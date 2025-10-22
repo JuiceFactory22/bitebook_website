@@ -34,10 +34,15 @@ export default function EventsCarousel({ pastEvents, upcomingEvents, currentMont
       'January', 'February', 'March', 'April', 'May', 'June',
       'July', 'August', 'September', 'October', 'November', 'December'
     ];
-    const eventMonthIndex = monthNames.indexOf(event.month);
     
-    // Mark as SOLD OUT if it's the current month or prior month
-    return eventMonthIndex <= currentMonth;
+    // Check if it's a 2026 event (all should be available)
+    if (event.month.includes('2026')) {
+      return false;
+    }
+    
+    // For 2025 events, mark November and earlier as sold out
+    const eventMonthIndex = monthNames.indexOf(event.month);
+    return eventMonthIndex <= 10; // November is index 10, so November and earlier are sold out
   };
 
   // Drag functionality
@@ -177,7 +182,7 @@ export default function EventsCarousel({ pastEvents, upcomingEvents, currentMont
             return (
               <div
                 key={`event-${index}`}
-                className={`flex-shrink-0 w-60 backdrop-blur-sm rounded-xl p-4 border border-white relative snap-start ${
+                className={`flex flex-col flex-shrink-0 w-60 backdrop-blur-sm rounded-xl p-4 border border-white relative snap-start ${
                   isSoldOut
                     ? 'bg-white bg-opacity-10 border-opacity-20'
                     : 'bg-white bg-opacity-20 border-opacity-30'
@@ -190,21 +195,24 @@ export default function EventsCarousel({ pastEvents, upcomingEvents, currentMont
                 }`}>
                   {isSoldOut ? 'SOLD OUT' : 'UPCOMING'}
                 </div>
-                <div className="text-4xl mb-4">{event.icon}</div>
-                <div className="text-lg font-bold text-black mb-2">
-                  {event.month}
-                </div>
-                <div className="text-xl font-display font-bold text-black mb-3">
-                  {event.theme}
-                </div>
-                <div className="text-sm text-black opacity-80 italic mb-3">
-                  "{event.tagline}"
-                </div>
-                <div className="text-xs text-black opacity-70 mb-4">
-                  {event.description.substring(0, 60)}...
+                {/* Content area that grows to fill space */}
+                <div className="flex-grow">
+                  <div className="text-4xl mb-4">{event.icon}</div>
+                  <div className="text-lg font-bold text-black mb-2">
+                    {event.month}
+                  </div>
+                  <div className="text-xl font-display font-bold text-black mb-3">
+                    {event.theme}
+                  </div>
+                  <div className="text-sm text-black opacity-80 italic mb-3">
+                    "{event.tagline}"
+                  </div>
+                  <div className="text-xs text-black opacity-70">
+                    {event.description.substring(0, 60)}...
+                  </div>
                 </div>
                 
-                {/* Buy Now Button */}
+                {/* Buy Now Button - always at bottom */}
                 <button
                   className={`w-full py-2 px-4 rounded-lg text-sm font-semibold transition-all duration-300 ${
                     isSoldOut
