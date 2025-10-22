@@ -1,12 +1,12 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { ArrowLeft, CreditCard, Shield, Truck, CheckCircle } from "lucide-react";
 import Link from "next/link";
 import emailjs from '@emailjs/browser';
 import { useSearchParams } from 'next/navigation';
 
-export default function CheckoutPage() {
+function CheckoutContent() {
   const [isSubscription, setIsSubscription] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -339,5 +339,13 @@ export default function CheckoutPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function CheckoutPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <CheckoutContent />
+    </Suspense>
   );
 }
