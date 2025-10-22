@@ -1,4 +1,4 @@
-# Email Setup Guide for BiteBook
+New # Email Setup Guide for BiteBook
 
 ## 📧 Setting Up EmailJS for Form Submissions
 
