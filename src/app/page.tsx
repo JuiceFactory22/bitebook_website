@@ -214,9 +214,22 @@ export default function Home() {
             <h2 className="text-4xl font-display font-bold text-gray-900 mb-4">
               Monthly Promotions
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
               Each month features a different food theme with exclusive deals from local restaurants
             </p>
+            
+            {/* Subscribe & Save Button */}
+            <div className="text-center mb-12">
+              <a 
+                href="/checkout?subscription=true"
+                className="inline-block bg-[#ff6b35] hover:bg-[#e55a2b] text-white px-8 py-4 rounded-full text-lg font-semibold btn-hover shadow-lg transition-all duration-300"
+              >
+                Subscribe & Save 30% - Get Monthly BiteBooks
+              </a>
+              <p className="text-sm text-gray-500 mt-3">
+                Cancel anytime • No commitment • Save $9 every month
+              </p>
+            </div>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">

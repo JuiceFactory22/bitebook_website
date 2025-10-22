@@ -1,14 +1,23 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ArrowLeft, CreditCard, Shield, Truck, CheckCircle } from "lucide-react";
 import Link from "next/link";
 import emailjs from '@emailjs/browser';
+import { useSearchParams } from 'next/navigation';
 
 export default function CheckoutPage() {
   const [isSubscription, setIsSubscription] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const searchParams = useSearchParams();
+
+  // Check if subscription parameter is present
+  useEffect(() => {
+    if (searchParams.get('subscription') === 'true') {
+      setIsSubscription(true);
+    }
+  }, [searchParams]);
   
   const couponBookDetails = {
     price: 29.99,
