@@ -99,9 +99,9 @@ export default function EventsCarousel({ pastEvents, upcomingEvents, currentMont
   }, []);
 
   const scrollToIndex = (index: number) => {
-    const container = document.getElementById('events-container');
+    const container = containerRef.current;
     if (container) {
-      const cardWidth = 320; // w-80 = 320px
+      const cardWidth = 240; // 25% smaller than 320px
       const gap = 16; // space-x-4 = 16px
       const scrollPosition = index * (cardWidth + gap);
       container.scrollTo({
@@ -160,8 +160,8 @@ export default function EventsCarousel({ pastEvents, upcomingEvents, currentMont
                   isDragging ? 'cursor-grabbing' : 'cursor-grab'
                 }`}
                 style={{
-                  transform: `translateX(-${currentIndex * (320 + 16)}px)`,
-                  width: `${allEvents.length * (320 + 16) - 16}px`
+                  transform: `translateX(-${currentIndex * (240 + 16)}px)`,
+                  width: `${allEvents.length * (240 + 16) - 16}px`
                 }}
                 onMouseDown={handleMouseDown}
                 onMouseMove={handleMouseMove}
@@ -175,11 +175,11 @@ export default function EventsCarousel({ pastEvents, upcomingEvents, currentMont
           {allEvents.map((event, index) => {
             const isSoldOut = isEventSoldOut(event);
             return (
-              <div 
-                key={`event-${index}`} 
-                className={`flex-shrink-0 w-80 backdrop-blur-sm rounded-xl p-6 border border-white relative snap-start ${
-                  isSoldOut 
-                    ? 'bg-white bg-opacity-10 border-opacity-20' 
+              <div
+                key={`event-${index}`}
+                className={`flex-shrink-0 w-60 backdrop-blur-sm rounded-xl p-4 border border-white relative snap-start ${
+                  isSoldOut
+                    ? 'bg-white bg-opacity-10 border-opacity-20'
                     : 'bg-white bg-opacity-20 border-opacity-30'
                 }`}
               >
@@ -200,9 +200,26 @@ export default function EventsCarousel({ pastEvents, upcomingEvents, currentMont
                 <div className="text-sm text-black opacity-80 italic mb-3">
                   "{event.tagline}"
                 </div>
-                <div className="text-xs text-black opacity-70">
-                  {event.description.substring(0, 80)}...
+                <div className="text-xs text-black opacity-70 mb-4">
+                  {event.description.substring(0, 60)}...
                 </div>
+                
+                {/* Buy Now Button */}
+                <button
+                  className={`w-full py-2 px-4 rounded-lg text-sm font-semibold transition-all duration-300 ${
+                    isSoldOut
+                      ? 'bg-gray-400 text-gray-600 cursor-not-allowed opacity-50'
+                      : 'bg-[#ff6b35] hover:bg-[#e55a2b] text-white hover:shadow-lg'
+                  }`}
+                  disabled={isSoldOut}
+                  onClick={() => {
+                    if (!isSoldOut) {
+                      window.location.href = '/checkout';
+                    }
+                  }}
+                >
+                  {isSoldOut ? 'Sold Out' : 'Buy Now - $29.99'}
+                </button>
               </div>
             );
           })}
@@ -227,7 +244,7 @@ export default function EventsCarousel({ pastEvents, upcomingEvents, currentMont
             {/* Scroll hint */}
             <div className="text-center mt-2">
               <p className="text-white text-xs opacity-75">
-                Showing 4 events at a time • Click and drag to scroll • Use arrows to navigate
+                Showing 4 events at a time • Click and drag to scroll • Use arrows to navigate • Click Buy Now to purchase
               </p>
             </div>
       </div>
