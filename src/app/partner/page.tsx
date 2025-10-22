@@ -46,8 +46,8 @@ export default function PartnerPage() {
     },
     {
       icon: <Shield className="w-8 h-8" />,
-      title: "No Setup Fees",
-      description: "Join our network at no cost. We only succeed when you succeed - it's that simple"
+      title: "Free to Participate",
+      description: "Join at no cost. Give a little (via the coupon) and get a lot in return."
     }
   ];
 
