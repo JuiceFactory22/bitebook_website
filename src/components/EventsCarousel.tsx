@@ -22,7 +22,7 @@ export default function EventsCarousel({ pastEvents, upcomingEvents, currentMont
   const [isScrolling, setIsScrolling] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
-  const [scrollLeft, setScrollLeft] = useState(0);
+  const [scrollLeftPosition, setScrollLeftPosition] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const allEvents = [...pastEvents, ...upcomingEvents];
@@ -45,7 +45,7 @@ export default function EventsCarousel({ pastEvents, upcomingEvents, currentMont
     if (!containerRef.current) return;
     setIsDragging(true);
     setStartX(e.pageX - containerRef.current.offsetLeft);
-    setScrollLeft(containerRef.current.scrollLeft);
+    setScrollLeftPosition(containerRef.current.scrollLeft);
   };
 
   const handleMouseMove = (e: React.MouseEvent) => {
@@ -53,7 +53,7 @@ export default function EventsCarousel({ pastEvents, upcomingEvents, currentMont
     e.preventDefault();
     const x = e.pageX - containerRef.current.offsetLeft;
     const walk = (x - startX) * 2;
-    containerRef.current.scrollLeft = scrollLeft - walk;
+    containerRef.current.scrollLeft = scrollLeftPosition - walk;
   };
 
   const handleMouseUp = () => {
@@ -69,14 +69,14 @@ export default function EventsCarousel({ pastEvents, upcomingEvents, currentMont
     if (!containerRef.current) return;
     setIsDragging(true);
     setStartX(e.touches[0].pageX - containerRef.current.offsetLeft);
-    setScrollLeft(containerRef.current.scrollLeft);
+    setScrollLeftPosition(containerRef.current.scrollLeft);
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
     if (!isDragging || !containerRef.current) return;
     const x = e.touches[0].pageX - containerRef.current.offsetLeft;
     const walk = (x - startX) * 2;
-    containerRef.current.scrollLeft = scrollLeft - walk;
+    containerRef.current.scrollLeft = scrollLeftPosition - walk;
   };
 
   const handleTouchEnd = () => {
