@@ -125,12 +125,12 @@ export default function Home() {
   ];
 
   const partnerRestaurants = [
-    { name: "Frank Pepe Pizzeria", location: "West Hartford", specialty: "New Haven Style Pizza" },
-    { name: "The Capital Grille", location: "Hartford", specialty: "Steakhouse & Fine Dining" },
-    { name: "Bear's Smokehouse", location: "Hartford", specialty: "BBQ & Smoked Meats" },
-    { name: "Max Downtown", location: "Hartford", specialty: "Contemporary American" },
-    { name: "Salute Restaurant", location: "Hartford", specialty: "Italian Cuisine" },
-    { name: "The Place 2 Be", location: "Hartford", specialty: "Brunch & American Fare" }
+    { name: "Riverside Bistro", location: "Hartford", specialty: "Contemporary American" },
+    { name: "Golden Fork Steakhouse", location: "West Hartford", specialty: "Premium Steaks & Seafood" },
+    { name: "Smoke & Spice BBQ", location: "Hartford", specialty: "Authentic BBQ & Ribs" },
+    { name: "Bella Vista Italian", location: "Hartford", specialty: "Traditional Italian Cuisine" },
+    { name: "Sunrise Cafe", location: "Hartford", specialty: "Breakfast & Brunch Specialties" },
+    { name: "The Garden Table", location: "West Hartford", specialty: "Farm-to-Table Dining" }
   ];
 
   return (
