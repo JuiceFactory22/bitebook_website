@@ -81,10 +81,10 @@ export default function PartnerPage() {
       };
 
       await emailjs.send(
-        'YOUR_SERVICE_ID', // You'll need to set this up in EmailJS
-        'YOUR_TEMPLATE_ID', // You'll need to set this up in EmailJS
+        'service_u460dtm', // Your EmailJS Service ID
+        'template_8sfrufk', // Your Partner Application Template ID
         templateParams,
-        'YOUR_PUBLIC_KEY' // You'll need to set this up in EmailJS
+        'qq3QK0zGBYaHNI2DW' // Your EmailJS Public Key
       );
       
       setIsSubmitted(true);
