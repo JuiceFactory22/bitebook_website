@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface Event {
@@ -20,6 +20,10 @@ interface EventsCarouselProps {
 export default function EventsCarousel({ pastEvents, upcomingEvents, currentMonth }: EventsCarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isScrolling, setIsScrolling] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeft, setScrollLeft] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const allEvents = [...pastEvents, ...upcomingEvents];
   const maxIndex = Math.max(0, allEvents.length - 4); // Show 4 at a time
@@ -36,6 +40,49 @@ export default function EventsCarousel({ pastEvents, upcomingEvents, currentMont
     return eventMonthIndex <= currentMonth;
   };
 
+  // Drag functionality
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (!containerRef.current) return;
+    setIsDragging(true);
+    setStartX(e.pageX - containerRef.current.offsetLeft);
+    setScrollLeft(containerRef.current.scrollLeft);
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging || !containerRef.current) return;
+    e.preventDefault();
+    const x = e.pageX - containerRef.current.offsetLeft;
+    const walk = (x - startX) * 2;
+    containerRef.current.scrollLeft = scrollLeft - walk;
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  const handleMouseLeave = () => {
+    setIsDragging(false);
+  };
+
+  // Touch support for mobile
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (!containerRef.current) return;
+    setIsDragging(true);
+    setStartX(e.touches[0].pageX - containerRef.current.offsetLeft);
+    setScrollLeft(containerRef.current.scrollLeft);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!isDragging || !containerRef.current) return;
+    const x = e.touches[0].pageX - containerRef.current.offsetLeft;
+    const walk = (x - startX) * 2;
+    containerRef.current.scrollLeft = scrollLeft - walk;
+  };
+
+  const handleTouchEnd = () => {
+    setIsDragging(false);
+  };
+
   useEffect(() => {
     let scrollTimeout: NodeJS.Timeout;
     const handleScroll = () => {
@@ -44,7 +91,7 @@ export default function EventsCarousel({ pastEvents, upcomingEvents, currentMont
       scrollTimeout = setTimeout(() => setIsScrolling(false), 150);
     };
 
-    const container = document.getElementById('events-container');
+    const container = containerRef.current;
     if (container) {
       container.addEventListener('scroll', handleScroll);
       return () => container.removeEventListener('scroll', handleScroll);
@@ -105,16 +152,25 @@ export default function EventsCarousel({ pastEvents, upcomingEvents, currentMont
           <ChevronRight className="w-6 h-6 text-black" />
         </button>
 
-        {/* Events Container */}
-        <div className="overflow-hidden">
-          <div 
-            id="events-container"
-            className="flex space-x-4 transition-transform duration-300 ease-in-out"
-            style={{ 
-              transform: `translateX(-${currentIndex * (320 + 16)}px)`,
-              width: `${allEvents.length * (320 + 16) - 16}px`
-            }}
-          >
+            {/* Events Container */}
+            <div className="overflow-hidden">
+              <div
+                ref={containerRef}
+                className={`flex space-x-4 transition-transform duration-300 ease-in-out scrollbar-hide ${
+                  isDragging ? 'cursor-grabbing' : 'cursor-grab'
+                }`}
+                style={{
+                  transform: `translateX(-${currentIndex * (320 + 16)}px)`,
+                  width: `${allEvents.length * (320 + 16) - 16}px`
+                }}
+                onMouseDown={handleMouseDown}
+                onMouseMove={handleMouseMove}
+                onMouseUp={handleMouseUp}
+                onMouseLeave={handleMouseLeave}
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={handleTouchEnd}
+              >
           {/* All Events with Dynamic Status */}
           {allEvents.map((event, index) => {
             const isSoldOut = isEventSoldOut(event);
@@ -168,12 +224,12 @@ export default function EventsCarousel({ pastEvents, upcomingEvents, currentMont
           ))}
         </div>
         
-        {/* Scroll hint */}
-        <div className="text-center mt-2">
-          <p className="text-white text-xs opacity-75">
-            Showing 4 events at a time • Use arrows to navigate
-          </p>
-        </div>
+            {/* Scroll hint */}
+            <div className="text-center mt-2">
+              <p className="text-white text-xs opacity-75">
+                Showing 4 events at a time • Click and drag to scroll • Use arrows to navigate
+              </p>
+            </div>
       </div>
     </div>
   );

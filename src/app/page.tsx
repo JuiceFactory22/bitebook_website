@@ -91,14 +91,95 @@ export default function Home() {
       color: "from-yellow-500 to-orange-600",
       icon: "🧀"
     },
-    {
-      month: "December",
-      theme: "Burger Month (Round 2)",
-      tagline: "Holiday Edition — The Gift of the Grill.",
-      description: "Cozy comfort food for winter. Repeat top performers or feature new premium burger collabs.",
-      color: "from-amber-600 to-red-600",
-      icon: "🍔"
-    }
+        {
+          month: "December",
+          theme: "Burger Month (Round 2)",
+          tagline: "Holiday Edition — The Gift of the Grill.",
+          description: "Cozy comfort food for winter. Repeat top performers or feature new premium burger collabs.",
+          color: "from-amber-600 to-red-600",
+          icon: "🍔"
+        },
+        // Additional months for next year
+        {
+          month: "January 2026",
+          theme: "Wings Month",
+          tagline: "New Year, New Heat.",
+          description: "Kick off the new year with spicy wings and hot deals from local sports bars.",
+          color: "from-red-500 to-orange-600",
+          icon: "🍗"
+        },
+        {
+          month: "February 2026",
+          theme: "Taco Month",
+          tagline: "Love at First Bite.",
+          description: "Valentine's month with authentic tacos and Mexican cuisine specials.",
+          color: "from-orange-400 to-red-500",
+          icon: "🌮"
+        },
+        {
+          month: "March 2026",
+          theme: "Pizza Month",
+          tagline: "In Crust We Trust.",
+          description: "National Pizza Day celebration with local pizzerias and artisanal pizza spots.",
+          color: "from-red-400 to-pink-500",
+          icon: "🍕"
+        },
+        {
+          month: "April 2026",
+          theme: "Breakfast Sandwich Month",
+          tagline: "Rise & Bite.",
+          description: "Spring breakfast specials with coffee shops and brunch spots.",
+          color: "from-yellow-400 to-orange-500",
+          icon: "🥪"
+        },
+        {
+          month: "May 2026",
+          theme: "Burger Month",
+          tagline: "Build the Perfect Bite.",
+          description: "National Burger Month with gourmet burger joints and casual dining.",
+          color: "from-amber-600 to-red-600",
+          icon: "🍔"
+        },
+        {
+          month: "June 2026",
+          theme: "BBQ Month",
+          tagline: "Smokin' Summer Deals.",
+          description: "Summer BBQ season with ribs, brisket, and grilled specialties.",
+          color: "from-orange-600 to-red-700",
+          icon: "🔥"
+        },
+        {
+          month: "July 2026",
+          theme: "Fried Chicken Month",
+          tagline: "Crispy Summer Bites.",
+          description: "Peak summer with fried chicken sandwiches and Korean fried chicken.",
+          color: "from-yellow-500 to-orange-600",
+          icon: "🍗"
+        },
+        {
+          month: "August 2026",
+          theme: "Ice Cream & Dessert Month",
+          tagline: "Sweet Summer Treats.",
+          description: "Summer dessert month with ice cream shops and bakeries.",
+          color: "from-pink-300 to-purple-400",
+          icon: "🍦"
+        },
+        {
+          month: "September 2026",
+          theme: "Wings Month (Round 2)",
+          tagline: "Fall Back into Flavor.",
+          description: "Football season with wing specials and sports bar deals.",
+          color: "from-red-500 to-orange-600",
+          icon: "🍗"
+        },
+        {
+          month: "October 2026",
+          theme: "Appetizers Month",
+          tagline: "Start with a Bite.",
+          description: "Fall appetizer specials with tapas and sharing plates.",
+          color: "from-orange-500 to-yellow-500",
+          icon: "🍤"
+        }
   ];
 
   const features = [
@@ -200,8 +281,8 @@ export default function Home() {
           </div>
           {/* Events Timeline */}
           <EventsCarousel 
-            pastEvents={monthlyPromotions.slice(7, 11)}
-            upcomingEvents={monthlyPromotions.slice(11, 15)}
+            pastEvents={monthlyPromotions.slice(7, 10)} // 3 previous months (August, September, October)
+            upcomingEvents={monthlyPromotions.slice(10, 22)} // 12 upcoming months (November through next October)
             currentMonth={9} // October (0-indexed)
           />
         </div>
