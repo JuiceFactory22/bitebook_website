@@ -105,7 +105,7 @@ export default function Home() {
     {
       icon: <Utensils className="w-8 h-8" />,
       title: "30+ Local Restaurants",
-      description: "Access deals from Boston's best local restaurants and hidden gems"
+      description: "Access deals from your area's best local restaurants and hidden gems"
     },
     {
       icon: <Star className="w-8 h-8" />,
@@ -125,12 +125,12 @@ export default function Home() {
   ];
 
   const partnerRestaurants = [
-    { name: "Boston Pizza Co.", location: "Back Bay", specialty: "Artisan Pizzas" },
-    { name: "The Taco Stand", location: "North End", specialty: "Authentic Tacos" },
-    { name: "Morning Glory Cafe", location: "South End", specialty: "Breakfast & Brunch" },
-    { name: "Burger Barn", location: "Fenway", specialty: "Gourmet Burgers" },
-    { name: "Sushi Zen", location: "Chinatown", specialty: "Fresh Sushi" },
-    { name: "Mediterranean Breeze", location: "Cambridge", specialty: "Mediterranean Cuisine" }
+    { name: "Frank Pepe Pizzeria", location: "West Hartford", specialty: "New Haven Style Pizza" },
+    { name: "The Capital Grille", location: "Hartford", specialty: "Steakhouse & Fine Dining" },
+    { name: "Bear's Smokehouse", location: "Hartford", specialty: "BBQ & Smoked Meats" },
+    { name: "Max Downtown", location: "Hartford", specialty: "Contemporary American" },
+    { name: "Salute Restaurant", location: "Hartford", specialty: "Italian Cuisine" },
+    { name: "The Place 2 Be", location: "Hartford", specialty: "Brunch & American Fare" }
   ];
 
   return (
