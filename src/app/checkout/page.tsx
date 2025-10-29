@@ -5,6 +5,7 @@ import { ArrowLeft, CreditCard, Shield, Truck, CheckCircle } from "lucide-react"
 import Link from "next/link";
 import emailjs from '@emailjs/browser';
 import { useSearchParams } from 'next/navigation';
+import { trackPurchase, trackInitiateCheckout } from '@/utils/facebookPixel';
 
 function CheckoutContent() {
   const [isSubscription, setIsSubscription] = useState(false);
@@ -17,6 +18,8 @@ function CheckoutContent() {
     if (searchParams.get('subscription') === 'true') {
       setIsSubscription(true);
     }
+    // Track page view for checkout
+    trackInitiateCheckout(29.99);
   }, [searchParams]);
   
   const couponBookDetails = {
@@ -44,15 +47,19 @@ function CheckoutContent() {
         to_email: 'info@getbitebook.com'
       };
 
-      await emailjs.send(
-        'service_u460dtm', // Your EmailJS Service ID
-        'template_1rbwvvd', // Your Checkout Order Template ID
-        templateParams,
-        'qq3QK0zGBYaHNI2DW' // Your EmailJS Public Key
-      );
-      
-      setIsSubmitted(true);
-      setIsSubmitting(false);
+          await emailjs.send(
+            'service_u460dtm', // Your EmailJS Service ID
+            'template_1rbwvvd', // Your Checkout Order Template ID
+            templateParams,
+            'qq3QK0zGBYaHNI2DW' // Your EmailJS Public Key
+          );
+          
+          // Track purchase event
+          const purchaseValue = isSubscription ? couponBookDetails.subscriptionPrice : couponBookDetails.price;
+          trackPurchase(purchaseValue);
+          
+          setIsSubmitted(true);
+          setIsSubmitting(false);
     } catch (error) {
       console.error('Error sending email:', error);
       // Fallback: still show success message

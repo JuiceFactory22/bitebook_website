@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { ArrowLeft, CheckCircle, Users, TrendingUp, Star, Clock, Shield, Phone, Mail } from 'lucide-react';
 import Link from 'next/link';
 import emailjs from '@emailjs/browser';
+import { trackLead, trackCompleteRegistration } from '@/utils/facebookPixel';
 
 export default function PartnerPage() {
   const [formData, setFormData] = useState({
@@ -80,15 +81,19 @@ export default function PartnerPage() {
         to_email: 'info@getbitebook.com'
       };
 
-      await emailjs.send(
-        'service_u460dtm', // Your EmailJS Service ID
-        'template_8sfrufk', // Your Partner Application Template ID
-        templateParams,
-        'qq3QK0zGBYaHNI2DW' // Your EmailJS Public Key
-      );
-      
-      setIsSubmitted(true);
-      setIsSubmitting(false);
+          await emailjs.send(
+            'service_u460dtm', // Your EmailJS Service ID
+            'template_8sfrufk', // Your Partner Application Template ID
+            templateParams,
+            'qq3QK0zGBYaHNI2DW' // Your EmailJS Public Key
+          );
+          
+          // Track lead generation events
+          trackLead();
+          trackCompleteRegistration();
+          
+          setIsSubmitted(true);
+          setIsSubmitting(false);
     } catch (error) {
       console.error('Error sending email:', error);
       // Fallback: still show success message

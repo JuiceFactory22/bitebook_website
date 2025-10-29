@@ -1,5 +1,6 @@
 import { Clock, MapPin, Star, Utensils } from "lucide-react";
 import EventsCarousel from "@/components/EventsCarousel";
+import { trackAddToCart } from "@/utils/facebookPixel";
 
 export default function Home() {
   const monthlyPromotions = [
@@ -265,13 +266,14 @@ export default function Home() {
             Get over $300 in savings at 30+ local restaurants for just $29.99. 
             Limited monthly themes - books sell out fast!
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
-                <a 
-                  href="/checkout"
-                  className="inline-block bg-white text-[#ff6b35] px-8 py-4 rounded-full text-lg font-semibold btn-hover shadow-lg"
-                >
-                  Buy Your Coupon Book - $29.99
-                </a>
+                <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
+                      <a 
+                        href="/checkout"
+                        onClick={() => trackAddToCart(29.99)}
+                        className="inline-block bg-white text-[#ff6b35] px-8 py-4 rounded-full text-lg font-semibold btn-hover shadow-lg"
+                      >
+                        Buy Your Coupon Book - $29.99
+                      </a>
             <a 
               href="/partner"
               className="inline-block border-2 border-white text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-white hover:text-[#ff6b35] transition-all"
@@ -301,12 +303,13 @@ export default function Home() {
             
             {/* Subscribe & Save Button */}
             <div className="text-center mb-12">
-              <a 
-                href="/checkout?subscription=true"
-                className="inline-block bg-[#ff6b35] hover:bg-[#e55a2b] text-white px-8 py-4 rounded-full text-lg font-semibold btn-hover shadow-lg transition-all duration-300"
-              >
-                Subscribe & Save 30% - Get Monthly BiteBooks
-              </a>
+                <a 
+                  href="/checkout?subscription=true"
+                  onClick={() => trackAddToCart(20.99)}
+                  className="inline-block bg-[#ff6b35] hover:bg-[#e55a2b] text-white px-8 py-4 rounded-full text-lg font-semibold btn-hover shadow-lg transition-all duration-300"
+                >
+                  Subscribe & Save 30% - Get Monthly BiteBooks
+                </a>
               <p className="text-sm text-gray-500 mt-3">
                 Cancel anytime • No commitment • Save $9 every month
               </p>
