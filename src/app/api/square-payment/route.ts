@@ -1,16 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { Client, Environment } from 'squareup';
-
-// Initialize Square client
-const squareClient = new Client({
-  environment: process.env.SQUARE_ENVIRONMENT === 'production' 
-    ? Environment.Production 
-    : Environment.Sandbox,
-  accessToken: process.env.SQUARE_ACCESS_TOKEN || '',
-});
 
 export async function POST(request: NextRequest) {
   try {
+    // Check if Square credentials are available
+    if (!process.env.SQUARE_ACCESS_TOKEN) {
+      console.error('SQUARE_ACCESS_TOKEN is not set');
+      return NextResponse.json(
+        { error: 'Square payment credentials not configured on server' },
+        { status: 500 }
+      );
+    }
+
     const body = await request.json();
     const { sourceId, amount, idempotencyKey, customerInfo } = body;
 
@@ -21,6 +21,17 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
+
+    // Dynamically import Square SDK to avoid build issues
+    const { Client, Environment } = await import('squareup');
+
+    // Initialize Square client
+    const squareClient = new Client({
+      environment: process.env.SQUARE_ENVIRONMENT === 'production' 
+        ? Environment.Production 
+        : Environment.Sandbox,
+      accessToken: process.env.SQUARE_ACCESS_TOKEN,
+    });
 
     // Convert amount to cents (Square requires amounts in cents)
     const amountMoney = {
@@ -49,14 +60,20 @@ export async function POST(request: NextRequest) {
       });
     } else {
       return NextResponse.json(
-        { error: 'Payment processing failed' },
+        { error: 'Payment processing failed', details: result },
         { status: 400 }
       );
     }
   } catch (error: any) {
     console.error('Square payment error:', error);
+    console.error('Error details:', JSON.stringify(error, null, 2));
+    
+    // Return proper JSON error response
     return NextResponse.json(
-      { error: error.message || 'Payment processing failed' },
+      { 
+        error: error.message || 'Payment processing failed',
+        details: error.response?.body || error.body || 'Unknown error'
+      },
       { status: 500 }
     );
   }

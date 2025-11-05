@@ -94,6 +94,14 @@ function CheckoutContent() {
         }),
       });
 
+      // Check if response is JSON
+      const contentType = paymentResponse.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        const text = await paymentResponse.text();
+        console.error('Non-JSON response:', text);
+        throw new Error('Server returned an error. Please check your server logs or try again.');
+      }
+
       const paymentResult = await paymentResponse.json();
 
       if (!paymentResponse.ok || !paymentResult.success) {
