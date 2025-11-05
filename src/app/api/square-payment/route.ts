@@ -22,16 +22,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Dynamically import Square SDK to avoid build issues
-    const { Client, Environment } = await import('squareup');
-
-    // Initialize Square client
-    const squareClient = new Client({
-      environment: process.env.SQUARE_ENVIRONMENT === 'production' 
-        ? Environment.Production 
-        : Environment.Sandbox,
-      accessToken: process.env.SQUARE_ACCESS_TOKEN,
-    });
+    // Use Square REST API directly (more reliable than SDK)
+    const isProduction = process.env.SQUARE_ENVIRONMENT === 'production';
+    const baseUrl = isProduction 
+      ? 'https://connect.squareup.com' 
+      : 'https://connect.squareupsandbox.com';
 
     // Convert amount to cents (Square requires amounts in cents)
     const amountMoney = {
@@ -40,17 +35,37 @@ export async function POST(request: NextRequest) {
     };
 
     // Create payment request
-    const paymentsApi = squareClient.paymentsApi;
     const paymentRequest = {
-      sourceId,
-      idempotencyKey,
-      amountMoney,
-      buyerEmailAddress: customerInfo?.email,
+      source_id: sourceId,
+      idempotency_key: idempotencyKey,
+      amount_money: amountMoney,
+      buyer_email_address: customerInfo?.email,
       note: `BiteBook Purchase - ${customerInfo?.firstName || ''} ${customerInfo?.lastName || ''}`,
     };
 
-    // Process payment
-    const { result } = await paymentsApi.createPayment(paymentRequest);
+    // Process payment via Square REST API
+    const response = await fetch(`${baseUrl}/v2/payments`, {
+      method: 'POST',
+      headers: {
+        'Square-Version': '2023-10-18',
+        'Authorization': `Bearer ${process.env.SQUARE_ACCESS_TOKEN}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(paymentRequest),
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      console.error('Square API error:', result);
+      return NextResponse.json(
+        { 
+          error: result.errors?.[0]?.detail || 'Payment processing failed',
+          details: result.errors
+        },
+        { status: response.status }
+      );
+    }
 
     if (result.payment) {
       return NextResponse.json({
