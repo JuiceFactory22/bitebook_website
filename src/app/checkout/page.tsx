@@ -6,11 +6,19 @@ import Link from "next/link";
 import emailjs from '@emailjs/browser';
 import { useSearchParams } from 'next/navigation';
 import { trackPurchase, trackInitiateCheckout } from '@/utils/facebookPixel';
+import SquarePaymentForm from '@/components/SquarePaymentForm';
 
 function CheckoutContent() {
   const [isSubscription, setIsSubscription] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [paymentToken, setPaymentToken] = useState<string | null>(null);
+  const [paymentError, setPaymentError] = useState<string | null>(null);
+  const [formData, setFormData] = useState({
+    first_name: '',
+    last_name: '',
+    email: ''
+  });
   const searchParams = useSearchParams();
 
   // Check if subscription parameter is present
@@ -43,40 +51,96 @@ function CheckoutContent() {
     return couponBookDetails.savings;
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
+  const handlePaymentSuccess = async (token: string) => {
+    setPaymentToken(token);
+    setPaymentError(null);
     
+    // Validate form data
+    if (!formData.first_name || !formData.last_name || !formData.email) {
+      setPaymentError('Please fill in all customer information fields.');
+      return;
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      setPaymentError('Please enter a valid email address.');
+      return;
+    }
+    
+    // Process payment with Square API
     try {
-      const formData = new FormData(e.target as HTMLFormElement);
+      setIsSubmitting(true);
       const currentPrice = getCurrentPrice();
+      
+      // Generate unique idempotency key
+      const idempotencyKey = crypto.randomUUID();
+      
+      // Process payment
+      const paymentResponse = await fetch('/api/square-payment', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          sourceId: token,
+          amount: currentPrice,
+          idempotencyKey,
+          customerInfo: {
+            firstName: formData.first_name,
+            lastName: formData.last_name,
+            email: formData.email,
+          },
+        }),
+      });
+
+      const paymentResult = await paymentResponse.json();
+
+      if (!paymentResponse.ok || !paymentResult.success) {
+        throw new Error(paymentResult.error || 'Payment processing failed');
+      }
+
+      // Send order confirmation email
       const templateParams = {
-        first_name: formData.get('first_name'),
-        last_name: formData.get('last_name'),
-        email: formData.get('email'),
+        first_name: formData.first_name,
+        last_name: formData.last_name,
+        email: formData.email,
         is_subscription: isSubscription,
         total_price: currentPrice,
+        payment_id: paymentResult.paymentId,
         to_email: 'info@getbitebook.com'
       };
 
-          await emailjs.send(
-            'service_u460dtm', // Your EmailJS Service ID
-            'template_1rbwvvd', // Your Checkout Order Template ID
-            templateParams,
-            'qq3QK0zGBYaHNI2DW' // Your EmailJS Public Key
-          );
-          
-          // Track purchase event
-          trackPurchase(currentPrice);
-          
-          setIsSubmitted(true);
-          setIsSubmitting(false);
-    } catch (error) {
-      console.error('Error sending email:', error);
-      // Fallback: still show success message
+      await emailjs.send(
+        'service_u460dtm',
+        'template_1rbwvvd',
+        templateParams,
+        'qq3QK0zGBYaHNI2DW'
+      );
+
+      // Track purchase event
+      trackPurchase(currentPrice);
+
       setIsSubmitted(true);
       setIsSubmitting(false);
+    } catch (error: any) {
+      console.error('Payment processing error:', error);
+      setPaymentError(error.message || 'Payment processing failed. Please try again.');
+      setIsSubmitting(false);
     }
+  };
+
+  const handlePaymentError = (error: string) => {
+    setPaymentError(error);
+    setPaymentToken(null);
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
   };
 
   if (isSubmitted) {
@@ -253,7 +317,7 @@ function CheckoutContent() {
                 Complete Your Purchase
               </h2>
 
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <form onSubmit={(e) => e.preventDefault()} className="space-y-6">
                 {/* Customer Information */}
                 <div>
                   <h3 className="text-lg font-semibold text-gray-900 mb-4">
@@ -266,6 +330,9 @@ function CheckoutContent() {
                       </label>
                       <input
                         type="text"
+                        name="first_name"
+                        value={formData.first_name}
+                        onChange={handleInputChange}
                         required
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b35] focus:border-transparent"
                         placeholder="John"
@@ -277,6 +344,9 @@ function CheckoutContent() {
                       </label>
                       <input
                         type="text"
+                        name="last_name"
+                        value={formData.last_name}
+                        onChange={handleInputChange}
                         required
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b35] focus:border-transparent"
                         placeholder="Doe"
@@ -289,6 +359,9 @@ function CheckoutContent() {
                     </label>
                     <input
                       type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
                       required
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b35] focus:border-transparent"
                       placeholder="john@example.com"
@@ -301,18 +374,26 @@ function CheckoutContent() {
                   <h3 className="text-lg font-semibold text-gray-900 mb-4">
                     Payment Information
                   </h3>
-                  <div className="bg-gray-50 rounded-lg p-6 text-center">
-                    <CreditCard className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                    <p className="text-gray-600 mb-4">
-                      Payment processing will be integrated here
-                    </p>
-                    <div className="bg-[#ff6b35] text-white px-6 py-3 rounded-lg font-semibold">
-                      Total: ${getCurrentPrice().toFixed(2)}
-                      {isSubscription && (
-                        <div className="text-xs opacity-90 mt-1">
-                          Monthly subscription (30% off)
+                  <div className="bg-gray-50 rounded-lg p-6">
+                    <div className="mb-4">
+                      <div className="bg-[#ff6b35] text-white px-6 py-3 rounded-lg font-semibold text-center mb-4">
+                        Total: ${getCurrentPrice().toFixed(2)}
+                        {isSubscription && (
+                          <div className="text-xs opacity-90 mt-1">
+                            Monthly subscription (30% off)
+                          </div>
+                        )}
+                      </div>
+                      {paymentError && (
+                        <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
+                          <p className="text-red-800 text-sm">{paymentError}</p>
                         </div>
                       )}
+                      <SquarePaymentForm
+                        amount={getCurrentPrice()}
+                        onPaymentSuccess={handlePaymentSuccess}
+                        onPaymentError={handlePaymentError}
+                      />
                     </div>
                   </div>
                 </div>
@@ -337,14 +418,12 @@ function CheckoutContent() {
                   </label>
                 </div>
 
-                {/* Place Order Button */}
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="w-full bg-[#ff6b35] hover:bg-[#e55a2b] text-white py-4 rounded-lg font-semibold text-lg btn-hover shadow-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {isSubmitting ? 'Processing...' : `${isSubscription ? 'Start Subscription' : 'Place Order'} - $${getCurrentPrice().toFixed(2)}`}
-                </button>
+                {isSubmitting && (
+                  <div className="text-center py-4">
+                    <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-[#ff6b35]"></div>
+                    <p className="mt-2 text-sm text-gray-600">Processing payment...</p>
+                  </div>
+                )}
 
                 <p className="text-xs text-gray-500 text-center">
                   {isSubscription
