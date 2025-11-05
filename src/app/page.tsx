@@ -567,9 +567,11 @@ export default function Home() {
             <div>
               <h4 className="font-semibold mb-4">Contact</h4>
               <div className="text-sm text-gray-400 space-y-2">
-                <div>Boston Metro Area</div>
-                <div>hello@bitebook.com</div>
-                <div>(555) 123-4567</div>
+                <div>
+                  <a href="mailto:info@getbitebook.com" className="hover:text-white transition-colors">
+                    info@getbitebook.com
+                  </a>
+                </div>
               </div>
             </div>
           </div>
