@@ -19,9 +19,15 @@ export default function SquarePaymentForm({ amount, onPaymentSuccess, onPaymentE
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [squareLoaded, setSquareLoaded] = useState(false);
+  const [applePayAvailable, setApplePayAvailable] = useState(false);
+  const [googlePayAvailable, setGooglePayAvailable] = useState(false);
   const paymentFormRef = useRef<HTMLDivElement>(null);
+  const applePayButtonRef = useRef<HTMLDivElement>(null);
+  const googlePayButtonRef = useRef<HTMLDivElement>(null);
   const paymentsRef = useRef<any>(null);
   const cardRef = useRef<any>(null);
+  const applePayRef = useRef<any>(null);
+  const googlePayRef = useRef<any>(null);
 
   useEffect(() => {
     if (!squareLoaded) return;
@@ -59,6 +65,110 @@ export default function SquarePaymentForm({ amount, onPaymentSuccess, onPaymentE
         cardRef.current = card;
         await card.attach(paymentFormRef.current);
 
+        // Check and initialize Apple Pay if available
+        try {
+          const applePay = await payments.applePay({
+            countryCode: 'US',
+            currencyCode: 'USD',
+          });
+          
+          if (applePay && applePayButtonRef.current) {
+            applePayRef.current = applePay;
+            
+            // Configure payment request
+            const paymentRequest = {
+              requestShippingAddress: false,
+              requestBillingContact: true,
+              requestEmailAddress: true,
+              countryCode: 'US',
+              currencyCode: 'USD',
+              total: {
+                amount: (amount * 100).toString(), // Convert to cents
+                label: 'BiteBook',
+              },
+            };
+            
+            await applePay.configure({
+              paymentRequest,
+              async onPaymentMethodSelected() {
+                // Handle payment method selection if needed
+                return {};
+              },
+            });
+            
+            // Attach button
+            await applePay.attach(applePayButtonRef.current);
+            setApplePayAvailable(true);
+            
+            // Handle tokenization when user completes payment
+            applePay.addEventListener('tokenization', async (event: any) => {
+              try {
+                const tokenResult = event.detail;
+                if (tokenResult.status === 'OK') {
+                  onPaymentSuccess(tokenResult.token);
+                } else {
+                  onPaymentError('Apple Pay payment failed');
+                }
+              } catch (err: any) {
+                onPaymentError(err.message || 'Apple Pay error');
+              }
+            });
+          }
+        } catch (applePayError) {
+          console.log('Apple Pay not available:', applePayError);
+          setApplePayAvailable(false);
+        }
+
+        // Check and initialize Google Pay if available
+        try {
+          const googlePay = await payments.googlePay({
+            countryCode: 'US',
+            currencyCode: 'USD',
+          });
+          
+          if (googlePay && googlePayButtonRef.current) {
+            googlePayRef.current = googlePay;
+            
+            // Configure payment request
+            const paymentRequest = {
+              requestShippingAddress: false,
+              requestBillingContact: true,
+              requestEmailAddress: true,
+              countryCode: 'US',
+              currencyCode: 'USD',
+              total: {
+                amount: (amount * 100).toString(), // Convert to cents
+                label: 'BiteBook',
+              },
+            };
+            
+            await googlePay.configure({
+              paymentRequest,
+            });
+            
+            // Attach button
+            await googlePay.attach(googlePayButtonRef.current);
+            setGooglePayAvailable(true);
+            
+            // Handle tokenization when user completes payment
+            googlePay.addEventListener('tokenization', async (event: any) => {
+              try {
+                const tokenResult = event.detail;
+                if (tokenResult.status === 'OK') {
+                  onPaymentSuccess(tokenResult.token);
+                } else {
+                  onPaymentError('Google Pay payment failed');
+                }
+              } catch (err: any) {
+                onPaymentError(err.message || 'Google Pay error');
+              }
+            });
+          }
+        } catch (googlePayError) {
+          console.log('Google Pay not available:', googlePayError);
+          setGooglePayAvailable(false);
+        }
+
         setIsLoading(false);
       } catch (err: any) {
         console.error('Error initializing Square:', err);
@@ -82,8 +192,22 @@ export default function SquarePaymentForm({ amount, onPaymentSuccess, onPaymentE
           // Ignore cleanup errors
         }
       }
+      if (applePayRef.current) {
+        try {
+          applePayRef.current.destroy();
+        } catch (e) {
+          // Ignore cleanup errors
+        }
+      }
+      if (googlePayRef.current) {
+        try {
+          googlePayRef.current.destroy();
+        } catch (e) {
+          // Ignore cleanup errors
+        }
+      }
     };
-  }, [squareLoaded]);
+  }, [squareLoaded, amount]);
 
   const handlePayment = async () => {
     if (!cardRef.current || !paymentsRef.current) {
@@ -142,6 +266,38 @@ export default function SquarePaymentForm({ amount, onPaymentSuccess, onPaymentE
         }}
         strategy="afterInteractive"
       />
+      {/* Fast Checkout Options */}
+      {(applePayAvailable || googlePayAvailable) && !isLoading && (
+        <div className="mb-4">
+          <p className="text-sm text-gray-600 mb-3 text-center">Fast checkout options:</p>
+          <div className="flex gap-3 mb-4">
+            {applePayAvailable && (
+              <div 
+                ref={applePayButtonRef}
+                className="flex-1 min-h-[48px]"
+                style={{ minHeight: '48px' }}
+              />
+            )}
+            {googlePayAvailable && (
+              <div 
+                ref={googlePayButtonRef}
+                className="flex-1 min-h-[48px]"
+                style={{ minHeight: '48px' }}
+              />
+            )}
+          </div>
+          <div className="relative mb-4">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-gray-300"></div>
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="px-2 bg-gray-50 text-gray-500">Or pay with card</span>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Card Payment Form */}
       <div 
         id="square-payment-form" 
         ref={paymentFormRef}
