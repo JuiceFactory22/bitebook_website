@@ -47,21 +47,30 @@ export default function EventsCarousel({ pastEvents, upcomingEvents, currentMont
 
   // Drag functionality
   const handleMouseDown = (e: React.MouseEvent) => {
+    // Don't start dragging if clicking on a button
+    if ((e.target as HTMLElement).closest('button')) return;
+    
     if (!containerRef.current) return;
     setIsDragging(true);
-    setStartX(e.pageX - containerRef.current.offsetLeft);
+    const rect = containerRef.current.getBoundingClientRect();
+    setStartX(e.pageX - rect.left);
     setScrollLeftPosition(containerRef.current.scrollLeft);
+    e.preventDefault();
   };
 
   const handleMouseMove = (e: React.MouseEvent) => {
     if (!isDragging || !containerRef.current) return;
     e.preventDefault();
-    const x = e.pageX - containerRef.current.offsetLeft;
+    const rect = containerRef.current.getBoundingClientRect();
+    const x = e.pageX - rect.left;
     const walk = (x - startX) * 2;
     containerRef.current.scrollLeft = scrollLeftPosition - walk;
   };
 
-  const handleMouseUp = () => {
+  const handleMouseUp = (e: React.MouseEvent) => {
+    if (isDragging) {
+      e.preventDefault();
+    }
     setIsDragging(false);
   };
 
@@ -71,15 +80,21 @@ export default function EventsCarousel({ pastEvents, upcomingEvents, currentMont
 
   // Touch support for mobile
   const handleTouchStart = (e: React.TouchEvent) => {
+    // Don't start dragging if clicking on a button
+    if ((e.target as HTMLElement).closest('button')) return;
+    
     if (!containerRef.current) return;
     setIsDragging(true);
-    setStartX(e.touches[0].pageX - containerRef.current.offsetLeft);
+    const rect = containerRef.current.getBoundingClientRect();
+    setStartX(e.touches[0].pageX - rect.left);
     setScrollLeftPosition(containerRef.current.scrollLeft);
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
     if (!isDragging || !containerRef.current) return;
-    const x = e.touches[0].pageX - containerRef.current.offsetLeft;
+    e.preventDefault();
+    const rect = containerRef.current.getBoundingClientRect();
+    const x = e.touches[0].pageX - rect.left;
     const walk = (x - startX) * 2;
     containerRef.current.scrollLeft = scrollLeftPosition - walk;
   };
@@ -88,12 +103,49 @@ export default function EventsCarousel({ pastEvents, upcomingEvents, currentMont
     setIsDragging(false);
   };
 
+  // Global mouse move handler for dragging
+  useEffect(() => {
+    const handleGlobalMouseMove = (e: MouseEvent) => {
+      if (!isDragging || !containerRef.current) return;
+      e.preventDefault();
+      const rect = containerRef.current.getBoundingClientRect();
+      const x = e.pageX - rect.left;
+      const walk = (x - startX) * 2;
+      containerRef.current.scrollLeft = scrollLeftPosition - walk;
+    };
+
+    const handleGlobalMouseUp = () => {
+      if (isDragging) {
+        setIsDragging(false);
+      }
+    };
+
+    if (isDragging) {
+      document.addEventListener('mousemove', handleGlobalMouseMove);
+      document.addEventListener('mouseup', handleGlobalMouseUp);
+      return () => {
+        document.removeEventListener('mousemove', handleGlobalMouseMove);
+        document.removeEventListener('mouseup', handleGlobalMouseUp);
+      };
+    }
+  }, [isDragging, startX, scrollLeftPosition]);
+
   useEffect(() => {
     let scrollTimeout: NodeJS.Timeout;
     const handleScroll = () => {
       setIsScrolling(true);
       clearTimeout(scrollTimeout);
       scrollTimeout = setTimeout(() => setIsScrolling(false), 150);
+      
+      // Update currentIndex based on scroll position
+      const container = containerRef.current;
+      if (container) {
+        const cardWidth = 240;
+        const gap = 16;
+        const scrollPosition = container.scrollLeft;
+        const newIndex = Math.round(scrollPosition / (cardWidth + gap));
+        setCurrentIndex(Math.min(newIndex, maxIndex));
+      }
     };
 
     const container = containerRef.current;
@@ -101,7 +153,7 @@ export default function EventsCarousel({ pastEvents, upcomingEvents, currentMont
       container.addEventListener('scroll', handleScroll);
       return () => container.removeEventListener('scroll', handleScroll);
     }
-  }, []);
+  }, [maxIndex]);
 
   const scrollToIndex = (index: number) => {
     const container = containerRef.current;
@@ -158,15 +210,16 @@ export default function EventsCarousel({ pastEvents, upcomingEvents, currentMont
         </button>
 
             {/* Events Container */}
-            <div className="overflow-hidden">
+            <div className="overflow-hidden px-12">
               <div
                 ref={containerRef}
-                className={`flex space-x-4 transition-transform duration-300 ease-in-out scrollbar-hide ${
+                className={`flex space-x-4 scrollbar-hide overflow-x-auto snap-x snap-mandatory ${
                   isDragging ? 'cursor-grabbing' : 'cursor-grab'
                 }`}
                 style={{
-                  transform: `translateX(-${currentIndex * (240 + 16)}px)`,
-                  width: `${allEvents.length * (240 + 16) - 16}px`
+                  scrollBehavior: isDragging ? 'auto' : 'smooth',
+                  userSelect: isDragging ? 'none' : 'auto',
+                  WebkitUserSelect: isDragging ? 'none' : 'auto'
                 }}
                 onMouseDown={handleMouseDown}
                 onMouseMove={handleMouseMove}
