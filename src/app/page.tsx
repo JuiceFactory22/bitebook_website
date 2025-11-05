@@ -206,14 +206,6 @@ export default function Home() {
     }
   ];
 
-  const partnerRestaurants = [
-    { name: "Riverside Bistro", location: "Hartford", specialty: "Contemporary American" },
-    { name: "Golden Fork Steakhouse", location: "West Hartford", specialty: "Premium Steaks & Seafood" },
-    { name: "Smoke & Spice BBQ", location: "Hartford", specialty: "Authentic BBQ & Ribs" },
-    { name: "Bella Vista Italian", location: "Hartford", specialty: "Traditional Italian Cuisine" },
-    { name: "Sunrise Cafe", location: "Hartford", specialty: "Breakfast & Brunch Specialties" },
-    { name: "The Garden Table", location: "West Hartford", specialty: "Farm-to-Table Dining" }
-  ];
 
   return (
     <div className="min-h-screen bg-white">
@@ -445,68 +437,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Partner Restaurants */}
-      <section id="restaurants" className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-display font-bold text-gray-900 mb-4">
-              Partner Restaurants
-            </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Discover amazing local restaurants in our network
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {partnerRestaurants.map((restaurant, index) => (
-              <div key={index} className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-display font-semibold text-gray-900">
-                    {restaurant.name}
-                  </h3>
-                  <div className="flex items-center text-yellow-500">
-                    <Star className="w-4 h-4 fill-current" />
-                    <Star className="w-4 h-4 fill-current" />
-                    <Star className="w-4 h-4 fill-current" />
-                    <Star className="w-4 h-4 fill-current" />
-                    <Star className="w-4 h-4 fill-current" />
-                  </div>
-                </div>
-                <div className="flex items-center text-gray-600 mb-2">
-                  <MapPin className="w-4 h-4 mr-2" />
-                  <span className="text-sm">{restaurant.location}</span>
-                </div>
-                <div className="text-sm text-gray-500">
-                  Specializes in: {restaurant.specialty}
-                </div>
-              </div>
-            ))}
-          </div>
-          
-          {/* Prominent Partner CTA Section */}
-          <div className="mt-16 bg-[#ff6b35] text-white rounded-2xl p-12 text-center">
-            <h3 className="text-3xl font-display font-bold mb-4">
-              Join Our Restaurant Network
-            </h3>
-            <p className="text-xl mb-8 opacity-90 max-w-2xl mx-auto">
-              Partner with BiteBook and reach thousands of food lovers in your area. 
-              Increase your customer base and boost sales with our monthly coupon books.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <a 
-                href="/partner"
-                className="inline-block bg-white text-[#ff6b35] text-lg px-8 py-4 font-bold hover:bg-gray-100 transition-all duration-300 shadow-lg rounded-full"
-              >
-                Become a Partner Restaurant
-              </a>
-              <div className="text-sm opacity-75">
-                ✓ No setup fees ✓ Flexible terms ✓ Proven results
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* CTA Section */}
       <section className="py-20 bg-gradient-to-r from-[#ff6b35] to-[#e55a2b] text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -548,7 +478,6 @@ export default function Home() {
               <h4 className="font-semibold mb-4">Quick Links</h4>
               <ul className="space-y-2 text-sm text-gray-400">
                 <li><a href="#promotions" className="hover:text-white transition-colors">Monthly Promotions</a></li>
-                <li><a href="#restaurants" className="hover:text-white transition-colors">Partner Restaurants</a></li>
                 <li><a href="#how-it-works" className="hover:text-white transition-colors">How It Works</a></li>
                 <li><a href="#" className="hover:text-white transition-colors">Contact Us</a></li>
               </ul>

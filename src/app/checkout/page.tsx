@@ -9,6 +9,7 @@ import { trackPurchase, trackInitiateCheckout } from '@/utils/facebookPixel';
 
 function CheckoutContent() {
   const [isSubscription, setIsSubscription] = useState(false);
+  const [isSuperSubscription, setIsSuperSubscription] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const searchParams = useSearchParams();
@@ -25,11 +26,26 @@ function CheckoutContent() {
   const couponBookDetails = {
     price: 29.99,
     subscriptionPrice: 20.99, // 30% off
+    superSubscriptionPrice: 17.99, // 40% off (even more)
     originalValue: 300,
     savings: 270.01,
     subscriptionSavings: 279.01, // $300 - $20.99
+    superSubscriptionSavings: 282.01, // $300 - $17.99
     restaurants: 30,
     validity: 30
+  };
+
+  // Calculate current price based on selected options
+  const getCurrentPrice = () => {
+    if (isSuperSubscription) return couponBookDetails.superSubscriptionPrice;
+    if (isSubscription) return couponBookDetails.subscriptionPrice;
+    return couponBookDetails.price;
+  };
+
+  const getCurrentSavings = () => {
+    if (isSuperSubscription) return couponBookDetails.superSubscriptionSavings;
+    if (isSubscription) return couponBookDetails.subscriptionSavings;
+    return couponBookDetails.savings;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -38,12 +54,14 @@ function CheckoutContent() {
     
     try {
       const formData = new FormData(e.target as HTMLFormElement);
+      const currentPrice = getCurrentPrice();
       const templateParams = {
         first_name: formData.get('first_name'),
         last_name: formData.get('last_name'),
         email: formData.get('email'),
         is_subscription: isSubscription,
-        total_price: isSubscription ? couponBookDetails.subscriptionPrice : couponBookDetails.price,
+        is_super_subscription: isSuperSubscription,
+        total_price: currentPrice,
         to_email: 'info@getbitebook.com'
       };
 
@@ -55,8 +73,7 @@ function CheckoutContent() {
           );
           
           // Track purchase event
-          const purchaseValue = isSubscription ? couponBookDetails.subscriptionPrice : couponBookDetails.price;
-          trackPurchase(purchaseValue);
+          trackPurchase(currentPrice);
           
           setIsSubmitted(true);
           setIsSubmitting(false);
@@ -137,11 +154,21 @@ function CheckoutContent() {
                   </div>
                   <div className="text-right">
                     <div className="text-2xl font-bold text-[#ff6b35]">
-                      ${couponBookDetails.price}
+                      ${getCurrentPrice().toFixed(2)}
                     </div>
                     <div className="text-sm text-gray-500 line-through">
                       ${couponBookDetails.originalValue} value
                     </div>
+                    {isSuperSubscription && (
+                      <div className="text-xs text-purple-600 font-semibold mt-1">
+                        40% Off
+                      </div>
+                    )}
+                    {isSubscription && !isSuperSubscription && (
+                      <div className="text-xs text-blue-600 font-semibold mt-1">
+                        30% Off
+                      </div>
+                    )}
                   </div>
                 </div>
                 
@@ -172,6 +199,39 @@ function CheckoutContent() {
                 )}
               </div>
 
+              {/* Super Subscription Toggle */}
+              <div className="bg-purple-50 border border-purple-200 rounded-lg p-4 mb-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h4 className="font-semibold text-purple-900">Subscribe & Save Even More</h4>
+                    <p className="text-sm text-purple-700">Get 40% off with our best value subscription</p>
+                  </div>
+                  <label className="relative inline-flex items-center cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={isSuperSubscription}
+                      onChange={(e) => {
+                        setIsSuperSubscription(e.target.checked);
+                        // Auto-enable regular subscription if super subscription is selected
+                        if (e.target.checked && !isSubscription) {
+                          setIsSubscription(true);
+                        }
+                      }}
+                      className="sr-only peer"
+                    />
+                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div>
+                  </label>
+                </div>
+                {isSuperSubscription && (
+                  <div className="mt-3 text-sm text-purple-800">
+                    <div className="flex items-center">
+                      <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
+                      <span>Maximum savings • Cancel anytime • No commitment</span>
+                    </div>
+                  </div>
+                )}
+              </div>
+
               {/* Value Breakdown */}
               <div className="bg-gray-50 rounded-lg p-4 space-y-2">
                 <div className="flex justify-between text-sm">
@@ -181,18 +241,24 @@ function CheckoutContent() {
                 <div className="flex justify-between text-sm">
                   <span>Your Price:</span>
                   <span className="font-semibold">
-                    ${isSubscription ? couponBookDetails.subscriptionPrice : couponBookDetails.price}
+                    ${getCurrentPrice().toFixed(2)}
                   </span>
                 </div>
-                {isSubscription && (
+                {isSuperSubscription && (
+                  <div className="flex justify-between text-sm text-purple-600">
+                    <span>Super Subscription Discount (40%):</span>
+                    <span className="font-semibold">-${(couponBookDetails.price - couponBookDetails.superSubscriptionPrice).toFixed(2)}</span>
+                  </div>
+                )}
+                {isSubscription && !isSuperSubscription && (
                   <div className="flex justify-between text-sm text-blue-600">
-                    <span>Subscription Discount:</span>
+                    <span>Subscription Discount (30%):</span>
                     <span className="font-semibold">-${(couponBookDetails.price - couponBookDetails.subscriptionPrice).toFixed(2)}</span>
                   </div>
                 )}
                 <div className="border-t pt-2 flex justify-between text-sm font-bold text-green-600">
                   <span>You Save:</span>
-                  <span>${isSubscription ? couponBookDetails.subscriptionSavings.toFixed(2) : couponBookDetails.savings}</span>
+                  <span>${getCurrentSavings().toFixed(2)}</span>
                 </div>
               </div>
               </div>
@@ -295,10 +361,10 @@ function CheckoutContent() {
                       Payment processing will be integrated here
                     </p>
                     <div className="bg-[#ff6b35] text-white px-6 py-3 rounded-lg font-semibold">
-                      Total: ${isSubscription ? couponBookDetails.subscriptionPrice : couponBookDetails.price}
-                      {isSubscription && (
+                      Total: ${getCurrentPrice().toFixed(2)}
+                      {(isSubscription || isSuperSubscription) && (
                         <div className="text-xs opacity-90 mt-1">
-                          Monthly subscription
+                          {isSuperSubscription ? 'Super subscription (40% off)' : 'Monthly subscription (30% off)'}
                         </div>
                       )}
                     </div>
@@ -331,11 +397,11 @@ function CheckoutContent() {
                   disabled={isSubmitting}
                   className="w-full bg-[#ff6b35] hover:bg-[#e55a2b] text-white py-4 rounded-lg font-semibold text-lg btn-hover shadow-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {isSubmitting ? 'Processing...' : `${isSubscription ? 'Start Subscription' : 'Place Order'} - $${isSubscription ? couponBookDetails.subscriptionPrice : couponBookDetails.price}`}
+                  {isSubmitting ? 'Processing...' : `${(isSubscription || isSuperSubscription) ? (isSuperSubscription ? 'Start Super Subscription' : 'Start Subscription') : 'Place Order'} - $${getCurrentPrice().toFixed(2)}`}
                 </button>
 
                 <p className="text-xs text-gray-500 text-center">
-                  {isSubscription 
+                  {(isSubscription || isSuperSubscription)
                     ? 'Your first coupon book will be delivered instantly via email. Future books will be delivered monthly.' 
                     : 'Your coupon book will be delivered instantly via email'
                   }
