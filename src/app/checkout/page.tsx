@@ -137,16 +137,16 @@ function CheckoutContent() {
               
               {/* Product Details */}
               <div className="border border-gray-200 rounded-lg p-6 mb-6">
-                <div className="flex items-center justify-between mb-4">
-                  <div>
-                    <h3 className="text-lg font-semibold text-gray-900">
+                <div className="flex flex-col md:flex-row md:items-start md:justify-between mb-4 gap-4">
+                  <div className="flex-1">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-3">
                       BiteBook Monthly Coupon Book
                     </h3>
-                    <p className="text-gray-600 text-sm">
-                      Get over ${couponBookDetails.originalValue} in savings at local restaurants
+                    <p className="text-gray-600 text-sm leading-relaxed">
+                      With over 30 local restaurants participating you'll be getting hundreds of dollars in value for less than the cost of another parking ticket. We've partnered with some of the best establishments in the area to put together an incredible deal book for this January. Share with your friends and family or keep all the deals to yourself. Whatever you decide, January is for wing lovers. Checkout now and make some memories with BiteBook.
                     </p>
                   </div>
-                  <div className="text-right">
+                  <div className="text-right md:ml-4 flex-shrink-0">
                     <div className="text-2xl font-bold text-[#ff6b35]">
                       ${getCurrentPrice().toFixed(2)}
                     </div>
