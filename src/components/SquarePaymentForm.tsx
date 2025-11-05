@@ -96,14 +96,14 @@ export default function SquarePaymentForm({ amount, onPaymentSuccess, onPaymentE
               },
             });
             
-            // Attach button
-            await applePay.attach(applePayButtonRef.current);
+            // Attach button and get button element
+            const applePayButton = await applePay.attach(applePayButtonRef.current);
             setApplePayAvailable(true);
             
-            // Handle tokenization when user completes payment
-            applePay.addEventListener('tokenization', async (event: any) => {
+            // Handle button click to tokenize payment
+            applePayButton.addEventListener('click', async () => {
               try {
-                const tokenResult = event.detail;
+                const tokenResult = await applePay.tokenize();
                 if (tokenResult.status === 'OK') {
                   onPaymentSuccess(tokenResult.token);
                 } else {
@@ -146,14 +146,14 @@ export default function SquarePaymentForm({ amount, onPaymentSuccess, onPaymentE
               paymentRequest,
             });
             
-            // Attach button
-            await googlePay.attach(googlePayButtonRef.current);
+            // Attach button and get button element
+            const googlePayButton = await googlePay.attach(googlePayButtonRef.current);
             setGooglePayAvailable(true);
             
-            // Handle tokenization when user completes payment
-            googlePay.addEventListener('tokenization', async (event: any) => {
+            // Handle button click to tokenize payment
+            googlePayButton.addEventListener('click', async () => {
               try {
-                const tokenResult = event.detail;
+                const tokenResult = await googlePay.tokenize();
                 if (tokenResult.status === 'OK') {
                   onPaymentSuccess(tokenResult.token);
                 } else {
