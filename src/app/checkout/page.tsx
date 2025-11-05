@@ -260,19 +260,6 @@ function CheckoutContent() {
                 )}
               </div>
 
-              {/* Value Breakdown */}
-              <div className="bg-gray-50 rounded-lg p-4 space-y-2">
-                {isSubscription && (
-                  <div className="flex justify-between text-sm text-blue-600 mb-2">
-                    <span>Subscription Discount (30%):</span>
-                    <span className="font-semibold">-${(couponBookDetails.price - couponBookDetails.subscriptionPrice).toFixed(2)}</span>
-                  </div>
-                )}
-                <div className="border-t pt-2 flex justify-between text-sm font-bold text-green-600">
-                  <span>You Save:</span>
-                  <span>${getCurrentSavings().toFixed(2)}</span>
-                </div>
-              </div>
               </div>
 
               {/* What's Included */}
