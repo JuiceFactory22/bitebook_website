@@ -409,13 +409,6 @@ function CheckoutContent() {
                     <p className="mt-2 text-sm text-gray-600">Processing payment...</p>
                   </div>
                 )}
-
-                <p className="text-xs text-gray-500 text-center">
-                  {isSubscription
-                    ? 'Your first coupon book will be delivered instantly via email. Future books will be delivered monthly.' 
-                    : 'Your coupon book will be delivered instantly via email'
-                  }
-                </p>
               </form>
             </div>
           </div>
