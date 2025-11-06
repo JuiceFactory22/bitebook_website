@@ -29,7 +29,7 @@ export default function EventsCarousel({ pastEvents, upcomingEvents, currentMont
   const maxIndex = Math.max(0, allEvents.length - 4); // Show 4 at a time
 
   // Helper function to determine if an event should be marked as SOLD OUT
-  // All previous months (before current month) are marked as sold out
+  // All previous months (before current month/year) are marked as sold out
   const isEventSoldOut = (event: Event) => {
     const monthNames = [
       'January', 'February', 'March', 'April', 'May', 'June',
@@ -37,16 +37,26 @@ export default function EventsCarousel({ pastEvents, upcomingEvents, currentMont
     ];
     
     const now = new Date();
+    const currentYear = now.getFullYear();
     const currentMonth = now.getMonth(); // 0-11 (0 = January)
     
     // Parse the event month string (e.g., "January 2026" or "January")
     const eventMonthParts = event.month.split(' ');
     const eventMonthName = eventMonthParts[0];
+    const eventYear = eventMonthParts.length > 1 ? parseInt(eventMonthParts[1]) : currentYear;
     const eventMonthIndex = monthNames.indexOf(eventMonthName);
     
-    // An event is sold out if its month index is before the current month
-    // This works regardless of year - previous months are always sold out
-    return eventMonthIndex < currentMonth;
+    // An event is sold out if:
+    // 1. Its year is before the current year, OR
+    // 2. Its year is the same but its month is before the current month
+    if (eventYear < currentYear) {
+      return true;
+    }
+    if (eventYear === currentYear) {
+      return eventMonthIndex < currentMonth;
+    }
+    // Future years are not sold out
+    return false;
   };
 
   // Drag functionality

@@ -72,7 +72,7 @@ const monthlyPromotions = [
       icon: "🍦"
     },
     {
-      month: "September 2026",
+      month: "September 2025",
       theme: "Wings Month (Round 2)",
       tagline: "Fall Back into Flavor.",
       description: "Football season kickoff — repeat your January success with a new slate of wing joints. Consider spicy challenges.",
@@ -80,7 +80,7 @@ const monthlyPromotions = [
       icon: "🍗"
     },
     {
-      month: "October 2026",
+      month: "October 2025",
       theme: "Appetizers Month",
       tagline: "Start with a Bite.",
       description: "Tapas, nachos, sliders, quesadillas, mozzarella sticks. Encourage sharing and date-night promos.",
@@ -88,7 +88,7 @@ const monthlyPromotions = [
       icon: "🍤"
     },
     {
-      month: "November 2026",
+      month: "November 2025",
       theme: "Nacho Month",
       tagline: "Stacked. Loaded. Melted.",
       description: "Great for casual dining and sports bars. Include creative twists: BBQ nachos, breakfast nachos, etc.",
@@ -96,7 +96,7 @@ const monthlyPromotions = [
       icon: "🧀"
     },
     {
-      month: "December 2026",
+      month: "December 2025",
       theme: "Burger Month (Round 2)",
       tagline: "Holiday Edition — The Gift of the Grill.",
       description: "Cozy comfort food for winter. Repeat top performers or feature new premium burger collabs.",
@@ -108,30 +108,69 @@ const monthlyPromotions = [
 export default function Home() {
   // Calculate carousel events dynamically based on current date
   // Shows: previous 2 months, current month, next 6 months (total 9 events)
+  // Handles combination of 2025 (Sept-Dec) and 2026 (Jan-Aug) events
   const carouselEvents = useMemo(() => {
     const now = new Date();
+    const currentYear = now.getFullYear();
     const currentMonth = now.getMonth(); // 0-11 (0 = January)
     
-    // All events are for 2026, so use current month index directly
-    const currentMonthIndex = currentMonth;
+    const monthNames = [
+      'January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December'
+    ];
     
-    // Calculate indices: previous 2 months, current month, next 6 months (total 9 events)
-    const startIndex = currentMonthIndex - 2;
-    const endIndex = currentMonthIndex + 6; // current + 6 next = 7 total from current
+    // Helper function to find event by month name and year
+    const findEvent = (monthIndex: number, targetYear: number) => {
+      const monthName = monthNames[monthIndex];
+      const searchString = `${monthName} ${targetYear}`;
+      
+      // First try exact match
+      let event = monthlyPromotions.find(e => e.month === searchString);
+      
+      // If not found and it's Sept-Dec, try 2025
+      if (!event && monthIndex >= 8) {
+        event = monthlyPromotions.find(e => e.month === `${monthName} 2025`);
+      }
+      
+      // If not found and it's Jan-Aug, try 2026
+      if (!event && monthIndex < 8) {
+        event = monthlyPromotions.find(e => e.month === `${monthName} 2026`);
+      }
+      
+      return event || null;
+    };
     
-    // Get the events for the carousel (wrapping around if needed)
+    // Calculate which months to show: previous 2, current, next 6
     const events = [];
-    for (let i = startIndex; i <= endIndex; i++) {
-      let adjustedIndex = i;
-      // Handle wrapping for negative indices (previous year months)
-      if (adjustedIndex < 0) {
-        adjustedIndex = 12 + adjustedIndex; // Wrap to end of previous year
+    for (let i = -2; i <= 6; i++) {
+      const targetMonthIndex = currentMonth + i;
+      let targetYear = currentYear;
+      let adjustedMonthIndex = targetMonthIndex;
+      
+      // Handle year wrapping
+      if (adjustedMonthIndex < 0) {
+        adjustedMonthIndex = adjustedMonthIndex + 12;
+        targetYear = targetYear - 1;
+      } else if (adjustedMonthIndex >= 12) {
+        adjustedMonthIndex = adjustedMonthIndex - 12;
+        targetYear = targetYear + 1;
       }
-      // Handle wrapping for indices beyond array length (next year months)
-      if (adjustedIndex >= monthlyPromotions.length) {
-        adjustedIndex = adjustedIndex - 12; // Wrap to beginning of next year
+      
+      // Determine which year to use for this month
+      // Sept-Dec should use 2025, Jan-Aug should use 2026
+      let searchYear = targetYear;
+      if (adjustedMonthIndex >= 8) {
+        // September-December: prefer 2025
+        searchYear = 2025;
+      } else {
+        // January-August: prefer 2026
+        searchYear = 2026;
       }
-      events.push(monthlyPromotions[adjustedIndex]);
+      
+      const event = findEvent(adjustedMonthIndex, searchYear);
+      if (event) {
+        events.push(event);
+      }
     }
     
     // Separate into past (first 2), current (1), and upcoming (next 6)
@@ -144,7 +183,7 @@ export default function Home() {
       currentEvent,
       upcomingEvents,
       allCarouselEvents: events,
-      currentMonthIndex
+      currentMonthIndex: currentMonth
     };
   }, []);
 
