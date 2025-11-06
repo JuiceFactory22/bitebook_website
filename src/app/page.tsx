@@ -1,11 +1,14 @@
+'use client';
+
 import { Clock, MapPin, Star, Utensils } from "lucide-react";
 import EventsCarousel from "@/components/EventsCarousel";
 import TrackingButton from "@/components/TrackingButton";
+import { useMemo } from "react";
 
-export default function Home() {
-  const monthlyPromotions = [
+// Monthly promotions for 2026
+const monthlyPromotions = [
     {
-      month: "January",
+      month: "January 2026",
       theme: "Wings Month",
       tagline: "Kick Off the Year with Heat.",
       description: "Perfect for bars, breweries, and sports grills. Tie into football playoffs or Super Bowl promos.",
@@ -13,7 +16,7 @@ export default function Home() {
       icon: "🍗"
     },
     {
-      month: "February", 
+      month: "February 2026", 
       theme: "Taco Month",
       tagline: "Love at First Bite.",
       description: "Works with Valentine's tie-ins — 'Taco 'bout love.' Feature street tacos, taquerias, and Mexican cantinas.",
@@ -21,7 +24,7 @@ export default function Home() {
       icon: "🌮"
     },
     {
-      month: "March",
+      month: "March 2026",
       theme: "Pizza Month", 
       tagline: "In Crust We Trust.",
       description: "Celebrate National Pizza Day (Mar 9). Include local pizzerias, breweries, and family spots.",
@@ -29,7 +32,7 @@ export default function Home() {
       icon: "🍕"
     },
     {
-      month: "April",
+      month: "April 2026",
       theme: "Breakfast Sandwich Month",
       tagline: "Rise & Bite.",
       description: "Partner with coffee shops and cafés. Feature breakfast burritos, croissant sandwiches, and biscuit specials.",
@@ -37,7 +40,7 @@ export default function Home() {
       icon: "🥪"
     },
     {
-      month: "May",
+      month: "May 2026",
       theme: "Burger Month",
       tagline: "Build the Perfect Bite.",
       description: "National Burger Month — ideal time for contests or polls ('Best Burger in Town').",
@@ -45,7 +48,7 @@ export default function Home() {
       icon: "🍔"
     },
     {
-      month: "June",
+      month: "June 2026",
       theme: "BBQ Month",
       tagline: "Smokin' Deals All Month Long.",
       description: "Kick off summer with ribs, brisket, pulled pork, and grilled chicken. Feature BBQ joints and food trucks.",
@@ -53,7 +56,7 @@ export default function Home() {
       icon: "🔥"
     },
     {
-      month: "July",
+      month: "July 2026",
       theme: "Fried Chicken Month",
       tagline: "Crispy. Juicy. Legendary.",
       description: "Peak picnic season — highlight fried chicken sandwiches, tenders, and Korean fried chicken spots.",
@@ -61,7 +64,7 @@ export default function Home() {
       icon: "🍗"
     },
     {
-      month: "August",
+      month: "August 2026",
       theme: "Ice Cream & Dessert Month",
       tagline: "Sweet Summer Bites.",
       description: "Pair ice cream shops, donut cafés, bakeries, and dessert trucks. Great for families and social media engagement.",
@@ -69,7 +72,7 @@ export default function Home() {
       icon: "🍦"
     },
     {
-      month: "September",
+      month: "September 2026",
       theme: "Wings Month (Round 2)",
       tagline: "Fall Back into Flavor.",
       description: "Football season kickoff — repeat your January success with a new slate of wing joints. Consider spicy challenges.",
@@ -77,7 +80,7 @@ export default function Home() {
       icon: "🍗"
     },
     {
-      month: "October",
+      month: "October 2026",
       theme: "Appetizers Month",
       tagline: "Start with a Bite.",
       description: "Tapas, nachos, sliders, quesadillas, mozzarella sticks. Encourage sharing and date-night promos.",
@@ -85,22 +88,65 @@ export default function Home() {
       icon: "🍤"
     },
     {
-      month: "November",
+      month: "November 2026",
       theme: "Nacho Month",
       tagline: "Stacked. Loaded. Melted.",
       description: "Great for casual dining and sports bars. Include creative twists: BBQ nachos, breakfast nachos, etc.",
       color: "from-yellow-500 to-orange-600",
       icon: "🧀"
     },
-        {
-          month: "December",
-          theme: "Burger Month (Round 2)",
-          tagline: "Holiday Edition — The Gift of the Grill.",
-          description: "Cozy comfort food for winter. Repeat top performers or feature new premium burger collabs.",
-          color: "from-amber-600 to-red-600",
-          icon: "🍔"
-        }
+    {
+      month: "December 2026",
+      theme: "Burger Month (Round 2)",
+      tagline: "Holiday Edition — The Gift of the Grill.",
+      description: "Cozy comfort food for winter. Repeat top performers or feature new premium burger collabs.",
+      color: "from-amber-600 to-red-600",
+      icon: "🍔"
+    }
   ];
+
+export default function Home() {
+  // Calculate carousel events dynamically based on current date
+  // Shows: previous 2 months, current month, next 6 months (total 9 events)
+  const carouselEvents = useMemo(() => {
+    const now = new Date();
+    const currentMonth = now.getMonth(); // 0-11 (0 = January)
+    
+    // All events are for 2026, so use current month index directly
+    const currentMonthIndex = currentMonth;
+    
+    // Calculate indices: previous 2 months, current month, next 6 months (total 9 events)
+    const startIndex = currentMonthIndex - 2;
+    const endIndex = currentMonthIndex + 6; // current + 6 next = 7 total from current
+    
+    // Get the events for the carousel (wrapping around if needed)
+    const events = [];
+    for (let i = startIndex; i <= endIndex; i++) {
+      let adjustedIndex = i;
+      // Handle wrapping for negative indices (previous year months)
+      if (adjustedIndex < 0) {
+        adjustedIndex = 12 + adjustedIndex; // Wrap to end of previous year
+      }
+      // Handle wrapping for indices beyond array length (next year months)
+      if (adjustedIndex >= monthlyPromotions.length) {
+        adjustedIndex = adjustedIndex - 12; // Wrap to beginning of next year
+      }
+      events.push(monthlyPromotions[adjustedIndex]);
+    }
+    
+    // Separate into past (first 2), current (1), and upcoming (next 6)
+    const pastEvents = events.slice(0, 2);
+    const currentEvent = events.slice(2, 3);
+    const upcomingEvents = events.slice(3, 9);
+    
+    return {
+      pastEvents,
+      currentEvent,
+      upcomingEvents,
+      allCarouselEvents: events,
+      currentMonthIndex
+    };
+  }, []);
 
   const features = [
     {
@@ -149,7 +195,7 @@ export default function Home() {
                 </a>
                 <a href="#how-it-works" className="text-gray-700 hover:text-[#ff6b35] px-3 py-2 rounded-md text-sm font-medium transition-colors">
                   How It Works
-                </a>
+          </a>
           <a
                   href="/checkout"
                   className="inline-block bg-[#ff6b35] text-white px-6 py-2 rounded-full text-sm font-medium btn-hover"
@@ -194,9 +240,9 @@ export default function Home() {
           </div>
           {/* Events Timeline */}
           <EventsCarousel 
-            pastEvents={monthlyPromotions.slice(7, 10)} // 3 previous months (August, September, October)
-            upcomingEvents={monthlyPromotions.slice(10, 12)} // 2 upcoming months (November, December)
-            currentMonth={9} // October (0-indexed)
+            pastEvents={carouselEvents.pastEvents}
+            upcomingEvents={[...carouselEvents.currentEvent, ...carouselEvents.upcomingEvents]}
+            currentMonth={carouselEvents.currentMonthIndex}
           />
         </div>
       </section>
