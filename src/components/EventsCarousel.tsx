@@ -36,15 +36,20 @@ export default function EventsCarousel({ pastEvents, upcomingEvents, currentMont
       'July', 'August', 'September', 'October', 'November', 'December'
     ];
     
-    const now = new Date();
-    const currentYear = now.getFullYear();
-    const currentMonth = now.getMonth(); // 0-11 (0 = January)
-    
     // Parse the event month string (e.g., "January 2026" or "January")
     const eventMonthParts = event.month.split(' ');
     const eventMonthName = eventMonthParts[0];
-    const eventYear = eventMonthParts.length > 1 ? parseInt(eventMonthParts[1]) : currentYear;
+    const eventYear = eventMonthParts.length > 1 ? parseInt(eventMonthParts[1]) : new Date().getFullYear();
     const eventMonthIndex = monthNames.indexOf(eventMonthName);
+    
+    // Manually mark November 2025 and December 2025 as sold out
+    if (eventYear === 2025 && (eventMonthName === 'November' || eventMonthName === 'December')) {
+      return true;
+    }
+    
+    const now = new Date();
+    const currentYear = now.getFullYear();
+    const currentMonth = now.getMonth(); // 0-11 (0 = January)
     
     // An event is sold out if:
     // 1. Its year is before the current year, OR
