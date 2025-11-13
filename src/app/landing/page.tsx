@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { Metadata } from 'next';
+import Script from 'next/script';
 import TrackingButton from '@/components/TrackingButton';
 
 export const metadata: Metadata = {
@@ -11,6 +12,28 @@ export const metadata: Metadata = {
 export default function LandingBiteBook() {
   return (
     <div className="min-h-screen bg-white text-slate-900">
+      {/* Meta Pixel Code for Landing Page */}
+      <Script
+        id="meta-pixel-landing"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: `
+            !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js'); 
+            fbq('init', '2728483774150410'); 
+            fbq('track', 'PageView');
+          `
+        }}
+      />
+      <noscript>
+        <img 
+          height="1" 
+          width="1" 
+          style={{display: 'none'}}
+          src="https://www.facebook.com/tr?id=2728483774150410&ev=PageView&noscript=1"
+        />
+      </noscript>
+      {/* End Meta Pixel Code */}
+      
       {/* Sticky Header */}
       <header className="sticky top-0 z-40 bg-white/80 backdrop-blur border-b border-slate-200">
         <div className="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
