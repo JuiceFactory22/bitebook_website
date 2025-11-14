@@ -286,6 +286,32 @@ export default function Home() {
         </div>
       </section>
 
+      {/* How It Works Copy */}
+      <section id="how-it-works" className="py-20 bg-white">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-10">
+            <p className="text-sm uppercase tracking-[0.3em] text-gray-400 mb-3">The BiteBook Way</p>
+            <h2 className="text-4xl font-display font-bold text-gray-900">
+              How does it work? <span className="text-[#ff6b35]">Well I'm glad you asked.</span>
+            </h2>
+          </div>
+          <div className="space-y-6 text-lg leading-relaxed text-gray-700 max-w-3xl mx-auto">
+            <p>Here at BiteBook we don't believe you have to sacrifice quality for price.</p>
+            <p>Each month we put together a coupon book featuring around 30 local restaurants. We focus only on the best (most delicious) types of food. Wings, tacos, pizza, burgers, BBQ, fried chicken, etc.</p>
+            <p>We petitioned those food pyramid guys to recreate it based on our suggestions - but we haven't heard back yet...</p>
+            <p>So each monthly coupon book is centered around a theme and features 30 local restaurants.</p>
+            <p>January is Wing Month.</p>
+            <p>Each restaurant includes a coupon of their choosing, like a free half or full order of chicken wings. Most coupons are between $10 and $20 in value and are valid for the entire month.</p>
+            <p>And the entire book costs $30 (or $19.99 if you subscribe).</p>
+            <p>Quick math shakes out to - if you eat food then it's a pretty good deal.</p>
+            <p>Oh, and all the participating restaurants are centered around the New Haven area, so you won't have to go far to enjoy these deals.</p>
+            <p>We have some outstanding places who are participating and our team is constantly reaching out to find the absolute best places in the area.</p>
+            <p>Every month we are working to bring you the VERY BEST in New Haven for less.</p>
+            <p>We hope you check out the book and consider subscribing.</p>
+          </div>
+        </div>
+      </section>
+
       {/* Monthly Promotions */}
       <section id="promotions" className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -388,35 +414,6 @@ export default function Home() {
                 </p>
               </div>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* How It Works */}
-      <section id="how-it-works" className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-display font-bold text-gray-900 mb-4">
-              How It Works
-            </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              How does it work? Well I'm glad you asked.
-            </p>
-          </div>
-
-          <div className="max-w-4xl mx-auto space-y-6 text-lg text-gray-700 leading-relaxed">
-            <p>
-              Here at BiteBook we don't believe you have to sacrifice quality for price. Each month we put together a coupon book featuring around 30 local restaurants. You can see from our 2026 schedule on our site but we focus only on the best (most delicious) types of food. Wings, tacos, pizza, burgers, BBQ, fried chicken, etc. We petitioned those food pyramid guys to recreate it based on our suggestions - but we haven't heard back yet...
-            </p>
-            <p>
-              So each monthly coupon book is centered around a monthly theme and features 30 local restaurants. January is Wing Month. Each restaurant includes a coupon of their choosing, like a free half or full order of chicken wings. Most coupons are between $10 and $20 in value and are valid for the entire month. And the entire book costs $30 (or $19.99 if you subscribe). Quick math shakes out to - if you eat food then it's a pretty good deal.
-            </p>
-            <p>
-              All the participating restaurants are centered around the New Haven area, so you won't have to go far to enjoy these deals.
-            </p>
-            <p>
-              We have some outstanding places who are participating and our team is constantly reaching out to find the absolute best places in the area. Every month we are working to bring you the VERY BEST in New Haven for less. We hope you check out the book and consider subscribing.
-            </p>
           </div>
         </div>
       </section>
