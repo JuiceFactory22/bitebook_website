@@ -395,51 +395,28 @@ export default function Home() {
       {/* How It Works */}
       <section id="how-it-works" className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+          <div className="text-center mb-12">
             <h2 className="text-4xl font-display font-bold text-gray-900 mb-4">
               How It Works
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Getting started with BiteBook is simple and rewarding
+              How does it work? Well I'm glad you asked.
             </p>
           </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="text-center">
-              <div className="bg-[#ff6b35] text-white w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-6 text-xl font-bold">
-                1
-              </div>
-              <h3 className="text-xl font-display font-semibold text-gray-900 mb-3">
-                Purchase Your Book
-              </h3>
-              <p className="text-gray-600">
-                Buy your monthly coupon book for just $29.99 and get instant access to over $300 in savings
-              </p>
-            </div>
-            
-            <div className="text-center">
-              <div className="bg-[#ff6b35] text-white w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-6 text-xl font-bold">
-                2
-              </div>
-              <h3 className="text-xl font-display font-semibold text-gray-900 mb-3">
-                Explore Restaurants
-              </h3>
-              <p className="text-gray-600">
-                Browse our curated selection of 30+ local restaurants and discover new favorites in your area
-              </p>
-            </div>
-            
-            <div className="text-center">
-              <div className="bg-[#ff6b35] text-white w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-6 text-xl font-bold">
-                3
-              </div>
-              <h3 className="text-xl font-display font-semibold text-gray-900 mb-3">
-                Enjoy & Save
-              </h3>
-              <p className="text-gray-600">
-                Use your coupons within 30 days and enjoy amazing food while saving hundreds of dollars
-              </p>
-            </div>
+
+          <div className="max-w-4xl mx-auto space-y-6 text-lg text-gray-700 leading-relaxed">
+            <p>
+              Here at BiteBook we don't believe you have to sacrifice quality for price. Each month we put together a coupon book featuring around 30 local restaurants. You can see from our 2026 schedule on our site but we focus only on the best (most delicious) types of food. Wings, tacos, pizza, burgers, BBQ, fried chicken, etc. We petitioned those food pyramid guys to recreate it based on our suggestions - but we haven't heard back yet...
+            </p>
+            <p>
+              So each monthly coupon book is centered around a monthly theme and features 30 local restaurants. January is Wing Month. Each restaurant includes a coupon of their choosing, like a free half or full order of chicken wings. Most coupons are between $10 and $20 in value and are valid for the entire month. And the entire book costs $30 (or $19.99 if you subscribe). Quick math shakes out to - if you eat food then it's a pretty good deal.
+            </p>
+            <p>
+              All the participating restaurants are centered around the New Haven area, so you won't have to go far to enjoy these deals.
+            </p>
+            <p>
+              We have some outstanding places who are participating and our team is constantly reaching out to find the absolute best places in the area. Every month we are working to bring you the VERY BEST in New Haven for less. We hope you check out the book and consider subscribing.
+            </p>
           </div>
         </div>
       </section>
