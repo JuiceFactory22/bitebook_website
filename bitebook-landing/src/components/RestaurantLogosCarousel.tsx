@@ -5,16 +5,18 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Image from 'next/image';
 
 const restaurantLogos = [
-  { name: 'Blue Orchid', image: '/images/logos/new-haven/blue-orchid-logo.jpeg' },
-  { name: "Capotorto's Apizza Center", image: '/images/logos/new-haven/capotortos-logo.jpeg' },
-  { name: "Gaetano's Tavern", image: '/images/logos/new-haven/gaetanos-tavern-logo.jpeg' },
-  { name: "Jordan's Hot Dogs", image: '/images/logos/new-haven/jordans-hot-dogs-logo.jpeg' },
-  { name: "Jroos Restaurant", image: '/images/logos/new-haven/jroos-restaurant-logo.jpeg' },
-  { name: 'Outriggers', image: '/images/logos/new-haven/outriggers-logo.jpeg' },
-  { name: 'Prime 16', image: '/images/logos/new-haven/prime-16-logo.jpeg' },
-  { name: "Ricky D's Rib Shack", image: '/images/logos/new-haven/ricky-ds-logo.jpeg' },
-  { name: 'The Breakwall', image: '/images/logos/new-haven/the-breakwall-logo.jpeg' },
-  { name: 'Transilvania', image: '/images/logos/new-haven/transilvania-logo.jpeg' },
+  { name: 'Archie Moores', image: '/Images/Logos/New Haven/archie-moores-nh-logo.jpeg' },
+  { name: 'Blue Orchid', image: '/Images/Logos/New Haven/blue-orchid-logo.jpeg' },
+  { name: 'Castle Black Rock', image: '/Images/Logos/New Haven/castle-black-rock.jpeg' },
+  { name: "Capotorto's Apizza Center", image: '/Images/Logos/New Haven/capotortos-logo.jpeg' },
+  { name: "Gaetano's Tavern", image: '/Images/Logos/New Haven/gaetanos-tavern-logo.jpeg' },
+  { name: "Jordan's Hot Dogs", image: '/Images/Logos/New Haven/jordans-hot-dogs-logo.jpeg' },
+  { name: "Jroos Restaurant", image: '/Images/Logos/New Haven/jroos-restaurant-logo.jpeg' },
+  { name: 'Outriggers', image: '/Images/Logos/New Haven/outriggers-logo.jpeg' },
+  { name: 'Prime 16', image: '/Images/Logos/New Haven/prime-16-logo.jpeg' },
+  { name: "Ricky D's Rib Shack", image: '/Images/Logos/New Haven/ricky-ds-logo.jpeg' },
+  { name: 'The Breakwall', image: '/Images/Logos/New Haven/the-breakwall-logo.jpeg' },
+  { name: 'Transilvania', image: '/Images/Logos/New Haven/transilvania-logo.jpeg' },
 ];
 
 export default function RestaurantLogosCarousel() {

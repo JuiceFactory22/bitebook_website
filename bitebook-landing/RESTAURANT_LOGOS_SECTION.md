@@ -29,18 +29,25 @@ import RestaurantLogosCarousel from '@/components/RestaurantLogosCarousel';
 ```
 
 ## Logo Files Location
-The logos should be placed in:
-`public/images/logos/new-haven/`
+✅ The logos are already in place at:
+`public/Images/Logos/New Haven/`
 
-With these filenames:
-- blue-orchid-logo.jpeg
-- capotortos-logo.jpeg
-- gaetanos-tavern-logo.jpeg
-- jordans-hot-dogs-logo.jpeg
-- jroos-restaurant-logo.jpeg
-- outriggers-logo.jpeg
-- prime-16-logo.jpeg
-- ricky-ds-logo.jpeg
-- the-breakwall-logo.jpeg
-- transilvania-logo.jpeg
+The component includes all 12 restaurants:
+- Archie Moores
+- Blue Orchid
+- Castle Black Rock
+- Capotorto's Apizza Center
+- Gaetano's Tavern
+- Jordan's Hot Dogs
+- Jroos Restaurant
+- Outriggers
+- Prime 16
+- Ricky D's Rib Shack
+- The Breakwall
+- Transilvania
+
+## Next Steps
+1. Open `/src/app/landing-new_haven/page.tsx`
+2. Add the import at the top: `import RestaurantLogosCarousel from '@/components/RestaurantLogosCarousel';`
+3. Add the section JSX after the "How It Works Copy" section (the section with id="how-it-works-copy")
 
