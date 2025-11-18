@@ -3,6 +3,7 @@
 import { Clock, MapPin, Star, Utensils } from "lucide-react";
 import EventsCarousel from "@/components/EventsCarousel";
 import TrackingButton from "@/components/TrackingButton";
+import RestaurantLogosCarousel from "@/components/RestaurantLogosCarousel";
 import { useMemo } from "react";
 
 // Monthly promotions for 2026
@@ -309,6 +310,21 @@ export default function Home() {
             <p>Every month we are working to bring you the VERY BEST in New Haven for less.</p>
             <p>We hope you check out the book and consider subscribing.</p>
           </div>
+        </div>
+      </section>
+
+      {/* Participating Restaurants */}
+      <section className="bg-white py-12 md:py-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-display font-bold text-gray-900 mb-4">
+              Participating Restaurants
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Here is a list of some of the restaurants featured in next month's book
+            </p>
+          </div>
+          <RestaurantLogosCarousel />
         </div>
       </section>
 
