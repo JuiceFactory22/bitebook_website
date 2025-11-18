@@ -15,6 +15,7 @@ const restaurantLogos = [
   { name: 'Prime 16', image: '/images/Logos/New Haven/Prime 16 logo.jpeg' },
   { name: "Ricky D's Rib Shack", image: '/images/Logos/New Haven/Ricky Ds logo.jpeg' },
   { name: 'The Breakwall', image: '/images/Logos/New Haven/the breakwall logo.jpeg' },
+  { name: 'Transilvania', image: '/images/Logos/New Haven/transilvania-logo.jpeg' },
 ];
 
 export default function RestaurantLogosCarousel() {
