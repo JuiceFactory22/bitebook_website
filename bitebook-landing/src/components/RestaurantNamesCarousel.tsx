@@ -124,7 +124,8 @@ export default function RestaurantNamesCarousel({ restaurants }: RestaurantNames
           style={{
             scrollBehavior: isDragging ? 'auto' : 'smooth',
             userSelect: isDragging ? 'none' : 'auto',
-            WebkitUserSelect: isDragging ? 'none' : 'auto'
+            WebkitUserSelect: isDragging ? 'none' : 'auto',
+            backgroundImage: 'none'
           }}
           onMouseDown={handleMouseDown}
           onMouseMove={handleMouseMove}
@@ -138,6 +139,7 @@ export default function RestaurantNamesCarousel({ restaurants }: RestaurantNames
             <div
               key={index}
               className="flex-shrink-0 w-72 min-w-[280px] bg-gradient-to-br from-white to-gray-50 rounded-xl shadow-lg p-8 flex items-center justify-center snap-start border-2 border-gray-100 hover:border-orange-200 hover:shadow-xl transition-all duration-300"
+              style={{ backgroundImage: 'none' }}
             >
               <h3 className="text-2xl font-bold text-gray-900 text-center leading-tight tracking-tight">
                 {restaurant}
