@@ -8,7 +8,7 @@ const restaurantLogos = [
   { name: "Capotorto's Apizza Center", image: '/images/Logos/New Haven/capotortos logo.jpeg' },
   { name: "Gaetano's Tavern", image: '/images/Logos/New Haven/gaetanos tavern logo.jpeg' },
   { name: "Jordan's Hot Dogs", image: '/images/Logos/New Haven/jordans hot dogs logo.jpeg' },
-  { name: "Jroos Restaurant", image: '/images/Logos/New Haven/jroos-restaurant-logo.jpeg' },
+  { name: "Jroos Restaurant", image: '/images/Logos/New Haven/jroos.jpeg' },
   { name: 'Outriggers', image: '/images/Logos/New Haven/outriggers logo.jpeg' },
   { name: 'Prime 16', image: '/images/Logos/New Haven/Prime 16 logo.jpeg' },
   { name: "Ricky D's Rib Shack", image: '/images/Logos/New Haven/Ricky Ds logo.jpeg' },
