@@ -202,3 +202,4 @@ For technical support:
 ---
 
 **Ready to Launch**: This theme is production-ready for SiteGround hosting with WordPress CMS integration.
+
