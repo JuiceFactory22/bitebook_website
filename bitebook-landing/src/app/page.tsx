@@ -1,7 +1,7 @@
 'use client';
 
 import TrackingButton from "@/components/TrackingButton";
-import RestaurantLogosCarousel from "@/components/RestaurantLogosCarousel";
+import RestaurantNamesCarousel from "@/components/RestaurantNamesCarousel";
 
 // Monthly promotions for 2025 (Sept-Dec) and 2026 (Jan-Aug)
 const monthlyPromotions = [
@@ -17,6 +17,21 @@ const monthlyPromotions = [
     { month: "October 2025", theme: "Appetizers Month", tagline: "Start with a Bite.", description: "Tapas, nachos, sliders, quesadillas, mozzarella sticks. Encourage sharing and date-night promos.", color: "from-orange-500 to-yellow-500", icon: "🍤" },
     { month: "November 2025", theme: "Nacho Month", tagline: "Stacked. Loaded. Melted.", description: "Great for casual dining and sports bars. Include creative twists: BBQ nachos, breakfast nachos, etc.", color: "from-yellow-500 to-orange-600", icon: "🧀" },
     { month: "December 2025", theme: "Burger Month (Round 2)", tagline: "Holiday Edition — The Gift of the Grill.", description: "Cozy comfort food for winter. Repeat top performers or feature new premium burger collabs.", color: "from-amber-600 to-red-600", icon: "🍔" }
+];
+
+const participatingRestaurants = [
+  'Archie Moores',
+  'Blue Orchid',
+  'Castle Black Rock',
+  "Capotorto's Apizza Center",
+  "Gaetano's Tavern",
+  "Jordan's Hot Dogs",
+  "Jroos Restaurant",
+  'Outriggers',
+  'Prime 16',
+  "Ricky D's Rib Shack",
+  'The Breakwall',
+  'Transilvania',
 ];
 
 export default function Home() {
@@ -128,7 +143,7 @@ export default function Home() {
               Here is a list of some of the restaurants featured in next month's book
             </p>
           </div>
-          <RestaurantLogosCarousel />
+          <RestaurantNamesCarousel restaurants={participatingRestaurants} />
         </div>
       </section>
 
