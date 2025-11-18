@@ -5,18 +5,14 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Image from 'next/image';
 
 const restaurantLogos = [
-  { name: 'Archie Moores', image: '/Images/Logos/New Haven/archie-moores-nh-logo.jpeg' },
-  { name: 'Blue Orchid', image: '/Images/Logos/New Haven/blue-orchid-logo.jpeg' },
-  { name: 'Castle Black Rock', image: '/Images/Logos/New Haven/castle-black-rock.jpeg' },
-  { name: "Capotorto's Apizza Center", image: '/Images/Logos/New Haven/capotortos-logo.jpeg' },
-  { name: "Gaetano's Tavern", image: '/Images/Logos/New Haven/gaetanos-tavern-logo.jpeg' },
-  { name: "Jordan's Hot Dogs", image: '/Images/Logos/New Haven/jordans-hot-dogs-logo.jpeg' },
-  { name: "Jroos Restaurant", image: '/Images/Logos/New Haven/jroos-restaurant-logo.jpeg' },
-  { name: 'Outriggers', image: '/Images/Logos/New Haven/outriggers-logo.jpeg' },
-  { name: 'Prime 16', image: '/Images/Logos/New Haven/prime-16-logo.jpeg' },
-  { name: "Ricky D's Rib Shack", image: '/Images/Logos/New Haven/ricky-ds-logo.jpeg' },
-  { name: 'The Breakwall', image: '/Images/Logos/New Haven/the-breakwall-logo.jpeg' },
-  { name: 'Transilvania', image: '/Images/Logos/New Haven/transilvania-logo.jpeg' },
+  { name: "Capotorto's Apizza Center", image: '/images/Logos/New Haven/capotortos logo.jpeg' },
+  { name: "Gaetano's Tavern", image: '/images/Logos/New Haven/gaetanos tavern logo.jpeg' },
+  { name: "Jordan's Hot Dogs", image: '/images/Logos/New Haven/jordans hot dogs logo.jpeg' },
+  { name: "Jroos Restaurant", image: '/images/Logos/New Haven/jroos-restaurant-logo.jpeg' },
+  { name: 'Outriggers', image: '/images/Logos/New Haven/outriggers logo.jpeg' },
+  { name: 'Prime 16', image: '/images/Logos/New Haven/Prime 16 logo.jpeg' },
+  { name: "Ricky D's Rib Shack", image: '/images/Logos/New Haven/Ricky Ds logo.jpeg' },
+  { name: 'The Breakwall', image: '/images/Logos/New Haven/the breakwall logo.jpeg' },
 ];
 
 export default function RestaurantLogosCarousel() {
