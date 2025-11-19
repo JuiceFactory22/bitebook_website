@@ -10,6 +10,7 @@ const restaurantLogos = [
   { name: 'Castle Black Rock', image: '/images/Logos/New Haven/The-Castle-Black-Rock-Logo.jpeg' },
   { name: "Delaney's Restaurant", image: '/images/Logos/New Haven/delaneys-restaurant-nh.jpeg' },
   { name: "Gaetano's Tavern", image: '/images/Logos/New Haven/gaetanos tavern logo.jpeg' },
+  { name: 'Heffer', image: '/images/Logos/New Haven/heffer-logo.jpeg' },
   { name: "Jordan's Hot Dogs", image: '/images/Logos/New Haven/jordans hot dogs logo.jpeg' },
   { name: "Jroos Restaurant", image: '/images/Logos/New Haven/jroos.jpeg' },
   { name: 'The Landing at Five Twenty', image: '/images/Logos/New Haven/the-landing-at-five-twenty.jpeg' },
