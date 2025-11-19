@@ -15,9 +15,9 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "BiteBook - Local Restaurant Coupon Books | Boston Metro Area",
-  description: "Discover amazing deals at local restaurants with BiteBook coupon books. $29.99 for over $300 in savings at 30+ Boston area restaurants. Limited monthly themes - Taco, Breakfast, Pizza & Burger months.",
-  keywords: "restaurant coupons, Boston restaurants, local dining deals, food coupons, restaurant discounts, Boston metro area dining",
+  title: "BiteBook - Local Restaurant Coupon Books | New Haven Area",
+  description: "Discover amazing deals at local restaurants with BiteBook coupon books. $29.99 for over $300 in savings at 30+ local restaurants. Limited monthly themes - Wings, Tacos, Pizza, Burgers & more.",
+  keywords: "restaurant coupons, New Haven restaurants, local dining deals, food coupons, restaurant discounts, New Haven area dining, coupon books",
   authors: [{ name: "BiteBook" }],
   creator: "BiteBook",
   publisher: "BiteBook",
@@ -40,8 +40,8 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_US',
     url: 'https://getbitebook.com',
-    title: 'BiteBook - Local Restaurant Coupon Books',
-    description: 'Discover amazing deals at local restaurants with BiteBook coupon books. $29.99 for over $300 in savings at 30+ local restaurants.',
+    title: 'BiteBook - Local Restaurant Coupon Books | New Haven Area',
+    description: 'Discover amazing deals at local restaurants with BiteBook coupon books. $29.99 for over $300 in savings at 30+ local restaurants. Limited monthly themes featuring wings, tacos, pizza, burgers and more.',
     siteName: 'BiteBook',
     images: [
       {
@@ -54,8 +54,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'BiteBook - Local Restaurant Coupon Books',
-    description: 'Discover amazing deals at local restaurants with BiteBook coupon books. $29.99 for over $300 in savings at 30+ local restaurants.',
+    title: 'BiteBook - Local Restaurant Coupon Books | New Haven Area',
+    description: 'Discover amazing deals at local restaurants with BiteBook coupon books. $29.99 for over $300 in savings at 30+ local restaurants. Limited monthly themes featuring wings, tacos, pizza, burgers and more.',
     images: ['/images/hero-wings.jpg'],
   },
 };
@@ -95,13 +95,13 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "Organization",
               "name": "BiteBook",
-              "description": "Local restaurant coupon book service providing amazing deals at Boston area restaurants",
-              "url": "https://bitebook.com",
+              "description": "Local restaurant coupon book service providing amazing deals at New Haven area restaurants",
+              "url": "https://getbitebook.com",
               "sameAs": [],
               "address": {
                 "@type": "PostalAddress",
-                "addressLocality": "Boston",
-                "addressRegion": "MA",
+                "addressLocality": "New Haven",
+                "addressRegion": "CT",
                 "addressCountry": "US"
               },
               "offers": {
