@@ -73,22 +73,6 @@ const monthlyPromotions = [
       icon: "🍦"
     },
     {
-      month: "September 2025",
-      theme: "Wings Month (Round 2)",
-      tagline: "Fall Back into Flavor.",
-      description: "Football season kickoff — repeat your January success with a new slate of wing joints. Consider spicy challenges.",
-      color: "from-red-500 to-orange-600",
-      icon: "🍗"
-    },
-    {
-      month: "October 2025",
-      theme: "Appetizers Month",
-      tagline: "Start with a Bite.",
-      description: "Tapas, nachos, sliders, quesadillas, mozzarella sticks. Encourage sharing and date-night promos.",
-      color: "from-orange-500 to-yellow-500",
-      icon: "🍤"
-    },
-    {
       month: "November 2025",
       theme: "Nacho Month",
       tagline: "Stacked. Loaded. Melted.",
