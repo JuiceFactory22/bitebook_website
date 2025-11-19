@@ -22,14 +22,8 @@ export const metadata: Metadata = {
   creator: "BiteBook",
   publisher: "BiteBook",
   icons: {
-    icon: [
-      { url: '/favicon.ico' },
-      { url: '/icon-16x16.png', sizes: '16x16', type: 'image/png' },
-      { url: '/icon-32x32.png', sizes: '32x32', type: 'image/png' },
-    ],
-    apple: [
-      { url: '/apple-icon.png', sizes: '180x180', type: 'image/png' },
-    ],
+    icon: '/icon.png',
+    apple: '/icon.png',
   },
   robots: {
     index: true,
@@ -45,15 +39,24 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://bitebook.com',
+    url: 'https://getbitebook.com',
     title: 'BiteBook - Local Restaurant Coupon Books',
-    description: 'Discover amazing deals at local restaurants with BiteBook coupon books. $29.99 for over $300 in savings at 30+ Boston area restaurants.',
+    description: 'Discover amazing deals at local restaurants with BiteBook coupon books. $29.99 for over $300 in savings at 30+ local restaurants.',
     siteName: 'BiteBook',
+    images: [
+      {
+        url: '/images/hero-wings.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'BiteBook - Local Restaurant Coupon Books',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'BiteBook - Local Restaurant Coupon Books',
-    description: 'Discover amazing deals at local restaurants with BiteBook coupon books. $29.99 for over $300 in savings at 30+ Boston area restaurants.',
+    description: 'Discover amazing deals at local restaurants with BiteBook coupon books. $29.99 for over $300 in savings at 30+ local restaurants.',
+    images: ['/images/hero-wings.jpg'],
   },
 };
 
