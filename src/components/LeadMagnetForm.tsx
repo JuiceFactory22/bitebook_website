@@ -74,7 +74,7 @@ export default function LeadMagnetForm() {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Enter your email"
                   required
-                  className="flex-1 px-4 py-3 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-4 focus:ring-yellow-300 shadow-lg font-medium"
+                  className="flex-1 px-4 py-3 rounded-lg bg-white text-black placeholder-gray-500 focus:outline-none focus:ring-4 focus:ring-yellow-300 shadow-lg font-medium"
                 />
                 <input
                   type="tel"
@@ -82,7 +82,7 @@ export default function LeadMagnetForm() {
                   onChange={(e) => setPhone(e.target.value)}
                   placeholder="Enter your phone"
                   required
-                  className="flex-1 px-4 py-3 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-4 focus:ring-yellow-300 shadow-lg font-medium"
+                  className="flex-1 px-4 py-3 rounded-lg bg-white text-black placeholder-gray-500 focus:outline-none focus:ring-4 focus:ring-yellow-300 shadow-lg font-medium"
                 />
                 <button
                   type="submit"
