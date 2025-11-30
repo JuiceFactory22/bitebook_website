@@ -4,6 +4,7 @@ import { Clock, MapPin, Star, Utensils } from "lucide-react";
 import EventsCarousel from "@/components/EventsCarousel";
 import TrackingButton from "@/components/TrackingButton";
 import RestaurantLogosCarousel from "@/components/RestaurantLogosCarousel";
+import LeadMagnetForm from "@/components/LeadMagnetForm";
 import { useMemo } from "react";
 
 // Monthly promotions for 2026
@@ -231,6 +232,9 @@ export default function Home() {
           </div>
         </div>
       </nav>
+
+      {/* Lead Magnet Form */}
+      <LeadMagnetForm />
 
       {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-[#ff6b35] via-[#e55a2b] to-[#d44a1f] text-white py-20">
