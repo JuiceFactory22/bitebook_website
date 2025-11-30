@@ -140,7 +140,10 @@ export default function RootLayout({
               t.src=v;s=b.getElementsByTagName(e)[0];
               s.parentNode.insertBefore(t,s)}(window, document,'script',
               'https://connect.facebook.net/en_US/fbevents.js');
-              fbq('init', '1557597308925077');
+              fbq('init', '1557597308925077', {
+                // Advanced matching data - values will be hashed automatically by the pixel using SHA-256
+                // Add user data here when available (em: email, ph: phone, etc.)
+              });
               fbq('track', 'PageView');
             `
           }}
