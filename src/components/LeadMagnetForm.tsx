@@ -52,44 +52,49 @@ export default function LeadMagnetForm() {
 
   return (
     <>
-      <section className="bg-gradient-to-r from-[#ff6b35] to-[#e55a2b] text-white py-6">
+      <section className="sticky top-0 z-50 bg-gradient-to-r from-[#ff6b35] via-[#ff6b35] to-[#e55a2b] text-white py-4 shadow-2xl border-b-4 border-yellow-400">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl mx-auto">
-            <div className="text-center mb-4">
-              <h3 className="text-2xl md:text-3xl font-bold mb-2">
-                Get a Free Coupon from One of Our Participating Restaurants!
-              </h3>
-              <p className="text-lg opacity-90">
-                Enter your email and phone number to receive a free coupon delivered instantly
-              </p>
+          <div className="max-w-5xl mx-auto">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+              {/* Left side - Heading */}
+              <div className="flex-1 text-center md:text-left">
+                <h3 className="text-xl md:text-2xl font-extrabold mb-1 leading-tight">
+                  🎉 Get a Free Coupon from One of Our Participating Restaurants!
+                </h3>
+                <p className="text-sm md:text-base opacity-95 font-medium">
+                  Enter your email and phone number to receive a free coupon delivered instantly
+                </p>
+              </div>
+              
+              {/* Right side - Form */}
+              <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-2 flex-1 max-w-2xl md:max-w-none">
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Enter your email"
+                  required
+                  className="flex-1 px-4 py-3 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-4 focus:ring-yellow-300 shadow-lg font-medium"
+                />
+                <input
+                  type="tel"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder="Enter your phone"
+                  required
+                  className="flex-1 px-4 py-3 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-4 focus:ring-yellow-300 shadow-lg font-medium"
+                />
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="px-6 md:px-8 py-3 bg-yellow-400 hover:bg-yellow-300 text-gray-900 font-extrabold rounded-lg shadow-xl hover:shadow-2xl transition-all disabled:opacity-50 disabled:cursor-not-allowed text-base md:text-lg whitespace-nowrap transform hover:scale-105"
+                >
+                  {isSubmitting ? 'Sending...' : 'Get Free Coupon'}
+                </button>
+              </form>
             </div>
-            <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-2xl mx-auto">
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter your email"
-                required
-                className="flex-1 px-4 py-3 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-yellow-300"
-              />
-              <input
-                type="tel"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                placeholder="Enter your phone number"
-                required
-                className="flex-1 px-4 py-3 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-yellow-300"
-              />
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="px-8 py-3 bg-yellow-400 hover:bg-yellow-300 text-gray-900 font-bold rounded-lg shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {isSubmitting ? 'Sending...' : 'Get Free Coupon'}
-              </button>
-            </form>
             {error && (
-              <p className="text-red-200 text-center mt-2 text-sm">{error}</p>
+              <p className="text-red-200 text-center mt-3 text-sm font-semibold">{error}</p>
             )}
           </div>
         </div>
