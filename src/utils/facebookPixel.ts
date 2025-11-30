@@ -14,7 +14,7 @@ export const trackEvent = (eventName: string, parameters?: any) => {
 // Common events for BiteBook
 export const trackPurchase = (value: number, currency: string = 'USD') => {
   trackEvent('Purchase', {
-    value: value,
+    value: 29.99,
     currency: currency,
     content_type: 'product',
     content_name: 'BiteBook Coupon Book'
