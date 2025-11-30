@@ -22,15 +22,17 @@ export default function LeadMagnetForm() {
       const templateParams = {
         to_email: email,
         to_phone: phone,
+        email: email,
+        phone: phone,
         from_name: 'BiteBook',
         message: 'Thank you for signing up! Your free coupon will be sent shortly.',
       };
 
       await emailjs.send(
-        'service_bitebook', // Replace with your EmailJS service ID
-        'template_lead_magnet', // Replace with your EmailJS template ID
+        'service_u460dtm', // EmailJS service ID
+        'template_lead_magnet', // TODO: Create this template in EmailJS for lead magnet
         templateParams,
-        'qq3QK0zGBYaHNI2DW' // Your EmailJS public key
+        'qq3QK0zGBYaHNI2DW' // EmailJS public key
       );
 
       // Track lead with Meta Pixel
