@@ -310,6 +310,26 @@ export default function Home() {
           </div>
           <RestaurantLogosCarousel />
         </div>
+        
+        {/* Limited Time Offer CTA */}
+        <div className="text-center mt-12">
+          <div className="bg-yellow-100 border border-yellow-300 rounded-lg p-6 max-w-2xl mx-auto">
+            <div className="flex items-center justify-center mb-3">
+              <Clock className="w-6 h-6 text-yellow-600 mr-2" />
+              <span className="font-semibold text-yellow-800">Limited Time Offer</span>
+            </div>
+            <p className="text-yellow-700 mb-6">
+              Coupon books sell out fast! Each month we print a limited number to ensure 
+              our restaurant partners get maximum value from their participation.
+            </p>
+            <a 
+              href="/checkout"
+              className="inline-block bg-[#ff6b35] hover:bg-[#e55a2b] text-white px-8 py-3 rounded-full font-semibold btn-hover shadow-lg transition-all duration-300"
+            >
+              Secure Your Book Now - $29.99
+            </a>
+          </div>
+        </div>
       </section>
 
       {/* Monthly Promotions */}
@@ -363,25 +383,6 @@ export default function Home() {
                 </div>
               </div>
             ))}
-          </div>
-          
-          <div className="text-center mt-12">
-            <div className="bg-yellow-100 border border-yellow-300 rounded-lg p-6 max-w-2xl mx-auto">
-              <div className="flex items-center justify-center mb-3">
-                <Clock className="w-6 h-6 text-yellow-600 mr-2" />
-                <span className="font-semibold text-yellow-800">Limited Time Offer</span>
-              </div>
-              <p className="text-yellow-700 mb-6">
-                Coupon books sell out fast! Each month we print a limited number to ensure 
-                our restaurant partners get maximum value from their participation.
-              </p>
-              <a 
-                href="/checkout"
-                className="inline-block bg-[#ff6b35] hover:bg-[#e55a2b] text-white px-8 py-3 rounded-full font-semibold btn-hover shadow-lg transition-all duration-300"
-              >
-                Secure Your Book Now - $29.99
-              </a>
-            </div>
           </div>
         </div>
       </section>
