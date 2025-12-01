@@ -43,20 +43,18 @@ export default function LeadMagnetForm() {
 
       const SERVICE_ID = 'service_u460dtm';
       const TEMPLATE_ID = 'template_db2m607';
-      const PUBLIC_KEY = 'qq3QK0zGBYaHNI2DW';
 
       console.log('=== EmailJS Send Request ===');
       console.log('Service ID:', SERVICE_ID);
       console.log('Template ID:', TEMPLATE_ID);
-      console.log('Public Key:', PUBLIC_KEY);
       console.log('Template Params:', templateParams);
       console.log('===========================');
 
+      // Since we initialized EmailJS with init(), we don't need to pass publicKey again
       const result = await emailjs.send(
         SERVICE_ID,
         TEMPLATE_ID,
-        templateParams,
-        PUBLIC_KEY
+        templateParams
       );
 
       console.log('EmailJS result:', result);
