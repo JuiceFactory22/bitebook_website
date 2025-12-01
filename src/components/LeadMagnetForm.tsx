@@ -18,12 +18,22 @@ export default function LeadMagnetForm() {
     setIsSubmitting(true);
 
     try {
+      // Validate email format
+      if (!email || !email.includes('@')) {
+        setError('Please enter a valid email address');
+        setIsSubmitting(false);
+        return;
+      }
+
+      // Clean phone number (remove any non-digits)
+      const cleanPhone = phone.replace(/\D/g, '');
+
       // Send email via EmailJS
       // Template variables must match exactly what's defined in your EmailJS template
       // The template uses {{email}} in the "To Email" field
       const templateParams = {
-        email: email, // Maps to {{email}} in template
-        phone: phone, // For reference, even if not used in template
+        email: email.trim(), // Maps to {{email}} in template - must be valid email
+        phone: cleanPhone, // Clean phone number
       };
 
       console.log('Sending email with params:', {
