@@ -47,7 +47,8 @@ export default function LeadMagnetForm() {
       };
 
       const SERVICE_ID = 'service_u460dtm';
-      const TEMPLATE_ID = 'template_db2m607';
+      // Try template_rwwf15i - the other template_lead_magnet in your list
+      const TEMPLATE_ID = 'template_rwwf15i';
       const PUBLIC_KEY = 'qq3QK0zGBYaHNI2DW';
 
       console.log('=== EmailJS Send Request ===');
