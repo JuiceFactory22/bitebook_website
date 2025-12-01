@@ -19,13 +19,10 @@ export default function LeadMagnetForm() {
 
     try {
       // Send email via EmailJS
+      // Template variables must match exactly what's defined in your EmailJS template
       const templateParams = {
-        to_email: email,
-        to_phone: phone,
         email: email,
         phone: phone,
-        from_name: 'BiteBook',
-        message: 'Thank you for signing up! Your free coupon will be sent shortly.',
       };
 
       console.log('Sending email with params:', {
