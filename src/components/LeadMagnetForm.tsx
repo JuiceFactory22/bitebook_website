@@ -52,49 +52,49 @@ export default function LeadMagnetForm() {
 
   return (
     <>
-      <section className="sticky top-0 z-50 bg-gradient-to-r from-[#ff6b35] via-[#ff6b35] to-[#e55a2b] text-white py-4 shadow-2xl border-b-4 border-yellow-400">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="sticky top-0 z-50 bg-gradient-to-r from-[#ff6b35] via-[#ff6b35] to-[#e55a2b] text-white py-2 md:py-4 shadow-2xl border-b-2 md:border-b-4 border-yellow-400">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
           <div className="max-w-5xl mx-auto">
-            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-2 md:gap-4">
               {/* Left side - Heading */}
-              <div className="flex-1 text-center md:text-left">
-                <h3 className="text-xl md:text-2xl font-extrabold mb-1 leading-tight">
-                  🎉 Get a Free Coupon from One of Our Participating Restaurants!
+              <div className="flex-1 text-center md:text-left w-full md:w-auto">
+                <h3 className="text-sm md:text-xl lg:text-2xl font-extrabold mb-0.5 md:mb-1 leading-tight">
+                  🎉 Get a Free Coupon!
                 </h3>
-                <p className="text-sm md:text-base opacity-95 font-medium">
+                <p className="text-xs md:text-sm lg:text-base opacity-95 font-medium hidden md:block">
                   Enter your email and phone number to receive a free coupon delivered instantly
                 </p>
               </div>
               
               {/* Right side - Form */}
-              <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-2 flex-1 max-w-2xl md:max-w-none">
+              <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-1.5 md:gap-2 flex-1 max-w-2xl md:max-w-none w-full md:w-auto">
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter your email"
+                  placeholder="Email"
                   required
-                  className="flex-1 px-4 py-3 rounded-lg bg-white text-black placeholder-gray-500 focus:outline-none focus:ring-4 focus:ring-yellow-300 shadow-lg font-medium"
+                  className="flex-1 px-2 md:px-4 py-1.5 md:py-3 rounded-lg bg-white text-black placeholder-gray-500 focus:outline-none focus:ring-2 md:focus:ring-4 focus:ring-yellow-300 shadow-lg text-sm md:text-base font-medium"
                 />
                 <input
                   type="tel"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  placeholder="Enter your phone"
+                  placeholder="Phone"
                   required
-                  className="flex-1 px-4 py-3 rounded-lg bg-white text-black placeholder-gray-500 focus:outline-none focus:ring-4 focus:ring-yellow-300 shadow-lg font-medium"
+                  className="flex-1 px-2 md:px-4 py-1.5 md:py-3 rounded-lg bg-white text-black placeholder-gray-500 focus:outline-none focus:ring-2 md:focus:ring-4 focus:ring-yellow-300 shadow-lg text-sm md:text-base font-medium"
                 />
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="px-6 md:px-8 py-3 bg-yellow-400 hover:bg-yellow-300 text-gray-900 font-extrabold rounded-lg shadow-xl hover:shadow-2xl transition-all disabled:opacity-50 disabled:cursor-not-allowed text-base md:text-lg whitespace-nowrap transform hover:scale-105"
+                  className="px-4 md:px-6 lg:px-8 py-1.5 md:py-3 bg-yellow-400 hover:bg-yellow-300 text-gray-900 font-extrabold rounded-lg shadow-xl hover:shadow-2xl transition-all disabled:opacity-50 disabled:cursor-not-allowed text-xs md:text-base lg:text-lg whitespace-nowrap transform hover:scale-105"
                 >
                   {isSubmitting ? 'Sending...' : 'Get Free Coupon'}
                 </button>
               </form>
             </div>
             {error && (
-              <p className="text-red-200 text-center mt-3 text-sm font-semibold">{error}</p>
+              <p className="text-red-200 text-center mt-1 md:mt-3 text-xs md:text-sm font-semibold">{error}</p>
             )}
           </div>
         </div>
