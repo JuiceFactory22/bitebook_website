@@ -12,11 +12,6 @@ export default function LeadMagnetForm() {
   const [showSuccess, setShowSuccess] = useState(false);
   const [error, setError] = useState('');
 
-  // Initialize EmailJS
-  useEffect(() => {
-    emailjs.init('qq3QK0zGBYaHNI2DW');
-  }, []);
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
@@ -32,6 +27,12 @@ export default function LeadMagnetForm() {
         from_name: 'BiteBook',
         message: 'Thank you for signing up! Your free coupon will be sent shortly.',
       };
+
+      console.log('Sending email with params:', {
+        service: 'service_u460dtm',
+        template: 'template_db2m607',
+        params: templateParams
+      });
 
       const result = await emailjs.send(
         'service_u460dtm', // EmailJS service ID
@@ -50,24 +51,18 @@ export default function LeadMagnetForm() {
       setEmail('');
       setPhone('');
     } catch (err: any) {
-      console.error('Error sending lead:', err);
-      console.error('Error details:', {
-        text: err.text,
-        status: err.status,
-        message: err.message
-      });
+      console.error('Full error object:', err);
+      console.error('Error text:', err.text);
+      console.error('Error status:', err.status);
+      console.error('Error statusText:', err.statusText);
       
       // More specific error messages
       if (err.text) {
-        if (err.text.includes('template')) {
-          setError('Template not found. Please check your EmailJS template name.');
-        } else if (err.text.includes('service')) {
-          setError('Service not found. Please check your EmailJS service ID.');
-        } else {
-          setError(`Error: ${err.text}. Please try again or contact support.`);
-        }
+        setError(`Error: ${err.text}`);
+      } else if (err.message) {
+        setError(`Error: ${err.message}`);
       } else {
-        setError('Something went wrong. Please try again.');
+        setError('Something went wrong. Please check the browser console for details.');
       }
     } finally {
       setIsSubmitting(false);
