@@ -12,9 +12,14 @@ export default function LeadMagnetForm() {
   const [showSuccess, setShowSuccess] = useState(false);
   const [error, setError] = useState('');
 
-  // Initialize EmailJS
+  // Initialize EmailJS on component mount
   useEffect(() => {
-    emailjs.init('qq3QK0zGBYaHNI2DW');
+    try {
+      emailjs.init('qq3QK0zGBYaHNI2DW');
+      console.log('EmailJS initialized successfully');
+    } catch (error) {
+      console.error('EmailJS initialization error:', error);
+    }
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
