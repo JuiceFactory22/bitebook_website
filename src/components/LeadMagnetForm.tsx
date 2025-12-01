@@ -38,13 +38,13 @@ export default function LeadMagnetForm() {
 
       console.log('Sending email with params:', {
         service: 'service_u460dtm',
-        template: 'template_db2m607',
+        template: 'template_7a5hdz9',
         params: templateParams
       });
 
       const result = await emailjs.send(
         'service_u460dtm', // EmailJS service ID
-        'template_db2m607', // EmailJS template ID for lead magnet
+        'template_7a5hdz9', // EmailJS template ID for lead magnet
         templateParams,
         'qq3QK0zGBYaHNI2DW' // EmailJS public key
       );
