@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { X, CheckCircle } from 'lucide-react';
 import emailjs from '@emailjs/browser';
 import { trackLead } from '@/utils/facebookPixel';
@@ -11,6 +11,11 @@ export default function LeadMagnetForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [error, setError] = useState('');
+
+  // Initialize EmailJS
+  useEffect(() => {
+    emailjs.init('qq3QK0zGBYaHNI2DW');
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,12 +33,14 @@ export default function LeadMagnetForm() {
         message: 'Thank you for signing up! Your free coupon will be sent shortly.',
       };
 
-      await emailjs.send(
+      const result = await emailjs.send(
         'service_u460dtm', // EmailJS service ID
         'template_lead_magnet', // EmailJS template for lead magnet (see EMAILJS_LEAD_MAGNET_TEMPLATE.md)
         templateParams,
         'qq3QK0zGBYaHNI2DW' // EmailJS public key
       );
+
+      console.log('EmailJS result:', result);
 
       // Track lead with Meta Pixel
       trackLead();
@@ -44,7 +51,24 @@ export default function LeadMagnetForm() {
       setPhone('');
     } catch (err: any) {
       console.error('Error sending lead:', err);
-      setError('Something went wrong. Please try again.');
+      console.error('Error details:', {
+        text: err.text,
+        status: err.status,
+        message: err.message
+      });
+      
+      // More specific error messages
+      if (err.text) {
+        if (err.text.includes('template')) {
+          setError('Template not found. Please check your EmailJS template name.');
+        } else if (err.text.includes('service')) {
+          setError('Service not found. Please check your EmailJS service ID.');
+        } else {
+          setError(`Error: ${err.text}. Please try again or contact support.`);
+        }
+      } else {
+        setError('Something went wrong. Please try again.');
+      }
     } finally {
       setIsSubmitting(false);
     }
