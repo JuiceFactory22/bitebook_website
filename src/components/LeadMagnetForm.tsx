@@ -12,6 +12,11 @@ export default function LeadMagnetForm() {
   const [showSuccess, setShowSuccess] = useState(false);
   const [error, setError] = useState('');
 
+  // Initialize EmailJS
+  useEffect(() => {
+    emailjs.init('qq3QK0zGBYaHNI2DW');
+  }, []);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
@@ -36,17 +41,22 @@ export default function LeadMagnetForm() {
         phone: cleanPhone, // Clean phone number
       };
 
-      console.log('Sending email with params:', {
-        service: 'service_u460dtm',
-        template: 'template_7a5hdz9',
-        params: templateParams
-      });
+      const SERVICE_ID = 'service_u460dtm';
+      const TEMPLATE_ID = 'template_7a5hdz9';
+      const PUBLIC_KEY = 'qq3QK0zGBYaHNI2DW';
+
+      console.log('=== EmailJS Send Request ===');
+      console.log('Service ID:', SERVICE_ID);
+      console.log('Template ID:', TEMPLATE_ID);
+      console.log('Public Key:', PUBLIC_KEY);
+      console.log('Template Params:', templateParams);
+      console.log('===========================');
 
       const result = await emailjs.send(
-        'service_u460dtm', // EmailJS service ID
-        'template_7a5hdz9', // EmailJS template ID for lead magnet
+        SERVICE_ID,
+        TEMPLATE_ID,
         templateParams,
-        'qq3QK0zGBYaHNI2DW' // EmailJS public key
+        PUBLIC_KEY
       );
 
       console.log('EmailJS result:', result);
