@@ -81,7 +81,7 @@ Your Free Coupon from BiteBook is On the Way! 🎉
 </head>
 <body>
   <div class="header">
-    <h1>🎉 Your Free Coupon is Here!</h1>
+    <h1>🎉 Your Free Coupon is On the Way!</h1>
   </div>
   
   <div class="content">
