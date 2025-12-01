@@ -35,7 +35,7 @@ export default function LeadMagnetForm() {
 
       const result = await emailjs.send(
         'service_u460dtm', // EmailJS service ID
-        'template_lead_magnet', // EmailJS template for lead magnet (see EMAILJS_LEAD_MAGNET_TEMPLATE.md)
+        'template_db2m607', // EmailJS template ID for lead magnet
         templateParams,
         'qq3QK0zGBYaHNI2DW' // EmailJS public key
       );
