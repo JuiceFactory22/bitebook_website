@@ -12,7 +12,7 @@ Copy this into your EmailJS template editor:
 
 ### Subject Line:
 ```
-Your Free Coupon from BiteBook is Here! 🎉
+Your Free Coupon from BiteBook is On the Way! 🎉
 ```
 
 ### Email Body (HTML):
@@ -89,26 +89,25 @@ Your Free Coupon from BiteBook is Here! 🎉
     
     <p>Thank you for signing up with BiteBook! We're excited to have you join our community of food lovers in the New Haven area.</p>
     
+    <p><strong>Your free coupon is on the way!</strong></p>
+    
+    <p>We will text you 1 coupon for Free Wings at one of our participating restaurants. Keep an eye on your phone - it should arrive shortly!</p>
+    
     <div class="coupon-box">
-      <h2 style="margin-top: 0; color: #333;">Your Free Coupon</h2>
-      <p style="margin: 10px 0;">Use this code at checkout:</p>
-      <div class="coupon-code">FREEBITE2025</div>
-      <p style="margin: 10px 0; font-size: 14px; color: #666;">
-        Valid for one free item from one of our participating restaurants
-      </p>
+      <h2 style="margin-top: 0; color: #333;">Here's How to Use Your Coupon:</h2>
+      <ul style="text-align: left; display: inline-block; margin: 15px 0;">
+        <li>We will text you 1 coupon for Free Wings at one of our participating restaurants.</li>
+        <li>Present this coupon which is valid for the month of January.</li>
+        <li>If you want more great deals sign up for the full version of BiteBook and get deals at over 25 restaurants.</li>
+      </ul>
     </div>
     
-    <p><strong>How to use your coupon:</strong></p>
-    <ul>
-      <li>Visit any participating restaurant (see list at getbitebook.com)</li>
-      <li>Show this email or mention the code at checkout</li>
-      <li>Enjoy your free item!</li>
-    </ul>
+    <p><strong>Special Offer Just For You!</strong></p>
     
-    <p>Want even more savings? Check out our full BiteBook with over $300 in restaurant deals for just $29.99!</p>
+    <p>We have a special offer for you. Sign up now and get the full book for only <strong style="color: #ff6b35; font-size: 20px;">$19.99</strong>. Discounted from the standard price of $29.99!</p>
     
     <div style="text-align: center;">
-      <a href="https://getbitebook.com/checkout" class="button">Get Full BiteBook - $29.99</a>
+      <a href="https://getbitebook.com/checkout" class="button">Get Full BiteBook - $19.99 (Save $10!)</a>
     </div>
     
     <p style="margin-top: 30px;">Questions? Reply to this email or contact us at <a href="mailto:info@getbitebook.com">info@getbitebook.com</a></p>
@@ -131,20 +130,24 @@ Your Free Coupon from BiteBook is Here! 🎉
 
 ### Plain Text Version (for email clients that don't support HTML):
 ```
-🎉 Your Free Coupon is Here!
+🎉 Your Free Coupon is On the Way!
 
 Hi there!
 
 Thank you for signing up with BiteBook! We're excited to have you join our community of food lovers in the New Haven area.
 
-YOUR FREE COUPON CODE: FREEBITE2025
+Your free coupon is on the way!
 
-How to use your coupon:
-- Visit any participating restaurant (see list at getbitebook.com)
-- Show this email or mention the code at checkout
-- Enjoy your free item!
+We will text you 1 coupon for Free Wings at one of our participating restaurants. Keep an eye on your phone - it should arrive shortly!
 
-Want even more savings? Check out our full BiteBook with over $300 in restaurant deals for just $29.99!
+Here's How to Use Your Coupon:
+- We will text you 1 coupon for Free Wings at one of our participating restaurants.
+- Present this coupon which is valid for the month of January.
+- If you want more great deals sign up for the full version of BiteBook and get deals at over 25 restaurants.
+
+Special Offer Just For You!
+
+We have a special offer for you. Sign up now and get the full book for only $19.99. Discounted from the standard price of $29.99!
 
 Get your full BiteBook here: https://getbitebook.com/checkout
 
