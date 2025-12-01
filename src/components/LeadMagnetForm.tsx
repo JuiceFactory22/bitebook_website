@@ -20,9 +20,10 @@ export default function LeadMagnetForm() {
     try {
       // Send email via EmailJS
       // Template variables must match exactly what's defined in your EmailJS template
+      // The template uses {{email}} in the "To Email" field
       const templateParams = {
-        email: email,
-        phone: phone,
+        email: email, // Maps to {{email}} in template
+        phone: phone, // For reference, even if not used in template
       };
 
       console.log('Sending email with params:', {
