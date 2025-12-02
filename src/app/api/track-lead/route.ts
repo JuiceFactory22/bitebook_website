@@ -21,13 +21,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Get Google Sheets credentials from environment variables
-    const GOOGLE_SHEETS_ID = process.env.GOOGLE_SHEETS_ID;
-    const GOOGLE_SERVICE_ACCOUNT_EMAIL = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
-    const GOOGLE_PRIVATE_KEY = process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n');
+    // Get Google Apps Script URL from environment variables
+    const GOOGLE_APPS_SCRIPT_URL = process.env.GOOGLE_APPS_SCRIPT_URL;
 
-    if (!GOOGLE_SHEETS_ID || !GOOGLE_SERVICE_ACCOUNT_EMAIL || !GOOGLE_PRIVATE_KEY) {
-      console.error('Google Sheets credentials not configured');
+    if (!GOOGLE_APPS_SCRIPT_URL) {
+      console.error('Google Apps Script URL not configured');
       // Don't fail the request - just log the error
       // The form submission will still work, just won't track to sheets
       return NextResponse.json(
@@ -36,39 +34,28 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Prepare data for Google Sheets
-    const timestamp = new Date().toISOString();
-    const rowData = [
-      timestamp,
-      email,
-      phone,
-      source,
-      restaurant_name || '',
-    ];
-
-    // Use Google Sheets API to append row
-    const { google } = await import('googleapis');
-    const auth = new google.auth.JWT(
-      GOOGLE_SERVICE_ACCOUNT_EMAIL,
-      null,
-      GOOGLE_PRIVATE_KEY,
-      ['https://www.googleapis.com/auth/spreadsheets']
-    );
-
-    const sheets = google.sheets({ version: 'v4', auth });
-    
-    // Append row to the sheet
-    await sheets.spreadsheets.values.append({
-      spreadsheetId: GOOGLE_SHEETS_ID,
-      range: 'Sheet1!A:E', // Adjust range as needed
-      valueInputOption: 'USER_ENTERED',
-      resource: {
-        values: [rowData],
+    // Send data to Google Apps Script web app
+    const response = await fetch(GOOGLE_APPS_SCRIPT_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
       },
+      body: JSON.stringify({
+        email,
+        phone,
+        source,
+        restaurant_name: restaurant_name || '',
+      }),
     });
 
+    if (!response.ok) {
+      throw new Error(`Google Apps Script returned ${response.status}`);
+    }
+
+    const result = await response.json();
+
     return NextResponse.json(
-      { success: true, message: 'Lead tracked successfully' },
+      { success: true, message: 'Lead tracked successfully', result },
       { status: 200 }
     );
   } catch (error: any) {
