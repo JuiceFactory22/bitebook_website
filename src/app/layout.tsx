@@ -45,7 +45,7 @@ export const metadata: Metadata = {
     siteName: 'BiteBook',
     images: [
       {
-        url: '/images/hero-wings.jpg',
+        url: '/images/bitebook-logo.png',
         width: 1200,
         height: 630,
         alt: 'BiteBook - Local Restaurant Coupon Books',
@@ -56,7 +56,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'BiteBook - Local Restaurant Coupon Books | New Haven Area',
     description: 'Discover amazing deals at local restaurants with BiteBook coupon books. $29.99 for over $300 in savings at 30+ local restaurants. Limited monthly themes featuring wings, tacos, pizza, burgers and more.',
-    images: ['/images/hero-wings.jpg'],
+    images: ['/images/bitebook-logo.png'],
   },
 };
 
