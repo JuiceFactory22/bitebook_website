@@ -68,6 +68,25 @@ export default function LeadMagnetForm() {
 
       console.log('EmailJS result:', result);
 
+      // Track lead to Google Sheets
+      try {
+        await fetch('/api/track-lead', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: email.trim(),
+            phone: cleanPhone,
+            source: 'homepage',
+          }),
+        });
+        console.log('Lead tracked to Google Sheets');
+      } catch (sheetError) {
+        console.error('Error tracking to Google Sheets:', sheetError);
+        // Don't fail the form submission if Sheets tracking fails
+      }
+
       // Send notification email to site owner
       try {
         await emailjs.send(

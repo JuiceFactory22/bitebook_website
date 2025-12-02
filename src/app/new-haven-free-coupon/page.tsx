@@ -133,6 +133,26 @@ export default function NewHavenFreeCoupon() {
         templateParams
       );
 
+      // Track lead to Google Sheets
+      try {
+        await fetch('/api/track-lead', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: email.trim(),
+            phone: cleanPhone,
+            source: 'spin-wheel',
+            restaurant_name: restaurant.name,
+          }),
+        });
+        console.log('Lead tracked to Google Sheets');
+      } catch (sheetError) {
+        console.error('Error tracking to Google Sheets:', sheetError);
+        // Don't fail the form submission if Sheets tracking fails
+      }
+
       // Track lead with Meta Pixel
       trackLead(0, email.trim(), cleanPhone);
 
