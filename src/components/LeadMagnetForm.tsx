@@ -68,6 +68,25 @@ export default function LeadMagnetForm() {
 
       console.log('EmailJS result:', result);
 
+      // Send notification email to site owner
+      try {
+        await emailjs.send(
+          SERVICE_ID,
+          'template_8sfrufk', // NEW Partner Restaurant Application template - we'll use this for notifications
+          {
+            to_email: 'info@getbitebook.com',
+            email: email.trim(),
+            phone: cleanPhone,
+            message: `New Lead Magnet Submission:\n\nEmail: ${email.trim()}\nPhone: ${cleanPhone}\n\nThis lead submitted the free coupon form on the homepage.`,
+          },
+          PUBLIC_KEY
+        );
+        console.log('Notification email sent to site owner');
+      } catch (notificationError) {
+        console.error('Failed to send notification email:', notificationError);
+        // Don't fail the form submission if notification fails
+      }
+
       // Track lead with Meta Pixel
       trackLead();
 
