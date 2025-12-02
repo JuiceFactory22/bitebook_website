@@ -35,6 +35,14 @@ export async function POST(request: NextRequest) {
     }
 
     // Send data to Google Apps Script web app
+    console.log('Sending data to Google Apps Script:', {
+      url: GOOGLE_APPS_SCRIPT_URL,
+      email,
+      phone,
+      source,
+      restaurant_name,
+    });
+
     const response = await fetch(GOOGLE_APPS_SCRIPT_URL, {
       method: 'POST',
       headers: {
@@ -48,11 +56,16 @@ export async function POST(request: NextRequest) {
       }),
     });
 
+    console.log('Google Apps Script response status:', response.status);
+
     if (!response.ok) {
-      throw new Error(`Google Apps Script returned ${response.status}`);
+      const errorText = await response.text();
+      console.error('Google Apps Script error:', errorText);
+      throw new Error(`Google Apps Script returned ${response.status}: ${errorText}`);
     }
 
     const result = await response.json();
+    console.log('Google Apps Script result:', result);
 
     return NextResponse.json(
       { success: true, message: 'Lead tracked successfully', result },
@@ -60,9 +73,13 @@ export async function POST(request: NextRequest) {
     );
   } catch (error: any) {
     console.error('Error tracking lead to Google Sheets:', error);
+    console.error('Error details:', {
+      message: error.message,
+      stack: error.stack,
+    });
     // Don't fail the request - return success so form submission still works
     return NextResponse.json(
-      { success: true, message: 'Lead tracked (with error logging)' },
+      { success: true, message: 'Lead tracked (with error logging)', error: error.message },
       { status: 200 }
     );
   }
