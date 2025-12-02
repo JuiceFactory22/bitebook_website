@@ -71,7 +71,7 @@ function doGet(e) {
 3. Configure the deployment:
    - **Description**: "BiteBook Lead Tracking API" (optional)
    - **Execute as**: "Me" (your account)
-   - **Who has access**: "Anyone" (this is safe - the script validates data)
+   - **Who has access**: **"Anyone"** ⚠️ THIS IS CRITICAL - Must be set to "Anyone"
 4. Click **Deploy**
 5. **IMPORTANT**: Copy the **Web app URL** - it will look like:
    ```
@@ -81,6 +81,12 @@ function doGet(e) {
    - Choose your Google account
    - Click **Advanced** → **Go to [Project Name] (unsafe)**
    - Click **Allow**
+7. **VERY IMPORTANT**: After authorization, you MUST:
+   - Go back to **Deploy** → **Manage deployments**
+   - Click the pencil icon (✏️) to edit your deployment
+   - Make absolutely sure **"Who has access"** is set to **"Anyone"**
+   - If it's not, change it to "Anyone" and click **Deploy** again
+   - Copy the NEW Web app URL (it might change)
 
 ## Step 4: Add Environment Variable to Vercel
 
