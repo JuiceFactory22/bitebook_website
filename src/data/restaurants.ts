@@ -15,7 +15,7 @@ export const restaurants: Restaurant[] = [
   { name: "Jordan's Hot Dogs", image: '/images/Logos/New Haven/jordans hot dogs logo.jpeg' },
   { name: "Jroos Restaurant", image: '/images/Logos/New Haven/jroos.jpeg' },
   { name: 'The Landing at Five Twenty', image: '/images/Logos/New Haven/the-landing-at-five-twenty.jpeg' },
-  { name: 'New West Cafe', image: '/images/Logos/New Haven/new-west-cafe.jpeg' },
+  { name: 'New West Cafe', image: '/images/Logos/New Haven/new-west-cafe-new-logo.jpeg' },
   { name: 'Outriggers', image: '/images/Logos/New Haven/outriggers-restaurant-logo.jpeg' },
   { name: 'Pianca Pizza', image: '/images/Logos/New Haven/pianca-pizza.jpeg' },
   { name: "Porky's", image: '/images/Logos/New Haven/porkys-logo.jpeg' },
