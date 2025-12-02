@@ -3,23 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Image from 'next/image';
-
-const restaurantLogos = [
-  { name: "Capotorto's Apizza Center", image: '/images/Logos/New Haven/capotortos logo.jpeg' },
-  { name: 'Blue Orchid', image: '/images/Logos/New Haven/blue-orchid-logo.jpeg' },
-  { name: 'Castle Black Rock', image: '/images/Logos/New Haven/The-Castle-Black-Rock-Logo.jpeg' },
-  { name: "Delaney's Restaurant", image: '/images/Logos/New Haven/delaneys-restaurant-nh.jpeg' },
-  { name: "Gaetano's Tavern", image: '/images/Logos/New Haven/gaetanos tavern logo.jpeg' },
-  { name: 'Heffer', image: '/images/Logos/New Haven/heffer-logo.jpeg' },
-  { name: "Jordan's Hot Dogs", image: '/images/Logos/New Haven/jordans hot dogs logo.jpeg' },
-  { name: "Jroos Restaurant", image: '/images/Logos/New Haven/jroos.jpeg' },
-  { name: 'The Landing at Five Twenty', image: '/images/Logos/New Haven/the-landing-at-five-twenty.jpeg' },
-  { name: 'Outriggers', image: '/images/Logos/New Haven/outriggers-restaurant-logo.jpeg' },
-  { name: 'Prime 16', image: '/images/Logos/New Haven/Prime 16 logo.jpeg' },
-  { name: "Ricky D's Rib Shack", image: '/images/Logos/New Haven/Ricky Ds logo.jpeg' },
-  { name: 'The Breakwall', image: '/images/Logos/New Haven/the breakwall logo.jpeg' },
-  { name: 'Transilvania', image: '/images/Logos/New Haven/transilvania-logo.jpeg' },
-];
+import { restaurants } from '@/data/restaurants';
 
 export default function RestaurantLogosCarousel() {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -29,7 +13,7 @@ export default function RestaurantLogosCarousel() {
   const containerRef = useRef<HTMLDivElement>(null);
 
   const itemsPerView = 4; // Show 4 logos at a time
-  const maxIndex = Math.max(0, restaurantLogos.length - itemsPerView);
+  const maxIndex = Math.max(0, restaurants.length - itemsPerView);
 
   // Drag functionality
   const handleMouseDown = (e: React.MouseEvent) => {
@@ -148,7 +132,7 @@ export default function RestaurantLogosCarousel() {
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
         >
-          {restaurantLogos.map((restaurant, index) => (
+          {restaurants.map((restaurant, index) => (
             <div
               key={index}
               className="flex-shrink-0 w-48 h-32 bg-white rounded-lg shadow-md p-4 flex items-center justify-center snap-start"
