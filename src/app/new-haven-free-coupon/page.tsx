@@ -343,10 +343,10 @@ export default function NewHavenFreeCoupon() {
                 Your Price: $15 (50% OFF!)
               </p>
               <Link
-                href="/checkout?special=15"
+                href="/checkout?coupon=BITEBOOKNH50"
                 className="inline-block bg-[#ff6b35] hover:bg-[#e55a2b] text-white font-extrabold px-8 py-4 rounded-xl shadow-2xl hover:shadow-3xl transition-all transform hover:scale-105 text-lg"
               >
-                Get Full Book for $15
+                Get Full Book for $15 (50% OFF)
               </Link>
               <p className="text-sm text-gray-700 mt-4">
                 Limited time offer - expires soon!

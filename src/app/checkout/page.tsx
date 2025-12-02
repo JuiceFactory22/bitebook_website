@@ -24,14 +24,15 @@ function CheckoutContent() {
   });
   const searchParams = useSearchParams();
 
-  // Check if subscription parameter is present or special pricing
+  // Check if subscription parameter is present or coupon code from URL
   useEffect(() => {
     if (searchParams.get('subscription') === 'true') {
       setIsSubscription(true);
     }
-    // Check for special pricing from spin wheel
-    if (searchParams.get('special') === '15') {
-      setAppliedCoupon('SPECIAL15');
+    // Check for coupon code from URL (e.g., from spin wheel)
+    const urlCoupon = searchParams.get('coupon');
+    if (urlCoupon && validCoupons[urlCoupon.toUpperCase()]) {
+      setAppliedCoupon(urlCoupon.toUpperCase());
     }
     // Track page view for checkout
     trackInitiateCheckout(29.99);
@@ -50,7 +51,6 @@ function CheckoutContent() {
   // Valid coupon codes
   const validCoupons: { [key: string]: number } = {
     'BITEBOOKNH50': 0.5, // 50% off
-    'SPECIAL15': 15, // Fixed $15 price (from spin wheel)
   };
 
   // Calculate base price before discounts
@@ -63,17 +63,12 @@ function CheckoutContent() {
   const getCurrentPrice = () => {
     const basePrice = getBasePrice();
     
-    // Apply coupon discount
+    // Apply coupon discount (all coupons are percentage-based)
     if (appliedCoupon) {
       const coupon = validCoupons[appliedCoupon];
-      if (typeof coupon === 'number') {
-        if (coupon < 1) {
-          // Percentage discount (e.g., 0.5 = 50% off)
-          return basePrice * coupon;
-        } else {
-          // Fixed price (e.g., $15)
-          return coupon;
-        }
+      if (coupon !== undefined) {
+        // Percentage discount (e.g., 0.5 = 50% off)
+        return basePrice * coupon;
       }
     }
     
@@ -281,7 +276,7 @@ function CheckoutContent() {
                   <div className="text-right md:ml-4 flex-shrink-0">
                     {appliedCoupon && (
                       <div className="text-xs text-green-600 font-semibold mb-1">
-                        {appliedCoupon === 'BITEBOOKNH50' ? '50% OFF' : appliedCoupon === 'SPECIAL15' ? 'Special Price' : 'Coupon Applied'}
+                        {appliedCoupon === 'BITEBOOKNH50' ? '50% OFF' : 'Coupon Applied'}
                       </div>
                     )}
                     <div className="text-2xl font-bold text-[#ff6b35]">
@@ -491,11 +486,6 @@ function CheckoutContent() {
                         {appliedCoupon === 'BITEBOOKNH50' && (
                           <div className="text-xs opacity-90 mt-1">
                             50% OFF Applied
-                          </div>
-                        )}
-                        {appliedCoupon === 'SPECIAL15' && (
-                          <div className="text-xs opacity-90 mt-1">
-                            Special Price Applied
                           </div>
                         )}
                         {isSubscription && !appliedCoupon && (
