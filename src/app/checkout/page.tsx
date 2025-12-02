@@ -14,6 +14,9 @@ function CheckoutContent() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [paymentToken, setPaymentToken] = useState<string | null>(null);
   const [paymentError, setPaymentError] = useState<string | null>(null);
+  const [couponCode, setCouponCode] = useState('');
+  const [appliedCoupon, setAppliedCoupon] = useState<string | null>(null);
+  const [couponError, setCouponError] = useState('');
   const [formData, setFormData] = useState({
     first_name: '',
     last_name: '',
@@ -21,10 +24,14 @@ function CheckoutContent() {
   });
   const searchParams = useSearchParams();
 
-  // Check if subscription parameter is present
+  // Check if subscription parameter is present or special pricing
   useEffect(() => {
     if (searchParams.get('subscription') === 'true') {
       setIsSubscription(true);
+    }
+    // Check for special pricing from spin wheel
+    if (searchParams.get('special') === '15') {
+      setAppliedCoupon('SPECIAL15');
     }
     // Track page view for checkout
     trackInitiateCheckout(29.99);
@@ -40,10 +47,63 @@ function CheckoutContent() {
     validity: 30
   };
 
-  // Calculate current price based on selected options
-  const getCurrentPrice = () => {
+  // Valid coupon codes
+  const validCoupons: { [key: string]: number } = {
+    'BITEBOOKNH50': 0.5, // 50% off
+    'SPECIAL15': 15, // Fixed $15 price (from spin wheel)
+  };
+
+  // Calculate base price before discounts
+  const getBasePrice = () => {
     if (isSubscription) return couponBookDetails.subscriptionPrice;
     return couponBookDetails.price;
+  };
+
+  // Calculate current price with coupon discount
+  const getCurrentPrice = () => {
+    const basePrice = getBasePrice();
+    
+    // Apply coupon discount
+    if (appliedCoupon) {
+      const coupon = validCoupons[appliedCoupon];
+      if (typeof coupon === 'number') {
+        if (coupon < 1) {
+          // Percentage discount (e.g., 0.5 = 50% off)
+          return basePrice * coupon;
+        } else {
+          // Fixed price (e.g., $15)
+          return coupon;
+        }
+      }
+    }
+    
+    return basePrice;
+  };
+
+  // Handle coupon code application
+  const handleApplyCoupon = () => {
+    setCouponError('');
+    const code = couponCode.trim().toUpperCase();
+    
+    if (!code) {
+      setCouponError('Please enter a coupon code');
+      return;
+    }
+    
+    if (validCoupons[code]) {
+      setAppliedCoupon(code);
+      setCouponCode('');
+      setCouponError('');
+    } else {
+      setCouponError('Invalid coupon code');
+    }
+  };
+
+  // Remove coupon
+  const handleRemoveCoupon = () => {
+    setAppliedCoupon(null);
+    setCouponCode('');
+    setCouponError('');
   };
 
   const getCurrentSavings = () => {
@@ -219,13 +279,23 @@ function CheckoutContent() {
                     </p>
                   </div>
                   <div className="text-right md:ml-4 flex-shrink-0">
+                    {appliedCoupon && (
+                      <div className="text-xs text-green-600 font-semibold mb-1">
+                        {appliedCoupon === 'BITEBOOKNH50' ? '50% OFF' : appliedCoupon === 'SPECIAL15' ? 'Special Price' : 'Coupon Applied'}
+                      </div>
+                    )}
                     <div className="text-2xl font-bold text-[#ff6b35]">
                       ${getCurrentPrice().toFixed(2)}
                     </div>
+                    {(appliedCoupon || getBasePrice() !== getCurrentPrice()) && (
+                      <div className="text-sm text-gray-500 line-through">
+                        ${getBasePrice().toFixed(2)}
+                      </div>
+                    )}
                     <div className="text-sm text-gray-500 line-through">
                       ${couponBookDetails.originalValue} value
                     </div>
-                    {isSubscription && (
+                    {isSubscription && !appliedCoupon && (
                       <div className="text-xs text-blue-600 font-semibold mt-1">
                         30% Off
                       </div>
@@ -260,6 +330,54 @@ function CheckoutContent() {
                 )}
               </div>
 
+              </div>
+
+              {/* Coupon Code Section */}
+              <div className="mb-6">
+                <h4 className="font-semibold text-gray-900 mb-3">Have a Coupon Code?</h4>
+                {!appliedCoupon ? (
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={couponCode}
+                      onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
+                      placeholder="Enter coupon code"
+                      className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b35] focus:border-transparent"
+                      onKeyPress={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault();
+                          handleApplyCoupon();
+                        }
+                      }}
+                    />
+                    <button
+                      type="button"
+                      onClick={handleApplyCoupon}
+                      className="px-6 py-2 bg-[#ff6b35] hover:bg-[#e55a2b] text-white font-semibold rounded-lg transition-colors"
+                    >
+                      Apply
+                    </button>
+                  </div>
+                ) : (
+                  <div className="bg-green-50 border-2 border-green-300 rounded-lg p-4 flex items-center justify-between">
+                    <div className="flex items-center">
+                      <CheckCircle className="w-5 h-5 text-green-600 mr-2" />
+                      <span className="text-green-800 font-semibold">
+                        Coupon Applied: {appliedCoupon}
+                      </span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={handleRemoveCoupon}
+                      className="text-red-600 hover:text-red-800 font-semibold text-sm"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                )}
+                {couponError && (
+                  <p className="text-red-600 text-sm mt-2">{couponError}</p>
+                )}
               </div>
 
               {/* What's Included */}
@@ -362,8 +480,25 @@ function CheckoutContent() {
                   <div className="bg-gray-50 rounded-lg p-6">
                     <div className="mb-4">
                       <div className="bg-[#ff6b35] text-white px-6 py-3 rounded-lg font-semibold text-center mb-4">
-                        Total: ${getCurrentPrice().toFixed(2)}
-                        {isSubscription && (
+                        {appliedCoupon && (
+                          <div className="text-sm opacity-90 mb-1 line-through">
+                            ${getBasePrice().toFixed(2)}
+                          </div>
+                        )}
+                        <div className="text-2xl">
+                          Total: ${getCurrentPrice().toFixed(2)}
+                        </div>
+                        {appliedCoupon === 'BITEBOOKNH50' && (
+                          <div className="text-xs opacity-90 mt-1">
+                            50% OFF Applied
+                          </div>
+                        )}
+                        {appliedCoupon === 'SPECIAL15' && (
+                          <div className="text-xs opacity-90 mt-1">
+                            Special Price Applied
+                          </div>
+                        )}
+                        {isSubscription && !appliedCoupon && (
                           <div className="text-xs opacity-90 mt-1">
                             Monthly subscription (30% off)
                           </div>
