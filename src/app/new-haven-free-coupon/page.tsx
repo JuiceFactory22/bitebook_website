@@ -136,11 +136,13 @@ export default function NewHavenFreeCoupon() {
       // Track lead with Meta Pixel
       trackLead(0, email.trim(), cleanPhone);
 
-      // Show success and upsell
-      setShowSuccess(true);
+      // Show success after a brief delay to let user see the winner
       setTimeout(() => {
-        setShowUpsell(true);
-      }, 2000);
+        setShowSuccess(true);
+        setTimeout(() => {
+          setShowUpsell(true);
+        }, 2000);
+      }, 500);
     } catch (err: any) {
       console.error('EmailJS error:', err);
       setError('Failed to send coupon. Please try again.');
