@@ -126,8 +126,8 @@ function CheckoutContent() {
         'qq3QK0zGBYaHNI2DW'
       );
 
-      // Track purchase event
-      trackPurchase(currentPrice);
+      // Track purchase event with email for advanced matching
+      trackPurchase(currentPrice, 'USD', formData.email);
 
       setIsSubmitted(true);
       setIsSubmitting(false);

@@ -5,7 +5,8 @@ import EventsCarousel from "@/components/EventsCarousel";
 import TrackingButton from "@/components/TrackingButton";
 import RestaurantLogosCarousel from "@/components/RestaurantLogosCarousel";
 import LeadMagnetForm from "@/components/LeadMagnetForm";
-import { useMemo } from "react";
+import { useMemo, useEffect } from "react";
+import { trackViewContent } from "@/utils/facebookPixel";
 
 // Monthly promotions for 2026
 const monthlyPromotions = [
@@ -92,6 +93,11 @@ const monthlyPromotions = [
   ];
 
 export default function Home() {
+  // Track page view with ViewContent event
+  useEffect(() => {
+    trackViewContent('BiteBook Homepage');
+  }, []);
+
   // Calculate carousel events dynamically based on current date
   // Shows: previous 2 months, current month, next 6 months (total 9 events)
   // Handles combination of 2025 (Sept-Dec) and 2026 (Jan-Aug) events

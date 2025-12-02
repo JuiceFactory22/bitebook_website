@@ -1,15 +1,16 @@
-import Link from 'next/link';
-import { Metadata } from 'next';
-import Script from 'next/script';
-import TrackingButton from '@/components/TrackingButton';
+'use client';
 
-export const metadata: Metadata = {
-  title: 'Wings Month - BiteBook | Get $300+ in Local Restaurant Deals for $29.99',
-  description: 'Love wings for less! Unlock unbeatable Wing Month deals at local favorites. Get $300+ in savings for just $29.99. Digital, mobile-friendly, instant access.',
-  keywords: 'wings month, restaurant deals, local restaurant coupons, wing deals, food coupons',
-};
+import Link from 'next/link';
+import Script from 'next/script';
+import { useEffect } from 'react';
+import TrackingButton from '@/components/TrackingButton';
+import { trackViewContent } from '@/utils/facebookPixel';
 
 export default function LandingBiteBook() {
+  // Track page view with ViewContent event
+  useEffect(() => {
+    trackViewContent('BiteBook Landing Page - New Haven');
+  }, []);
   return (
     <div className="min-h-screen bg-white text-slate-900">
       {/* Meta Pixel Code for Landing Page */}

@@ -87,8 +87,8 @@ export default function LeadMagnetForm() {
         // Don't fail the form submission if notification fails
       }
 
-      // Track lead with Meta Pixel
-      trackLead();
+      // Track lead with Meta Pixel (include value for ROAS tracking)
+      trackLead(0, email.trim(), cleanPhone); // $0 value for free coupon lead
 
       // Show success popup
       setShowSuccess(true);
