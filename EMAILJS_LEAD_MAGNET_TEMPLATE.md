@@ -2,9 +2,16 @@
 
 ## Template Details
 
-**Template Name:** `template_lead_magnet`  
+**Template Name:** `template_lead_magnet` (or `template_rwwf15i` for spin wheel)  
 **Service ID:** `service_u460dtm`  
 **Public Key:** `qq3QK0zGBYaHNI2DW`
+
+## Template Variables
+
+The template receives these variables:
+- `{{email}}` - User's email address (required for "To Email" field)
+- `{{phone}}` - User's phone number
+- `{{restaurant_name}}` - **Which restaurant they won** (for spin wheel submissions only)
 
 ## Template Content
 
@@ -91,12 +98,23 @@ Your Free Coupon from BiteBook is On the Way! 🎉
     
     <p><strong>Your free coupon is on the way!</strong></p>
     
-    <p>We will text you 1 coupon for Free Wings at one of our participating restaurants. Keep an eye on your phone - it should arrive shortly!</p>
+    {{#if restaurant_name}}
+    <div style="background: #fff3cd; border-left: 4px solid #ff6b35; padding: 15px; margin: 20px 0; border-radius: 5px;">
+      <p style="margin: 0; font-size: 18px; font-weight: bold; color: #333;">
+        🎉 Congratulations! You won a free coupon at:
+      </p>
+      <p style="margin: 10px 0 0 0; font-size: 24px; font-weight: bold; color: #ff6b35;">
+        {{restaurant_name}}
+      </p>
+    </div>
+    {{/if}}
+    
+    <p>We will text you 1 coupon for Free Wings at {{#if restaurant_name}}{{restaurant_name}}{{else}}one of our participating restaurants{{/if}}. Keep an eye on your phone - it should arrive shortly!</p>
     
     <div class="coupon-box">
       <h2 style="margin-top: 0; color: #333;">Here's How to Use Your Coupon:</h2>
       <ul style="text-align: left; display: inline-block; margin: 15px 0;">
-        <li>We will text you 1 coupon for Free Wings at one of our participating restaurants.</li>
+        <li>We will text you 1 coupon for Free Wings at {{#if restaurant_name}}{{restaurant_name}}{{else}}one of our participating restaurants{{/if}}.</li>
         <li>Present this coupon which is valid for the month of January.</li>
         <li>If you want more great deals sign up for the full version of BiteBook and get deals at over 25 restaurants.</li>
       </ul>
@@ -138,10 +156,14 @@ Thank you for signing up with BiteBook! We're excited to have you join our commu
 
 Your free coupon is on the way!
 
-We will text you 1 coupon for Free Wings at one of our participating restaurants. Keep an eye on your phone - it should arrive shortly!
+{{#if restaurant_name}}
+🎉 Congratulations! You won a free coupon at: {{restaurant_name}}
+{{/if}}
+
+We will text you 1 coupon for Free Wings at {{#if restaurant_name}}{{restaurant_name}}{{else}}one of our participating restaurants{{/if}}. Keep an eye on your phone - it should arrive shortly!
 
 Here's How to Use Your Coupon:
-- We will text you 1 coupon for Free Wings at one of our participating restaurants.
+- We will text you 1 coupon for Free Wings at {{#if restaurant_name}}{{restaurant_name}}{{else}}one of our participating restaurants{{/if}}.
 - Present this coupon which is valid for the month of January.
 - If you want more great deals sign up for the full version of BiteBook and get deals at over 25 restaurants.
 
@@ -167,10 +189,13 @@ You're receiving this because you signed up for a free coupon at getbitebook.com
 ## Template Variables
 
 Make sure these variables are available in your template:
-- `{{email}}` - The user's email address
+- `{{email}}` - The user's email address (required - used in "To Email" field)
 - `{{phone}}` - The user's phone number
-- `{{from_name}}` - Will be "BiteBook"
-- `{{message}}` - Thank you message
+- `{{restaurant_name}}` - **Which restaurant they won** (for spin wheel submissions - may be empty for homepage submissions)
+
+**Note:** EmailJS uses Handlebars templating. The `{{#if restaurant_name}}` syntax checks if the restaurant name exists before displaying it. This way the template works for both:
+- Spin wheel submissions (has restaurant_name)
+- Homepage lead magnet (no restaurant_name)
 
 ## Setup Instructions
 
