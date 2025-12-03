@@ -14,9 +14,11 @@ export default function SpinWheel({ restaurants, onSpinComplete, isSpinning, onS
   const [rotation, setRotation] = useState(0);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [showWinner, setShowWinner] = useState(false);
+  const [showConfetti, setShowConfetti] = useState(false);
   const wheelRef = useRef<HTMLDivElement>(null);
   const SPIN_DURATION = 4000; // 4 seconds
   const WINNER_DISPLAY_DURATION = 2000; // 2 seconds to show winner before callback
+  const CONFETTI_COUNT = 20; // Number of chicken wings to spray
 
   // Calculate angle per slice
   const anglePerSlice = 360 / restaurants.length;
@@ -42,6 +44,11 @@ export default function SpinWheel({ restaurants, onSpinComplete, isSpinning, onS
     // Show winner highlight after spin completes
     setTimeout(() => {
       setShowWinner(true);
+      setShowConfetti(true); // Trigger confetti animation
+      // Hide confetti after animation completes
+      setTimeout(() => {
+        setShowConfetti(false);
+      }, 3000);
       // Call onSpinComplete after showing winner for a moment
       setTimeout(() => {
         onSpinComplete(restaurants[randomIndex]);
@@ -159,6 +166,50 @@ export default function SpinWheel({ restaurants, onSpinComplete, isSpinning, onS
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-20 h-20 bg-yellow-400 rounded-full border-4 border-white shadow-xl z-20 flex items-center justify-center">
           <span className="text-2xl font-bold text-gray-900">🎯</span>
         </div>
+        
+        {/* Chicken Wing Confetti */}
+        {showConfetti && (
+          <div className="absolute inset-0 pointer-events-none z-40 overflow-hidden">
+            {Array.from({ length: CONFETTI_COUNT }).map((_, i) => {
+              // Random angle for each wing (0 to 360 degrees)
+              const angle = (360 / CONFETTI_COUNT) * i + Math.random() * 20 - 10;
+              const angleRad = (angle * Math.PI) / 180;
+              
+              // Random distance (150px to 300px)
+              const distance = 150 + Math.random() * 150;
+              
+              // Calculate final position
+              const endX = Math.cos(angleRad) * distance;
+              const endY = Math.sin(angleRad) * distance;
+              
+              // Random rotation speed
+              const rotationSpeed = 360 + Math.random() * 360;
+              
+              // Random delay (0 to 200ms)
+              const delay = Math.random() * 200;
+              
+              return (
+                <div
+                  key={i}
+                  className="absolute top-1/2 left-1/2 text-3xl md:text-4xl"
+                  style={{
+                    transform: `translate(-50%, -50%)`,
+                    animation: `wingConfetti 2.5s ease-out ${delay}ms forwards`,
+                    '--end-x': `${endX}px`,
+                    '--end-y': `${endY}px`,
+                    '--rotation': `${rotationSpeed}deg`,
+                  } as React.CSSProperties & {
+                    '--end-x': string;
+                    '--end-y': string;
+                    '--rotation': string;
+                  }}
+                >
+                  🍗
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
       
       {/* Spin Button */}
