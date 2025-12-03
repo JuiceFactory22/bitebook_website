@@ -89,13 +89,13 @@ export default function SpinWheelPopup({
             <div className="text-6xl mb-4">🎰</div>
             
             {/* Headline */}
-            <h3 className="text-2xl md:text-3xl font-extrabold text-gray-900 mb-3">
-              Win Free Wings! 🍗
+            <h3 className="text-2xl md:text-3xl font-extrabold text-gray-900 mb-4">
+              Want 6 Free Wings? 🍗
             </h3>
             
             {/* Description */}
-            <p className="text-gray-700 mb-6 text-base md:text-lg">
-              Spin the wheel and win a free coupon for 6 wings at one of our participating restaurants!
+            <p className="text-gray-700 mb-6 text-base md:text-lg leading-relaxed">
+              Spin the wheel and you're guaranteed a coupon for at least 6 free wings at one of our participating restaurants. Click here to get yours.
             </p>
             
             {/* CTA Button */}
@@ -106,11 +106,6 @@ export default function SpinWheelPopup({
             >
               Spin the Wheel Now! 🎉
             </Link>
-            
-            {/* Optional: Small text */}
-            <p className="text-xs text-gray-500 mt-4">
-              No purchase necessary. One spin per person.
-            </p>
           </div>
         </div>
       </div>
