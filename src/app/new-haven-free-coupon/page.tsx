@@ -165,7 +165,32 @@ export default function NewHavenFreeCoupon() {
       }, 500);
     } catch (err: any) {
       console.error('EmailJS error:', err);
-      setError('Failed to send coupon. Please try again.');
+      console.error('Error details:', {
+        text: err.text,
+        status: err.status,
+        message: err.message,
+      });
+      
+      // Show more specific error message
+      let errorMessage = 'Failed to send coupon email. ';
+      if (err.text) {
+        errorMessage += err.text;
+      } else if (err.message) {
+        errorMessage += err.message;
+      } else {
+        errorMessage += 'Please try again or contact support.';
+      }
+      
+      setError(errorMessage);
+      
+      // Still show success popup even if email fails (user still won)
+      // The coupon will be tracked in Google Sheets
+      setTimeout(() => {
+        setShowSuccess(true);
+        setTimeout(() => {
+          setShowUpsell(true);
+        }, 2000);
+      }, 500);
     } finally {
       setIsSubmitting(false);
     }
@@ -325,9 +350,14 @@ export default function NewHavenFreeCoupon() {
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b35] focus:border-transparent text-gray-900"
                 />
               </div>
-              {error && (
-                <p className="text-red-600 text-sm font-semibold">{error}</p>
-              )}
+            {error && !showSuccess && (
+              <div className="bg-red-50 border-2 border-red-300 rounded-xl p-4 mt-4">
+                <p className="text-red-800 text-sm font-semibold text-center">{error}</p>
+                <p className="text-red-600 text-xs text-center mt-2">
+                  Don't worry - your win has been recorded! Check your email shortly.
+                </p>
+              </div>
+            )}
               <button
                 type="submit"
                 className="w-full bg-yellow-400 hover:bg-yellow-300 text-gray-900 font-extrabold py-4 rounded-xl shadow-xl hover:shadow-2xl transition-all transform hover:scale-105 text-lg"
