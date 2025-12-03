@@ -7,6 +7,7 @@ import RestaurantLogosCarousel from "@/components/RestaurantLogosCarousel";
 import Link from "next/link";
 import { useMemo, useEffect } from "react";
 import { trackViewContent } from "@/utils/facebookPixel";
+import SpinWheelPopup from "@/components/SpinWheelPopup";
 
 // Monthly promotions for 2026
 const monthlyPromotions = [
@@ -515,6 +516,13 @@ export default function Home() {
           </div>
         </div>
       </footer>
+      
+      {/* Spin Wheel Popup */}
+      <SpinWheelPopup 
+        delay={5} // Show after 5 seconds
+        showOncePerSession={true} // Only show once per browser session
+        showOncePerVisitor={false} // Set to true if you want it to show only once ever per visitor
+      />
     </div>
   );
 }
