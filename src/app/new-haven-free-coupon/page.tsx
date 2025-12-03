@@ -122,11 +122,38 @@ export default function NewHavenFreeCoupon() {
     // Send email via EmailJS
     setIsSubmitting(true);
     try {
+      // Generate coupon HTML as base64 for attachment
+      let couponAttachment = '';
+      try {
+        const couponResponse = await fetch('/api/generate-coupon-base64', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            restaurant: restaurant.name,
+            code: couponCode,
+            email: email.trim(),
+            phone: cleanPhone,
+            month: 'January 2026',
+          }),
+        });
+        
+        if (couponResponse.ok) {
+          const couponData = await couponResponse.json();
+          couponAttachment = couponData.dataUri; // Base64 data URI
+        }
+      } catch (couponError) {
+        console.error('Error generating coupon:', couponError);
+        // Continue without attachment if coupon generation fails
+      }
+
       const templateParams = {
         email: email.trim(),
         phone: cleanPhone,
         restaurant_name: restaurant.name, // Include which restaurant they won
         coupon_code: couponCode, // Unique coupon code
+        coupon_attachment: couponAttachment, // Base64 encoded coupon HTML
       };
 
       const SERVICE_ID = 'service_u460dtm';
