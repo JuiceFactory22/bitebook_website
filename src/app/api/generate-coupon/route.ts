@@ -5,13 +5,26 @@ import { NextRequest, NextResponse } from 'next/server';
  * This can be used to create PDFs or images for EmailJS attachments
  * 
  * Usage:
- * /api/generate-coupon?restaurant=Restaurant%20Name&code=COUPONCODE
+ * /api/generate-coupon?restaurant=Restaurant%20Name&code=COUPONCODE&email=user@example.com&phone=1234567890
  */
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const restaurantName = searchParams.get('restaurant') || 'Participating Restaurant';
   const couponCode = searchParams.get('code') || 'BITEBOOKWINGS';
+  const email = searchParams.get('email') || '';
+  const phone = searchParams.get('phone') || '';
   const month = searchParams.get('month') || 'January 2026';
+  
+  // Format phone number for display
+  let formattedPhone = '';
+  if (phone) {
+    const cleaned = phone.replace(/\D/g, '');
+    if (cleaned.length === 10) {
+      formattedPhone = `(${cleaned.substring(0, 3)}) ${cleaned.substring(3, 6)}-${cleaned.substring(6)}`;
+    } else {
+      formattedPhone = phone;
+    }
+  }
 
   // Generate HTML coupon
   const html = `<!DOCTYPE html>
@@ -169,6 +182,38 @@ export async function GET(request: NextRequest) {
             font-weight: 600;
         }
         
+        .customer-info {
+            background: #f0f0f0;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 30px 0;
+            text-align: left;
+        }
+        
+        .customer-info h4 {
+            color: #333;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .customer-info p {
+            color: #666;
+            font-size: 14px;
+            margin: 5px 0;
+            padding-left: 20px;
+        }
+        
+        .customer-info p::before {
+            content: '📧 ';
+            margin-right: 5px;
+        }
+        
+        .customer-info p:last-child::before {
+            content: '📱 ';
+        }
+        
         .barcode-area {
             background: white;
             padding: 20px;
@@ -224,6 +269,14 @@ export async function GET(request: NextRequest) {
             <div class="validity">
                 Valid: ${month}
             </div>
+            
+            ${email || phone ? `
+            <div class="customer-info">
+                <h4>Customer Information</h4>
+                ${email ? `<p>${email}</p>` : ''}
+                ${formattedPhone ? `<p>${formattedPhone}</p>` : ''}
+            </div>
+            ` : ''}
         </div>
         
         <div class="terms">

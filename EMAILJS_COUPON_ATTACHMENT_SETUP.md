@@ -48,11 +48,17 @@ In your EmailJS template, add an attachment using a URL:
 1. Go to EmailJS → Your Template → **Attachments**
 2. Click **"Add Attachment"**
 3. Choose **"From URL"** option
-4. Use this URL format:
+4. Use this URL format (includes unique coupon code, email, and phone):
    ```
-   https://getbitebook.com/api/generate-coupon?restaurant={{restaurant_name}}&code=BITEBOOKWINGS&month=January%202026
+   https://getbitebook.com/api/generate-coupon?restaurant={{restaurant_name}}&code={{coupon_code}}&email={{email}}&phone={{phone}}&month=January%202026
    ```
 5. Save the template
+
+**Template Variables Used:**
+- `{{restaurant_name}}` - Which restaurant they won
+- `{{coupon_code}}` - Unique coupon code (e.g., BB-A3F9-240115)
+- `{{email}}` - Customer's email address
+- `{{phone}}` - Customer's phone number
 
 **Note:** EmailJS will fetch the HTML and convert it to PDF automatically.
 

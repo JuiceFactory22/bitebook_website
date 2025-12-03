@@ -8,6 +8,7 @@ import SpinWheel from '@/components/SpinWheel';
 import { restaurants, Restaurant } from '@/data/restaurants';
 import emailjs from '@emailjs/browser';
 import { trackLead } from '@/utils/facebookPixel';
+import { generateCouponCode } from '@/utils/couponCode';
 import Image from 'next/image';
 
 export default function NewHavenFreeCoupon() {
@@ -115,6 +116,9 @@ export default function NewHavenFreeCoupon() {
     localStorage.setItem('spinWheelPhones', JSON.stringify(spunPhones));
     setHasSpun(true);
 
+    // Generate unique coupon code
+    const couponCode = generateCouponCode();
+    
     // Send email via EmailJS
     setIsSubmitting(true);
     try {
@@ -122,6 +126,7 @@ export default function NewHavenFreeCoupon() {
         email: email.trim(),
         phone: cleanPhone,
         restaurant_name: restaurant.name, // Include which restaurant they won
+        coupon_code: couponCode, // Unique coupon code
       };
 
       const SERVICE_ID = 'service_u460dtm';
@@ -145,6 +150,7 @@ export default function NewHavenFreeCoupon() {
             phone: cleanPhone,
             source: 'spin-wheel',
             restaurant_name: restaurant.name,
+            coupon_code: couponCode,
           }),
         });
         console.log('Lead tracked to Google Sheets');
