@@ -125,7 +125,7 @@ export default function NewHavenFreeCoupon() {
       };
 
       const SERVICE_ID = 'service_u460dtm';
-      const TEMPLATE_ID = 'template_rwwf15i'; // Use same template as homepage lead magnet
+      const TEMPLATE_ID = 'template_db2m6o7'; // Template ID provided by user
 
       await emailjs.send(
         SERVICE_ID,
