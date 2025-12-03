@@ -13,6 +13,49 @@ export default function LandingBiteBook() {
   }, []);
   return (
     <div className="min-h-screen bg-white text-slate-900">
+      {/* Social Media Preview Meta Tags */}
+      <Script
+        id="social-meta-tags-landing"
+        strategy="beforeInteractive"
+        dangerouslySetInnerHTML={{
+          __html: `
+            document.title = 'Wings Month - BiteBook | Get $300+ in Local Restaurant Deals for $29.99';
+            const metaDescription = document.querySelector('meta[name="description"]') || document.createElement('meta');
+            metaDescription.name = 'description';
+            metaDescription.content = 'Love wings for less! Unlock unbeatable Wing Month deals at local favorites. Get $300+ in savings for just $29.99. Digital, mobile-friendly, instant access.';
+            if (!document.querySelector('meta[name="description"]')) document.head.appendChild(metaDescription);
+            
+            // Open Graph tags
+            const ogTags = [
+              { property: 'og:title', content: 'Wings Month - BiteBook | Get $300+ in Local Restaurant Deals for $29.99' },
+              { property: 'og:description', content: 'Love wings for less! Unlock unbeatable Wing Month deals at local favorites. Get $300+ in savings for just $29.99.' },
+              { property: 'og:image', content: 'https://getbitebook.com/images/bitebook-logo.png' },
+              { property: 'og:url', content: 'https://getbitebook.com/landing-new_haven' },
+              { property: 'og:type', content: 'website' },
+            ];
+            
+            // Twitter Card tags
+            const twitterTags = [
+              { name: 'twitter:card', content: 'summary_large_image' },
+              { name: 'twitter:title', content: 'Wings Month - BiteBook | Get $300+ in Local Restaurant Deals for $29.99' },
+              { name: 'twitter:description', content: 'Love wings for less! Unlock unbeatable Wing Month deals at local favorites. Get $300+ in savings for just $29.99.' },
+              { name: 'twitter:image', content: 'https://getbitebook.com/images/bitebook-logo.png' },
+            ];
+            
+            [...ogTags, ...twitterTags].forEach(tag => {
+              let meta = document.querySelector(tag.property ? \`meta[property="\${tag.property}"]\` : \`meta[name="\${tag.name}"]\`);
+              if (!meta) {
+                meta = document.createElement('meta');
+                if (tag.property) meta.setAttribute('property', tag.property);
+                if (tag.name) meta.setAttribute('name', tag.name);
+                document.head.appendChild(meta);
+              }
+              meta.setAttribute('content', tag.content);
+            });
+          `
+        }}
+      />
+      
       {/* Meta Pixel Code for Landing Page */}
       <Script
         id="meta-pixel-landing"

@@ -173,6 +173,49 @@ export default function NewHavenFreeCoupon() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#ff6b35] via-[#ff6b35] to-[#e55a2b]">
+      {/* Social Media Preview Meta Tags */}
+      <Script
+        id="social-meta-tags"
+        strategy="beforeInteractive"
+        dangerouslySetInnerHTML={{
+          __html: `
+            document.title = 'Spin to Win Free Coupon - BiteBook | New Haven Area';
+            const metaDescription = document.querySelector('meta[name="description"]') || document.createElement('meta');
+            metaDescription.name = 'description';
+            metaDescription.content = 'Spin the wheel and win a free coupon at one of 20 participating restaurants in the New Haven area! Get your free coupon today.';
+            if (!document.querySelector('meta[name="description"]')) document.head.appendChild(metaDescription);
+            
+            // Open Graph tags
+            const ogTags = [
+              { property: 'og:title', content: 'Spin to Win Free Coupon - BiteBook | New Haven Area' },
+              { property: 'og:description', content: 'Spin the wheel and win a free coupon at one of 20 participating restaurants in the New Haven area!' },
+              { property: 'og:image', content: 'https://getbitebook.com/images/bitebook-logo.png' },
+              { property: 'og:url', content: 'https://getbitebook.com/new-haven-free-coupon' },
+              { property: 'og:type', content: 'website' },
+            ];
+            
+            // Twitter Card tags
+            const twitterTags = [
+              { name: 'twitter:card', content: 'summary_large_image' },
+              { name: 'twitter:title', content: 'Spin to Win Free Coupon - BiteBook | New Haven Area' },
+              { name: 'twitter:description', content: 'Spin the wheel and win a free coupon at one of 20 participating restaurants in the New Haven area!' },
+              { name: 'twitter:image', content: 'https://getbitebook.com/images/bitebook-logo.png' },
+            ];
+            
+            [...ogTags, ...twitterTags].forEach(tag => {
+              let meta = document.querySelector(tag.property ? \`meta[property="\${tag.property}"]\` : \`meta[name="\${tag.name}"]\`);
+              if (!meta) {
+                meta = document.createElement('meta');
+                if (tag.property) meta.setAttribute('property', tag.property);
+                if (tag.name) meta.setAttribute('name', tag.name);
+                document.head.appendChild(meta);
+              }
+              meta.setAttribute('content', tag.content);
+            });
+          `
+        }}
+      />
+      
       {/* Meta Pixel Code */}
       <Script
         id="meta-pixel-spin-wheel"
