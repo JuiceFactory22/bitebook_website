@@ -300,11 +300,14 @@ export async function POST(request: NextRequest) {
       const PDF_API_KEY = process.env.PDF_API_KEY;
       const PDF_SERVICE = process.env.PDF_SERVICE || 'pdfshift'; // 'pdfshift' or 'api2pdf'
       
+      console.log('PDF conversion attempt:', { hasKey: !!PDF_API_KEY, service: PDF_SERVICE });
+      
       if (PDF_API_KEY) {
         let pdfResponse;
         
         if (PDF_SERVICE === 'pdfshift') {
           // Use PDFShift API (https://pdfshift.io - free tier available)
+          console.log('Attempting PDFShift conversion...');
           pdfResponse = await fetch('https://api.pdfshift.io/v3/convert/pdf', {
             method: 'POST',
             headers: {
@@ -318,8 +321,16 @@ export async function POST(request: NextRequest) {
               landscape: false,
             }),
           });
+          
+          console.log('PDFShift response status:', pdfResponse?.status);
+          
+          if (pdfResponse && !pdfResponse.ok) {
+            const errorText = await pdfResponse.text();
+            console.error('PDFShift error:', errorText);
+          }
         } else if (PDF_SERVICE === 'api2pdf') {
           // Use Api2Pdf API (https://www.api2pdf.com)
+          console.log('Attempting Api2Pdf conversion...');
           pdfResponse = await fetch('https://v2018.api2pdf.com/chrome/html', {
             method: 'POST',
             headers: {
@@ -332,18 +343,26 @@ export async function POST(request: NextRequest) {
               fileName: 'bitebook-coupon.pdf',
             }),
           });
+          
+          console.log('Api2Pdf response status:', pdfResponse?.status);
         }
         
         if (pdfResponse && pdfResponse.ok) {
           const pdfBuffer = await pdfResponse.arrayBuffer();
           const pdfBase64 = Buffer.from(pdfBuffer).toString('base64');
           
+          console.log('PDF conversion successful, size:', pdfBase64.length);
+          
           return NextResponse.json({
             success: true,
             pdfBase64: pdfBase64,
             format: 'pdf',
           });
+        } else {
+          console.log('PDF conversion failed, falling back to HTML');
         }
+      } else {
+        console.log('No PDF_API_KEY found, using HTML fallback');
       }
     } catch (pdfError) {
       console.error('PDF conversion error:', pdfError);
