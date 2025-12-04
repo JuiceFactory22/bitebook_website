@@ -295,28 +295,46 @@ export async function POST(request: NextRequest) {
 </html>`;
 
     // Convert HTML to PDF using a conversion service
-    // Using htmlpdfapi.com or similar service for reliable PDF generation
+    // Try PDFShift first (free tier available), then fallback to HTML
     try {
-      // Option 1: Use htmlpdfapi.com (free tier available)
-      const PDF_API_URL = process.env.PDF_API_URL || 'https://api.htmlpdfapi.com/v1/pdf';
       const PDF_API_KEY = process.env.PDF_API_KEY;
+      const PDF_SERVICE = process.env.PDF_SERVICE || 'pdfshift'; // 'pdfshift' or 'api2pdf'
       
       if (PDF_API_KEY) {
-        // Use PDF conversion API
-        const pdfResponse = await fetch(PDF_API_URL, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-API-Key': PDF_API_KEY,
-          },
-          body: JSON.stringify({
-            html: html,
-            format: 'A4',
-            margin: '10mm',
-          }),
-        });
+        let pdfResponse;
         
-        if (pdfResponse.ok) {
+        if (PDF_SERVICE === 'pdfshift') {
+          // Use PDFShift API (https://pdfshift.io - free tier available)
+          pdfResponse = await fetch('https://api.pdfshift.io/v3/convert/pdf', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Basic ${Buffer.from(`api:${PDF_API_KEY}`).toString('base64')}`,
+            },
+            body: JSON.stringify({
+              source: html,
+              format: 'A4',
+              margin: '10mm',
+              landscape: false,
+            }),
+          });
+        } else if (PDF_SERVICE === 'api2pdf') {
+          // Use Api2Pdf API (https://www.api2pdf.com)
+          pdfResponse = await fetch('https://v2018.api2pdf.com/chrome/html', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': PDF_API_KEY,
+            },
+            body: JSON.stringify({
+              html: html,
+              inlinePdf: false,
+              fileName: 'bitebook-coupon.pdf',
+            }),
+          });
+        }
+        
+        if (pdfResponse && pdfResponse.ok) {
           const pdfBuffer = await pdfResponse.arrayBuffer();
           const pdfBase64 = Buffer.from(pdfBuffer).toString('base64');
           

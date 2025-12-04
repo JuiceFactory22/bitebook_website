@@ -5,28 +5,34 @@ HTML attachments don't render consistently across email clients. Chrome on deskt
 
 ## Solution Options
 
-### Option 1: Use HTMLPDFAPI.com (Recommended - Free Tier Available)
+### Option 1: Use PDFShift.io (Recommended - Free Tier Available)
 
-1. **Sign up**: Go to https://htmlpdfapi.com/
-2. **Get API Key**: Free tier includes 100 PDFs/month
+1. **Sign up**: Go to https://pdfshift.io/ (free tier: 250 PDFs/month)
+2. **Get API Key**: From your dashboard
 3. **Add to Vercel Environment Variables**:
    - Go to Vercel Dashboard → Your Project → Settings → Environment Variables
    - Add:
-     - `PDF_API_KEY` = Your API key from htmlpdfapi.com
-     - `PDF_API_URL` = `https://api.htmlpdfapi.com/v1/pdf` (optional, this is the default)
+     - `PDF_API_KEY` = Your API key from pdfshift.io
+     - `PDF_SERVICE` = `pdfshift` (optional, this is the default)
 
 4. **Redeploy**: Vercel will automatically use the new environment variable
 
-### Option 2: Use PDFShift.io (Alternative)
+### Option 2: Use Api2Pdf (Alternative)
 
-1. **Sign up**: Go to https://pdfshift.io/
-2. **Get API Key**: Free tier available
-3. **Update the code** to use PDFShift API
-4. **Add to Vercel**: `PDF_API_KEY` = Your PDFShift API key
+1. **Sign up**: Go to https://www.api2pdf.com/ (free tier available)
+2. **Get API Key**: From your dashboard
+3. **Add to Vercel**:
+   - `PDF_API_KEY` = Your Api2Pdf API key
+   - `PDF_SERVICE` = `api2pdf`
 
-### Option 3: Use Puppeteer (More Complex)
+4. **Redeploy**: Changes will take effect automatically
 
-Requires additional setup with `@sparticuz/chromium` for Vercel serverless functions. More control but more complex.
+### Option 3: Use Library-Based Solution (No External Service)
+
+I can add a Puppeteer-based solution that runs entirely on your server. This requires:
+- Adding `puppeteer-core` and `@sparticuz/chromium` dependencies
+- More setup but no external API needed
+- Works entirely within your Vercel function
 
 ## Current Implementation
 
@@ -34,13 +40,14 @@ The code will:
 1. Try to convert HTML to PDF using the API (if `PDF_API_KEY` is set)
 2. Fall back to HTML if PDF conversion fails or no API key
 
-## Quick Setup (HTMLPDFAPI)
+## Quick Setup (PDFShift - Recommended)
 
-1. **Sign up**: https://htmlpdfapi.com/ (free account)
+1. **Sign up**: https://pdfshift.io/ (free account - 250 PDFs/month)
 2. **Get API Key**: From your dashboard
 3. **Add to Vercel**:
    ```
-   PDF_API_KEY=your_api_key_here
+   PDF_API_KEY=your_pdfshift_api_key_here
+   PDF_SERVICE=pdfshift
    ```
 4. **Redeploy**: Changes will take effect automatically
 
@@ -53,10 +60,10 @@ After setting up the API key:
 
 ## Cost
 
-- **HTMLPDFAPI**: Free tier = 100 PDFs/month, then $0.01 per PDF
-- **PDFShift**: Free tier = 100 PDFs/month, then $0.01 per PDF
+- **PDFShift**: Free tier = 250 PDFs/month, then $9/month for 5,000 PDFs
+- **Api2Pdf**: Free tier available, then pay-as-you-go pricing
 
-For your use case (lead magnet coupons), the free tier should be sufficient.
+For your use case (lead magnet coupons), the free tier should be more than sufficient.
 
 ## If You Don't Want to Use a Service
 
