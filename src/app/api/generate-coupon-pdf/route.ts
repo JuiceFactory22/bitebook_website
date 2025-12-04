@@ -294,17 +294,52 @@ export async function POST(request: NextRequest) {
 </body>
 </html>`;
 
-    // For now, return HTML as base64
-    // In production, you'd convert this to PDF using puppeteer or a service
-    // For Vercel, we'll use a simpler approach: return HTML that EmailJS can convert
+    // Convert HTML to PDF using a conversion service
+    // Using htmlpdfapi.com or similar service for reliable PDF generation
+    try {
+      // Option 1: Use htmlpdfapi.com (free tier available)
+      const PDF_API_URL = process.env.PDF_API_URL || 'https://api.htmlpdfapi.com/v1/pdf';
+      const PDF_API_KEY = process.env.PDF_API_KEY;
+      
+      if (PDF_API_KEY) {
+        // Use PDF conversion API
+        const pdfResponse = await fetch(PDF_API_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-API-Key': PDF_API_KEY,
+          },
+          body: JSON.stringify({
+            html: html,
+            format: 'A4',
+            margin: '10mm',
+          }),
+        });
+        
+        if (pdfResponse.ok) {
+          const pdfBuffer = await pdfResponse.arrayBuffer();
+          const pdfBase64 = Buffer.from(pdfBuffer).toString('base64');
+          
+          return NextResponse.json({
+            success: true,
+            pdfBase64: pdfBase64,
+            format: 'pdf',
+          });
+        }
+      }
+    } catch (pdfError) {
+      console.error('PDF conversion error:', pdfError);
+      // Fall through to HTML fallback
+    }
+    
+    // Fallback: Return HTML as base64 if PDF conversion fails or no API key
+    // EmailJS will attach it as HTML, which works on some clients
     const base64 = Buffer.from(html).toString('base64');
     
-    // Return as data URI that EmailJS can handle
-    // EmailJS will convert HTML attachments to PDF automatically in some cases
     return NextResponse.json({
       success: true,
       pdfBase64: base64,
-      // Also provide the HTML for fallback
+      format: 'html', // Indicates it's HTML, not PDF
       html: html,
     });
   } catch (error: any) {
