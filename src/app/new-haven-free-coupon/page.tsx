@@ -189,14 +189,12 @@ export default function NewHavenFreeCoupon() {
       // Track lead with Meta Pixel
       trackLead(0, email.trim(), cleanPhone);
 
-      // Show success popup 2 seconds after spin completes
-      // Spin completes at 4 seconds, winner shows for 2 seconds, then popup appears
+      // Show success popup immediately after winner display
+      // Spin completes at 4 seconds, winner shows for 2 seconds (total 6 seconds), then popup appears
+      setShowSuccess(true);
       setTimeout(() => {
-        setShowSuccess(true);
-        setTimeout(() => {
-          setShowUpsell(true);
-        }, 2000);
-      }, 2000); // 2 seconds after onSpinComplete is called
+        setShowUpsell(true);
+      }, 2000);
     } catch (err: any) {
       console.error('EmailJS error:', err);
       console.error('Error details:', {
@@ -219,12 +217,10 @@ export default function NewHavenFreeCoupon() {
       
       // Still show success popup even if email fails (user still won)
       // The coupon will be tracked in Google Sheets
+      setShowSuccess(true);
       setTimeout(() => {
-        setShowSuccess(true);
-        setTimeout(() => {
-          setShowUpsell(true);
-        }, 2000);
-      }, 2000); // 2 seconds after spin completes
+        setShowUpsell(true);
+      }, 2000);
     } finally {
       setIsSubmitting(false);
     }
