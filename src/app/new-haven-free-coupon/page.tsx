@@ -23,6 +23,7 @@ export default function NewHavenFreeCoupon() {
   const [showUpsell, setShowUpsell] = useState(false);
   const [error, setError] = useState('');
   const [hasSpun, setHasSpun] = useState(false);
+  const [timeRemaining, setTimeRemaining] = useState(20 * 60); // 20 minutes in seconds
 
   // Initialize EmailJS
   useEffect(() => {
@@ -32,6 +33,30 @@ export default function NewHavenFreeCoupon() {
       console.error('EmailJS initialization error:', error);
     }
   }, []);
+
+  // Countdown timer for upsell offer
+  useEffect(() => {
+    if (showUpsell && timeRemaining > 0) {
+      const timer = setInterval(() => {
+        setTimeRemaining((prev) => {
+          if (prev <= 1) {
+            clearInterval(timer);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+
+      return () => clearInterval(timer);
+    }
+  }, [showUpsell, timeRemaining]);
+
+  // Format time as MM:SS
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  };
 
   // Check if user has already spun (localStorage)
   useEffect(() => {
@@ -194,6 +219,7 @@ export default function NewHavenFreeCoupon() {
       setShowSuccess(true);
       setTimeout(() => {
         setShowUpsell(true);
+        setTimeRemaining(20 * 60); // Reset to 20 minutes when upsell shows
       }, 2000);
     } catch (err: any) {
       console.error('EmailJS error:', err);
@@ -220,6 +246,7 @@ export default function NewHavenFreeCoupon() {
       setShowSuccess(true);
       setTimeout(() => {
         setShowUpsell(true);
+        setTimeRemaining(20 * 60); // Reset to 20 minutes when upsell shows
       }, 2000);
     } finally {
       setIsSubmitting(false);
@@ -459,22 +486,32 @@ export default function NewHavenFreeCoupon() {
                 Want More Deals?
               </h2>
               <p className="text-xl text-gray-800 mb-6 font-semibold">
-                Get the Full BiteBook with coupons from ALL {restaurants.length} restaurants for just <span className="text-3xl">$15</span>
+                Get the Full BiteBook with coupons from over 25 restaurants for just <span className="text-3xl">$15</span>
               </p>
               <p className="text-lg text-gray-700 mb-2 line-through">
                 Regular Price: $29.99
               </p>
-              <p className="text-2xl font-bold text-[#ff6b35] mb-6">
+              <p className="text-2xl font-bold text-[#ff6b35] mb-4">
                 Your Price: $15 (50% OFF!)
               </p>
+              
+              {/* Countdown Timer */}
+              <div className="bg-red-600 text-white px-6 py-3 rounded-lg mb-6 inline-block">
+                <p className="text-sm font-semibold mb-1">Limited Time Offer</p>
+                <p className="text-3xl font-bold font-mono">
+                  {timeRemaining > 0 ? formatTime(timeRemaining) : '00:00'}
+                </p>
+                <p className="text-xs mt-1">Time remaining</p>
+              </div>
+              
               <Link
                 href="/checkout?coupon=BITEBOOKNH50"
                 className="inline-block bg-[#ff6b35] hover:bg-[#e55a2b] text-white font-extrabold px-8 py-4 rounded-xl shadow-2xl hover:shadow-3xl transition-all transform hover:scale-105 text-lg"
               >
                 Get Full Book for $15 (50% OFF)
               </Link>
-              <p className="text-sm text-gray-700 mt-4">
-                Limited time offer - expires soon!
+              <p className="text-xs text-gray-600 mt-4 italic">
+                If you leave this page the special 50% discount leaves too - sorry, its just that special
               </p>
             </div>
           </div>
