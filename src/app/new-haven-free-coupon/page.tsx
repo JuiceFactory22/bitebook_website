@@ -491,12 +491,19 @@ export default function NewHavenFreeCoupon() {
               <p className="text-lg text-gray-700 mb-2 line-through">
                 Regular Price: $29.99
               </p>
-              <p className="text-2xl font-bold text-[#ff6b35] mb-4">
+              <p className="text-2xl font-bold text-[#ff6b35] mb-6">
                 Your Price: $15 (50% OFF!)
               </p>
               
+              <Link
+                href="/checkout?coupon=BITEBOOKNH50"
+                className="inline-block bg-[#ff6b35] hover:bg-[#e55a2b] text-white font-extrabold px-8 py-4 rounded-xl shadow-2xl hover:shadow-3xl transition-all transform hover:scale-105 text-lg mb-6"
+              >
+                Get Full Book for $15 (50% OFF)
+              </Link>
+              
               {/* Countdown Timer */}
-              <div className="bg-red-600 text-white px-6 py-3 rounded-lg mb-6 inline-block">
+              <div className="bg-red-600 text-white px-6 py-3 rounded-lg mb-4 inline-block">
                 <p className="text-sm font-semibold mb-1">Limited Time Offer</p>
                 <p className="text-3xl font-bold font-mono">
                   {timeRemaining > 0 ? formatTime(timeRemaining) : '00:00'}
@@ -504,12 +511,6 @@ export default function NewHavenFreeCoupon() {
                 <p className="text-xs mt-1">Time remaining</p>
               </div>
               
-              <Link
-                href="/checkout?coupon=BITEBOOKNH50"
-                className="inline-block bg-[#ff6b35] hover:bg-[#e55a2b] text-white font-extrabold px-8 py-4 rounded-xl shadow-2xl hover:shadow-3xl transition-all transform hover:scale-105 text-lg"
-              >
-                Get Full Book for $15 (50% OFF)
-              </Link>
               <p className="text-xs text-gray-600 mt-4 italic">
                 If you leave this page the special 50% discount leaves too - sorry, its just that special
               </p>
