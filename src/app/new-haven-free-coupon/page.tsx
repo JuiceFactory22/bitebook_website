@@ -495,20 +495,22 @@ export default function NewHavenFreeCoupon() {
                 Your Price: $15 (50% OFF!)
               </p>
               
-              <Link
-                href="/checkout?coupon=BITEBOOKNH50"
-                className="inline-block bg-[#ff6b35] hover:bg-[#e55a2b] text-white font-extrabold px-8 py-4 rounded-xl shadow-2xl hover:shadow-3xl transition-all transform hover:scale-105 text-lg mb-6"
-              >
-                Get Full Book for $15 (50% OFF)
-              </Link>
+              <div className="mb-6">
+                <Link
+                  href="/checkout?coupon=BITEBOOKNH50"
+                  className="inline-block bg-[#ff6b35] hover:bg-[#e55a2b] text-white font-extrabold px-8 py-4 rounded-xl shadow-2xl hover:shadow-3xl transition-all transform hover:scale-105 text-lg"
+                >
+                  Get Full Book for $15 (50% OFF)
+                </Link>
+              </div>
               
               {/* Countdown Timer */}
-              <div className="bg-red-600 text-white px-6 py-3 rounded-lg mb-4 inline-block">
-                <p className="text-sm font-semibold mb-1">Limited Time Offer</p>
-                <p className="text-3xl font-bold font-mono">
+              <div className="bg-red-600 text-white px-6 py-3 rounded-lg mb-4 inline-block mx-auto">
+                <p className="text-sm font-semibold mb-1 text-center">Limited Time Offer</p>
+                <p className="text-3xl font-bold font-mono text-center">
                   {timeRemaining > 0 ? formatTime(timeRemaining) : '00:00'}
                 </p>
-                <p className="text-xs mt-1">Time remaining</p>
+                <p className="text-xs mt-1 text-center">Time remaining</p>
               </div>
               
               <p className="text-xs text-gray-600 mt-4 italic">
