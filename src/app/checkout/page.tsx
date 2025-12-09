@@ -52,6 +52,7 @@ function CheckoutContent() {
   // Valid coupon codes
   const validCoupons: { [key: string]: number } = {
     'BITEBOOKNH50': 0.5, // 50% off
+    'WINGS20NH': 0.2, // 20% off
   };
 
   // Calculate base price before discounts
@@ -280,7 +281,7 @@ function CheckoutContent() {
                   <div className="text-right md:ml-4 flex-shrink-0">
                     {appliedCoupon && (
                       <div className="text-xs text-green-600 font-semibold mb-1">
-                        {appliedCoupon === 'BITEBOOKNH50' ? '50% OFF' : 'Coupon Applied'}
+                        {appliedCoupon === 'BITEBOOKNH50' ? '50% OFF' : appliedCoupon === 'WINGS20NH' ? '20% OFF' : 'Coupon Applied'}
                       </div>
                     )}
                     <div className="text-2xl font-bold text-[#ff6b35]">
