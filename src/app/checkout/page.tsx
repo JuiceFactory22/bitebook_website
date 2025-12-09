@@ -488,9 +488,14 @@ function CheckoutContent() {
                         <div className="text-2xl">
                           Total: ${getCurrentPrice().toFixed(2)}
                         </div>
-                        {(appliedCoupon === 'BITEBOOKNH50' || appliedCoupon === 'WINGS20NH') && (
+                        {appliedCoupon === 'BITEBOOKNH50' && (
                           <div className="text-xs opacity-90 mt-1">
                             50% OFF Applied
+                          </div>
+                        )}
+                        {appliedCoupon === 'WINGS20NH' && (
+                          <div className="text-xs opacity-90 mt-1">
+                            20% OFF Applied
                           </div>
                         )}
                         {isSubscription && !appliedCoupon && (
