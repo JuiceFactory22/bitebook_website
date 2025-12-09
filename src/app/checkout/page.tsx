@@ -50,9 +50,11 @@ function CheckoutContent() {
   };
 
   // Valid coupon codes
+  // For percentage discounts: value is between 0 and 1 (e.g., 0.5 = 50% off)
+  // For fixed prices: value is negative (e.g., -19.99 = fixed price of $19.99)
   const validCoupons: { [key: string]: number } = {
     'BITEBOOKNH50': 0.5, // 50% off
-    'WINGS20NH': 0.2, // 20% off
+    'WINGS20NH': -19.99, // Fixed price of $19.99
   };
 
   // Calculate base price before discounts
@@ -65,11 +67,15 @@ function CheckoutContent() {
   const getCurrentPrice = () => {
     const basePrice = getBasePrice();
     
-    // Apply coupon discount (all coupons are percentage-based)
+    // Apply coupon discount
     if (appliedCoupon) {
       const coupon = validCoupons[appliedCoupon];
       if (coupon !== undefined) {
-        // Percentage discount (e.g., 0.5 = 50% off)
+        // If coupon value is negative, it's a fixed price
+        if (coupon < 0) {
+          return Math.abs(coupon); // Return the absolute value (fixed price)
+        }
+        // Otherwise, it's a percentage discount (e.g., 0.5 = 50% off)
         return basePrice * coupon;
       }
     }
@@ -281,7 +287,7 @@ function CheckoutContent() {
                   <div className="text-right md:ml-4 flex-shrink-0">
                     {appliedCoupon && (
                       <div className="text-xs text-green-600 font-semibold mb-1">
-                        {appliedCoupon === 'BITEBOOKNH50' ? '50% OFF' : appliedCoupon === 'WINGS20NH' ? '20% OFF' : 'Coupon Applied'}
+                        {appliedCoupon === 'BITEBOOKNH50' ? '50% OFF' : appliedCoupon === 'WINGS20NH' ? '$19.99 Special Price' : 'Coupon Applied'}
                       </div>
                     )}
                     <div className="text-2xl font-bold text-[#ff6b35]">
@@ -495,7 +501,7 @@ function CheckoutContent() {
                         )}
                         {appliedCoupon === 'WINGS20NH' && (
                           <div className="text-xs opacity-90 mt-1">
-                            20% OFF Applied
+                            Special Price: $19.99
                           </div>
                         )}
                         {isSubscription && !appliedCoupon && (
