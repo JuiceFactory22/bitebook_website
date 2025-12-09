@@ -6,6 +6,7 @@ import Link from "next/link";
 import emailjs from '@emailjs/browser';
 import { useSearchParams } from 'next/navigation';
 import { trackPurchase, trackInitiateCheckout } from '@/utils/facebookPixel';
+import { trackCartAbandonment, clearCartAbandonment } from '@/utils/cartAbandonment';
 import SquarePaymentForm from '@/components/SquarePaymentForm';
 
 function CheckoutContent() {
@@ -37,6 +38,42 @@ function CheckoutContent() {
     // Track page view for checkout
     trackInitiateCheckout(29.99);
   }, [searchParams]);
+
+  // Track cart abandonment when user leaves checkout page without purchasing
+  useEffect(() => {
+    // Get current price function (defined later in component)
+    const getPrice = () => {
+      const basePrice = isSubscription ? couponBookDetails.subscriptionPrice : couponBookDetails.price;
+      if (appliedCoupon && validCoupons[appliedCoupon]) {
+        const discount = validCoupons[appliedCoupon];
+        return basePrice * (1 - discount / 100);
+      }
+      return basePrice;
+    };
+
+    const handleBeforeUnload = () => {
+      // Only track if they haven't submitted
+      if (!isSubmitted && !isSubmitting) {
+        const currentPrice = getPrice();
+        trackCartAbandonment(currentPrice, formData.email);
+      }
+    };
+
+    // Track abandonment after 30 seconds on checkout page (if they haven't started filling form)
+    const abandonmentTimer = setTimeout(() => {
+      if (!isSubmitted && !isSubmitting && !formData.email) {
+        const currentPrice = getPrice();
+        trackCartAbandonment(currentPrice);
+      }
+    }, 30000); // 30 seconds
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      clearTimeout(abandonmentTimer);
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [isSubmitted, isSubmitting, formData.email, isSubscription, appliedCoupon]);
   
   const couponBookDetails = {
     price: 29.99,
@@ -183,6 +220,9 @@ function CheckoutContent() {
 
       // Track purchase event with email for advanced matching
       trackPurchase(currentPrice, 'USD', formData.email);
+      
+      // Clear cart abandonment data on successful purchase
+      clearCartAbandonment();
 
       setIsSubmitted(true);
       setIsSubmitting(false);
