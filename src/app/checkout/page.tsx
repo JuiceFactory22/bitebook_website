@@ -10,7 +10,7 @@ import { trackCartAbandonment, clearCartAbandonment } from '@/utils/cartAbandonm
 import SquarePaymentForm from '@/components/SquarePaymentForm';
 
 function CheckoutContent() {
-  const [isSubscription, setIsSubscription] = useState(false);
+  const [isSubscription, setIsSubscription] = useState(true); // Always subscription
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [paymentToken, setPaymentToken] = useState<string | null>(null);
@@ -25,11 +25,9 @@ function CheckoutContent() {
   });
   const searchParams = useSearchParams();
 
-  // Check if subscription parameter is present or coupon code from URL
+  // Check for coupon code from URL
   useEffect(() => {
-    if (searchParams.get('subscription') === 'true') {
-      setIsSubscription(true);
-    }
+    // Subscription is always enabled, no need to check subscription parameter
     // Check for coupon code from URL (e.g., from spin wheel)
     const urlCoupon = searchParams.get('coupon');
     if (urlCoupon && validCoupons[urlCoupon.toUpperCase()]) {
@@ -226,7 +224,7 @@ function CheckoutContent() {
               <CheckCircle className="w-8 h-8 text-green-600" />
             </div>
             <h2 className="text-2xl font-display font-bold text-gray-900 mb-4">
-              Order Submitted!
+              Subscription Active!
             </h2>
             <p className="text-gray-600 mb-6">
               Welcome to BiteBook! Your subscription is active. You'll receive your first coupon book within 24 hours prior to the start of the event, and a new book will be delivered to your email each month. You can cancel anytime from your account.
@@ -270,7 +268,7 @@ function CheckoutContent() {
           <div className="order-2 lg:order-1">
             <div className="bg-white rounded-xl shadow-lg p-8">
               <h2 className="text-2xl font-display font-bold text-gray-900 mb-6">
-                Your BiteBook Order
+                Subscribe to BiteBook Monthly
               </h2>
               
               {/* Product Details */}
@@ -278,10 +276,10 @@ function CheckoutContent() {
                 <div className="flex flex-col md:flex-row md:items-start md:justify-between mb-4 gap-4">
                   <div className="flex-1">
                     <h3 className="text-lg font-semibold text-gray-900 mb-3">
-                      BiteBook Monthly Coupon Book
+                      BiteBook Monthly Subscription
                     </h3>
                     <p className="text-gray-600 text-sm leading-relaxed">
-                      With over 30 local restaurants participating you'll be getting hundreds of dollars in value for less than the cost of another parking ticket. We've partnered with some of the best establishments in the area to put together an incredible deal book for this January. Share with your friends and family or keep all the deals to yourself. Whatever you decide, January is for wing lovers. Checkout now and make some memories with BiteBook.
+                      Join BiteBook and receive a new coupon book every month featuring over 25 local restaurants. Each month brings a new theme - wings, tacos, pizza, burgers, and more. You'll get hundreds of dollars in value every month for less than the cost of a single meal out. Cancel anytime - no commitment required.
                     </p>
                   </div>
                   <div className="text-right md:ml-4 flex-shrink-0">
@@ -291,44 +289,54 @@ function CheckoutContent() {
                       </div>
                     )}
                     <div className="text-2xl font-bold text-[#ff6b35]">
-                      ${getCurrentPrice().toFixed(2)}
+                      ${getCurrentPrice().toFixed(2)}/month
                     </div>
                     {(appliedCoupon || getBasePrice() !== getCurrentPrice()) && (
                       <div className="text-sm text-gray-500 line-through">
-                        ${getBasePrice().toFixed(2)}
+                        ${getBasePrice().toFixed(2)}/month
                       </div>
                     )}
                     <div className="text-sm text-gray-500 line-through">
                       ${couponBookDetails.originalValue} value
                     </div>
+                    <div className="text-xs text-gray-600 mt-1">
+                      Billed monthly • Cancel anytime
+                    </div>
                   </div>
                 </div>
                 
-              {/* Subscription Toggle */}
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
-                <div className="flex items-center justify-between">
+              {/* Subscription Information */}
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-5 mb-4">
+                <div className="flex items-start mb-3">
+                  <span className="text-2xl mr-3">📅</span>
                   <div>
-                    <h4 className="font-semibold text-blue-900">Monthly Subscription</h4>
-                    <p className="text-sm text-blue-700">Get your BiteBook delivered monthly</p>
+                    <h4 className="font-semibold text-blue-900 mb-2">Monthly Subscription</h4>
+                    <ul className="text-sm text-blue-800 space-y-1.5">
+                      <li className="flex items-center">
+                        <CheckCircle className="w-4 h-4 text-green-500 mr-2 flex-shrink-0" />
+                        <span>New coupon book delivered monthly</span>
+                      </li>
+                      <li className="flex items-center">
+                        <CheckCircle className="w-4 h-4 text-green-500 mr-2 flex-shrink-0" />
+                        <span>Billed automatically each month</span>
+                      </li>
+                      <li className="flex items-center">
+                        <CheckCircle className="w-4 h-4 text-green-500 mr-2 flex-shrink-0" />
+                        <span>Cancel anytime - no commitment</span>
+                      </li>
+                      <li className="flex items-center">
+                        <CheckCircle className="w-4 h-4 text-green-500 mr-2 flex-shrink-0" />
+                        <span>Skip or pause anytime</span>
+                      </li>
+                    </ul>
                   </div>
-                  <label className="relative inline-flex items-center cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={isSubscription}
-                      onChange={(e) => setIsSubscription(e.target.checked)}
-                      className="sr-only peer"
-                    />
-                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-                  </label>
                 </div>
-                {isSubscription && (
-                  <div className="mt-3 text-sm text-blue-800">
-                    <div className="flex items-center">
-                      <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
-                      <span>Cancel anytime • No commitment</span>
-                    </div>
+                <div className="mt-4 pt-4 border-t border-blue-200">
+                  <div className="text-sm text-blue-900">
+                    <div className="font-semibold mb-1">First Month: ${getCurrentPrice().toFixed(2)}</div>
+                    <div className="text-blue-700">Then: ${getCurrentPrice().toFixed(2)}/month (billed monthly)</div>
                   </div>
-                )}
+                </div>
               </div>
 
               </div>
@@ -387,15 +395,27 @@ function CheckoutContent() {
                 <div className="space-y-2">
                   <div className="flex items-center">
                     <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
-                    <span className="text-sm text-gray-600">{couponBookDetails.restaurants}+ restaurant coupons</span>
+                    <span className="text-sm text-gray-600">New coupon book every month</span>
                   </div>
                   <div className="flex items-center">
                     <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
-                    <span className="text-sm text-gray-600">{couponBookDetails.validity}-day validity</span>
+                    <span className="text-sm text-gray-600">{couponBookDetails.restaurants}+ restaurant coupons per month</span>
+                  </div>
+                  <div className="flex items-center">
+                    <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
+                    <span className="text-sm text-gray-600">{couponBookDetails.validity}-day validity per book</span>
                   </div>
                   <div className="flex items-center">
                     <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
                     <span className="text-sm text-gray-600">Digital coupon access</span>
+                  </div>
+                  <div className="flex items-center">
+                    <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
+                    <span className="text-sm text-gray-600">Cancel anytime</span>
+                  </div>
+                  <div className="flex items-center">
+                    <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
+                    <span className="text-sm text-gray-600">No commitment required</span>
                   </div>
                 </div>
               </div>
@@ -418,7 +438,7 @@ function CheckoutContent() {
           <div className="order-1 lg:order-2">
             <div className="bg-white rounded-xl shadow-lg p-8">
               <h2 className="text-2xl font-display font-bold text-gray-900 mb-6">
-                Complete Your Purchase
+                Complete Your Subscription
               </h2>
 
               <form onSubmit={(e) => e.preventDefault()} className="space-y-6">
@@ -487,7 +507,10 @@ function CheckoutContent() {
                           </div>
                         )}
                         <div className="text-2xl">
-                          Total: ${getCurrentPrice().toFixed(2)}
+                          ${getCurrentPrice().toFixed(2)}/month
+                        </div>
+                        <div className="text-sm opacity-90 mt-1">
+                          Billed monthly
                         </div>
                         {appliedCoupon === 'BITEBOOKNH50' && (
                           <div className="text-xs opacity-90 mt-1">
@@ -499,7 +522,7 @@ function CheckoutContent() {
                             Special Price: $19.99
                           </div>
                         )}
-                        {isSubscription && !appliedCoupon && (
+                        {!appliedCoupon && (
                           <div className="text-xs opacity-90 mt-1">
                             Monthly subscription
                           </div>
@@ -519,6 +542,33 @@ function CheckoutContent() {
                   </div>
                 </div>
 
+                {/* Billing Information */}
+                <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-6">
+                  <h4 className="font-semibold text-gray-900 mb-3">Billing Information</h4>
+                  <ul className="text-sm text-gray-700 space-y-2">
+                    <li className="flex items-start">
+                      <span className="mr-2">•</span>
+                      <span>You'll be charged <strong>${getCurrentPrice().toFixed(2)}</strong> today for your first month</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="mr-2">•</span>
+                      <span>Future charges will occur on the same date each month</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="mr-2">•</span>
+                      <span>You'll receive an email reminder 3 days before each charge</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="mr-2">•</span>
+                      <span>Cancel anytime - no fees or penalties</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="mr-2">•</span>
+                      <span>Access your account to manage subscription</span>
+                    </li>
+                  </ul>
+                </div>
+
                 {/* Terms */}
                 <div className="flex items-start">
                   <input
@@ -528,7 +578,7 @@ function CheckoutContent() {
                     required
                   />
                   <label htmlFor="terms" className="text-sm text-gray-600">
-                    I agree to the{" "}
+                    By subscribing, I agree to the{" "}
                     <a href="#" className="text-[#ff6b35] hover:underline">
                       Terms of Service
                     </a>{" "}
@@ -536,6 +586,7 @@ function CheckoutContent() {
                     <a href="#" className="text-[#ff6b35] hover:underline">
                       Privacy Policy
                     </a>
+                    . I understand that I will be charged <strong>${getCurrentPrice().toFixed(2)}/month</strong> and can cancel anytime.
                   </label>
                 </div>
 
