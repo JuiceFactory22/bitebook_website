@@ -5,7 +5,7 @@ export interface Restaurant {
 }
 
 export const restaurants: Restaurant[] = [
-  { name: "Archie Moore's", image: '/images/Logos/New Haven/archie-moores-nh-logo.jpeg' },
+  { name: "Archie Moore's", image: '/images/Logos/New%20Haven/archie-moores-nh-logo.jpeg' },
   { name: "Capotorto's Apizza Center", image: '/images/Logos/New Haven/capotortos logo.jpeg' },
   { name: 'Blue Orchid', image: '/images/Logos/New Haven/blue-orchid-logo.jpeg' },
   { name: 'Castle Black Rock', image: '/images/Logos/New Haven/The-Castle-Black-Rock-Logo.jpeg' },
