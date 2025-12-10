@@ -439,10 +439,6 @@ function CheckoutContent() {
                   <Shield className="w-4 h-4 mr-1" />
                   <span>Secure Payment</span>
                 </div>
-                <div className="flex items-center">
-                  <Truck className="w-4 h-4 mr-1" />
-                  <span>Instant Access</span>
-                </div>
               </div>
             </div>
           </div>
