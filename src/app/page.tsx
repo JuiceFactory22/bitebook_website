@@ -373,14 +373,14 @@ export default function Home() {
             {/* Subscribe & Save Button */}
             <div className="text-center mb-12">
                 <TrackingButton 
-                  href="/checkout?subscription=true"
-                  value={20.99}
+                  href="/checkout?coupon=BITEBOOKNH50"
+                  value={14.99}
                   className="inline-block bg-[#ff6b35] hover:bg-[#e55a2b] text-white px-8 py-4 rounded-full text-lg font-semibold btn-hover shadow-lg transition-all duration-300"
                 >
-                  Subscribe & Save 30% - Get Monthly BiteBooks
+                  Subscribe and Save
                 </TrackingButton>
               <p className="text-sm text-gray-500 mt-3">
-                Cancel anytime • No commitment • Save $9 every month
+                Cancel anytime • No commitment • 50% off your first month
               </p>
             </div>
           </div>
