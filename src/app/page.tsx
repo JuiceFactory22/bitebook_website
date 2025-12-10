@@ -380,7 +380,7 @@ export default function Home() {
                   Subscribe and Save
                 </TrackingButton>
               <p className="text-sm text-gray-500 mt-3">
-                Cancel anytime • No commitment • 50% off your first month
+                Cancel anytime • No commitment • 50% off first month, then $29.99/month
               </p>
             </div>
           </div>
