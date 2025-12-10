@@ -229,7 +229,7 @@ function CheckoutContent() {
               Order Submitted!
             </h2>
             <p className="text-gray-600 mb-6">
-              Thank you for your order! We'll process your BiteBook and send it to your email within 24 hours.
+              Welcome to BiteBook! Your subscription is active. You'll receive your first coupon book within 24 hours prior to the start of the event, and a new book will be delivered to your email each month. You can cancel anytime from your account.
             </p>
             <Link 
               href="/" 
