@@ -333,8 +333,17 @@ function CheckoutContent() {
                 </div>
                 <div className="mt-4 pt-4 border-t border-blue-200">
                   <div className="text-sm text-blue-900">
-                    <div className="font-semibold mb-1">First Month: ${getCurrentPrice().toFixed(2)}</div>
-                    <div className="text-blue-700">Then: ${getCurrentPrice().toFixed(2)}/month (billed monthly)</div>
+                    {appliedCoupon ? (
+                      <>
+                        <div className="font-semibold mb-1">First Month: ${getCurrentPrice().toFixed(2)} <span className="text-green-600">(Discount Applied)</span></div>
+                        <div className="text-blue-700">Then: $29.99/month (standard price, billed monthly)</div>
+                      </>
+                    ) : (
+                      <>
+                        <div className="font-semibold mb-1">First Month: ${getCurrentPrice().toFixed(2)}</div>
+                        <div className="text-blue-700">Then: ${getCurrentPrice().toFixed(2)}/month (billed monthly)</div>
+                      </>
+                    )}
                   </div>
                 </div>
               </div>
@@ -344,6 +353,7 @@ function CheckoutContent() {
               {/* Coupon Code Section */}
               <div className="mb-6">
                 <h4 className="font-semibold text-gray-900 mb-3">Have a Coupon Code?</h4>
+                <p className="text-xs text-gray-500 mb-2">Coupon codes apply to your first month only. After that, you'll be billed at the standard $29.99/month rate.</p>
                 {!appliedCoupon ? (
                   <div className="flex gap-2">
                     <input
@@ -371,9 +381,12 @@ function CheckoutContent() {
                   <div className="bg-green-50 border-2 border-green-300 rounded-lg p-4 flex items-center justify-between">
                     <div className="flex items-center">
                       <CheckCircle className="w-5 h-5 text-green-600 mr-2" />
-                      <span className="text-green-800 font-semibold">
-                        Coupon Applied: {appliedCoupon}
-                      </span>
+                      <div>
+                        <span className="text-green-800 font-semibold">
+                          Coupon Applied: {appliedCoupon}
+                        </span>
+                        <div className="text-xs text-green-600 mt-1">First month only - then $29.99/month</div>
+                      </div>
                     </div>
                     <button
                       type="button"
@@ -507,24 +520,19 @@ function CheckoutContent() {
                           </div>
                         )}
                         <div className="text-2xl">
-                          ${getCurrentPrice().toFixed(2)}/month
+                          ${getCurrentPrice().toFixed(2)}
                         </div>
                         <div className="text-sm opacity-90 mt-1">
-                          Billed monthly
+                          First month{appliedCoupon && <span className="text-yellow-200"> (discount applied)</span>}
                         </div>
-                        {appliedCoupon === 'BITEBOOKNH50' && (
-                          <div className="text-xs opacity-90 mt-1">
-                            50% OFF Applied
-                          </div>
-                        )}
-                        {appliedCoupon === 'WINGS20NH' && (
-                          <div className="text-xs opacity-90 mt-1">
-                            Special Price: $19.99
+                        {appliedCoupon && (
+                          <div className="text-xs opacity-90 mt-2 pt-2 border-t border-white/20">
+                            Then $29.99/month
                           </div>
                         )}
                         {!appliedCoupon && (
                           <div className="text-xs opacity-90 mt-1">
-                            Monthly subscription
+                            Then ${getCurrentPrice().toFixed(2)}/month
                           </div>
                         )}
                       </div>
@@ -548,7 +556,11 @@ function CheckoutContent() {
                   <ul className="text-sm text-gray-700 space-y-2">
                     <li className="flex items-start">
                       <span className="mr-2">•</span>
-                      <span>You'll be charged <strong>${getCurrentPrice().toFixed(2)}</strong> today for your first month</span>
+                      <span>You'll be charged <strong>${getCurrentPrice().toFixed(2)}</strong> today for your first month{appliedCoupon && <span className="text-green-600"> (discount applied)</span>}</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="mr-2">•</span>
+                      <span>Starting month 2, you'll be charged <strong>$29.99/month</strong> at the standard subscription rate</span>
                     </li>
                     <li className="flex items-start">
                       <span className="mr-2">•</span>
