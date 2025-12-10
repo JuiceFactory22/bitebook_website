@@ -568,10 +568,6 @@ function CheckoutContent() {
                     </li>
                     <li className="flex items-start">
                       <span className="mr-2">•</span>
-                      <span>You'll receive an email reminder 3 days before each charge</span>
-                    </li>
-                    <li className="flex items-start">
-                      <span className="mr-2">•</span>
                       <span>Cancel anytime - no fees or penalties</span>
                     </li>
                     <li className="flex items-start">
