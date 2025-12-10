@@ -315,7 +315,7 @@ export default function SquarePaymentForm({ amount, onPaymentSuccess, onPaymentE
         disabled={isLoading || !squareLoaded}
         className="w-full bg-[#ff6b35] hover:bg-[#e55a2b] text-white py-3 rounded-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
       >
-        {isLoading ? 'Loading...' : `Pay $${amount.toFixed(2)}`}
+        {isLoading ? 'Loading...' : `Subscribe $${amount.toFixed(2)}/month`}
       </button>
     </div>
   );
