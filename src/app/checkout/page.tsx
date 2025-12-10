@@ -41,10 +41,10 @@ function CheckoutContent() {
   
   const couponBookDetails = {
     price: 29.99,
-    subscriptionPrice: 20.99, // 30% off
+    subscriptionPrice: 29.99, // Standard subscription price
     originalValue: 300,
     savings: 270.01,
-    subscriptionSavings: 279.01, // $300 - $20.99
+    subscriptionSavings: 270.01, // $300 - $29.99
     restaurants: 30,
     validity: 30
   };
@@ -301,11 +301,6 @@ function CheckoutContent() {
                     <div className="text-sm text-gray-500 line-through">
                       ${couponBookDetails.originalValue} value
                     </div>
-                    {isSubscription && !appliedCoupon && (
-                      <div className="text-xs text-blue-600 font-semibold mt-1">
-                        30% Off
-                      </div>
-                    )}
                   </div>
                 </div>
                 
@@ -313,7 +308,7 @@ function CheckoutContent() {
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h4 className="font-semibold text-blue-900">Subscribe & Save 30%</h4>
+                    <h4 className="font-semibold text-blue-900">Monthly Subscription</h4>
                     <p className="text-sm text-blue-700">Get your BiteBook delivered monthly</p>
                   </div>
                   <label className="relative inline-flex items-center cursor-pointer">
@@ -506,7 +501,7 @@ function CheckoutContent() {
                         )}
                         {isSubscription && !appliedCoupon && (
                           <div className="text-xs opacity-90 mt-1">
-                            Monthly subscription (30% off)
+                            Monthly subscription
                           </div>
                         )}
                       </div>
