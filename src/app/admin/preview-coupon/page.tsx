@@ -10,6 +10,7 @@ export default function PreviewCoupon() {
   const [month, setMonth] = useState('January 2026');
   const [previewHtml, setPreviewHtml] = useState('');
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   // Auto-generate preview on mount
   useEffect(() => {
@@ -18,24 +19,36 @@ export default function PreviewCoupon() {
   }, []);
 
   const generatePreview = async () => {
+    console.log('generatePreview called');
     setLoading(true);
+    setError('');
+    setPreviewHtml('');
+    
     try {
+      const requestBody = {
+        restaurant: restaurant.trim(),
+        code: code.trim() || 'BITEBOOKWINGS',
+        email: email.trim() || '',
+        phone: phone.trim() || '',
+        month: month.trim() || 'January 2026',
+      };
+      
+      console.log('Sending request:', requestBody);
+      
       const response = await fetch('/api/generate-coupon-pdf', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          restaurant: restaurant.trim(),
-          code: code.trim() || 'BITEBOOKWINGS',
-          email: email.trim() || '',
-          phone: phone.trim() || '',
-          month: month.trim() || 'January 2026',
-        }),
+        body: JSON.stringify(requestBody),
       });
 
+      console.log('Response status:', response.status, response.statusText);
+
       if (!response.ok) {
-        throw new Error('Failed to generate preview');
+        const errorText = await response.text();
+        console.error('Response error:', errorText);
+        throw new Error(`Failed to generate preview: ${response.status} ${response.statusText}`);
       }
 
       const data = await response.json();
@@ -43,14 +56,19 @@ export default function PreviewCoupon() {
       
       // The API returns html in the response
       if (data.html) {
+        console.log('Setting preview HTML, length:', data.html.length);
         setPreviewHtml(data.html);
+        setError('');
       } else {
         console.error('No HTML in response:', data);
+        setError('No HTML in API response. Check console for details.');
         setPreviewHtml('<p>Error: Could not generate preview. Check console for details.</p>');
       }
     } catch (err: any) {
       console.error('Error generating preview:', err);
-      setPreviewHtml(`<p style="color: red;">Error: ${err.message}</p>`);
+      const errorMsg = err.message || 'Unknown error occurred';
+      setError(errorMsg);
+      setPreviewHtml(`<div style="padding: 20px; color: red;"><h3>Error</h3><p>${errorMsg}</p></div>`);
     } finally {
       setLoading(false);
     }
@@ -135,12 +153,22 @@ export default function PreviewCoupon() {
           </div>
 
           <button
-            onClick={generatePreview}
+            onClick={(e) => {
+              e.preventDefault();
+              console.log('Button clicked');
+              generatePreview();
+            }}
             disabled={loading}
             className="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 px-6 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? 'Generating Preview...' : 'Update Preview'}
           </button>
+          
+          {error && (
+            <div className="mt-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+              <strong>Error:</strong> {error}
+            </div>
+          )}
         </div>
 
         {previewHtml && (
