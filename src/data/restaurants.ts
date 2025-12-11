@@ -10,6 +10,7 @@ export const restaurants: Restaurant[] = [
   { name: 'Blue Orchid', image: '/images/Logos/New Haven/blue-orchid-logo.jpeg' },
   { name: 'Castle Black Rock', image: '/images/Logos/New Haven/The-Castle-Black-Rock-Logo.jpeg' },
   { name: "Delaney's Restaurant", image: '/images/Logos/New Haven/delaneys-restaurant-nh.jpeg' },
+  { name: 'Flipside Burger Bar', image: '/images/Logos/New Haven/flipside-burger-bar-logo.jpeg' },
   { name: "Gaetano's Tavern", image: '/images/Logos/New Haven/gaetanos tavern logo.jpeg' },
   { name: "Giulio's Pizza & Top Shelf Lounge", image: '/images/Logos/New Haven/Giulios-pizza-top-shelf-lounge.jpeg' },
   { name: 'Heffer', image: '/images/Logos/New Haven/heffer-logo.jpeg' },
