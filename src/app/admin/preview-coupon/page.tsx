@@ -39,9 +39,18 @@ export default function PreviewCoupon() {
       }
 
       const data = await response.json();
-      setPreviewHtml(data.html || '');
+      console.log('API Response:', data);
+      
+      // The API returns html in the response
+      if (data.html) {
+        setPreviewHtml(data.html);
+      } else {
+        console.error('No HTML in response:', data);
+        setPreviewHtml('<p>Error: Could not generate preview. Check console for details.</p>');
+      }
     } catch (err: any) {
-      alert('Error generating preview: ' + err.message);
+      console.error('Error generating preview:', err);
+      setPreviewHtml(`<p style="color: red;">Error: ${err.message}</p>`);
     } finally {
       setLoading(false);
     }
