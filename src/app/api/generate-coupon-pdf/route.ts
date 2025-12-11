@@ -287,11 +287,11 @@ export async function POST(request: NextRequest) {
             ` : ''}
         </div>
         
-        <div class="terms">
+            <div class="terms">
             <h3>Terms & Conditions</h3>
             <ul>
                 <li>One coupon per customer. Cannot be combined with other offers.</li>
-                <li>Valid for 6 free wings (dine-in or takeout).</li>
+                <li>Valid for 6 free wings (dine-in only - not valid for takeout).</li>
                 <li>Valid only at the participating restaurant listed above.</li>
                 <li>Coupon must be presented at time of purchase.</li>
                 <li>Valid for the month of ${month} only.</li>
