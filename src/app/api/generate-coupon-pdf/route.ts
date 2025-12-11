@@ -371,6 +371,7 @@ export async function POST(request: NextRequest) {
             success: true,
             pdfBase64: pdfBase64,
             format: 'pdf',
+            html: html, // Always include HTML for preview purposes
           });
         } else {
           console.log('PDF conversion failed, falling back to HTML');
