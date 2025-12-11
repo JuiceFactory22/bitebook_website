@@ -146,10 +146,20 @@ export default function PreviewCoupon() {
         {previewHtml && (
           <div className="bg-white shadow-xl rounded-lg p-8">
             <h2 className="text-2xl font-bold text-gray-900 mb-6">Preview:</h2>
-            <div 
-              className="border border-gray-200 rounded-lg overflow-hidden"
-              dangerouslySetInnerHTML={{ __html: previewHtml }}
-            />
+            <div className="border border-gray-200 rounded-lg overflow-hidden">
+              <iframe
+                srcDoc={previewHtml}
+                className="w-full"
+                style={{ minHeight: '800px', border: 'none' }}
+                title="Coupon Preview"
+              />
+            </div>
+          </div>
+        )}
+        
+        {loading && !previewHtml && (
+          <div className="bg-white shadow-xl rounded-lg p-8 text-center">
+            <p className="text-gray-600">Generating preview...</p>
           </div>
         )}
       </div>
