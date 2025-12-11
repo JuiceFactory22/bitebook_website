@@ -238,10 +238,24 @@ export async function POST(request: NextRequest) {
             );
             margin: 10px 0;
         }
+        
+        .illegal-notice {
+            text-align: center;
+            padding: 15px 20px;
+            background: #ff0000;
+            color: white;
+            font-size: 1.17em;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
     </style>
 </head>
 <body>
     <div class="coupon">
+        <div class="illegal-notice">
+            IT IS ILLEGAL TO COPY OR DUPLICATE THIS COUPON
+        </div>
         <div class="coupon-header">
             <h1>🍗 BiteBook</h1>
             <div class="subtitle">FREE WINGS COUPON</div>
