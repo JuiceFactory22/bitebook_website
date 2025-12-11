@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function PreviewCoupon() {
   const [restaurant, setRestaurant] = useState("Archie Moore's");
@@ -9,8 +9,15 @@ export default function PreviewCoupon() {
   const [phone, setPhone] = useState('2035551234');
   const [month, setMonth] = useState('January 2026');
   const [previewHtml, setPreviewHtml] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  // Auto-generate preview on mount
+  useEffect(() => {
+    generatePreview();
+  }, []);
 
   const generatePreview = async () => {
+    setLoading(true);
     try {
       const response = await fetch('/api/generate-coupon-pdf', {
         method: 'POST',
@@ -34,6 +41,8 @@ export default function PreviewCoupon() {
       setPreviewHtml(data.html || '');
     } catch (err: any) {
       alert('Error generating preview: ' + err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -117,9 +126,10 @@ export default function PreviewCoupon() {
 
           <button
             onClick={generatePreview}
-            className="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 px-6 rounded-lg transition-colors"
+            disabled={loading}
+            className="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 px-6 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Generate Preview
+            {loading ? 'Generating Preview...' : 'Update Preview'}
           </button>
         </div>
 
