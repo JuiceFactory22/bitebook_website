@@ -267,6 +267,7 @@ export async function POST(request: NextRequest) {
             <div class="offer">
                 6 FREE WINGS
                 <div class="offer-small">at participating location</div>
+                <div class="offer-small" style="margin-top: 10px; font-weight: 600; color: #ff6b35;">with the purchase of an additional item</div>
             </div>
             
             <div class="coupon-code-box">
