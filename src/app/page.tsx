@@ -7,6 +7,9 @@ import RestaurantLogosCarousel from "@/components/RestaurantLogosCarousel";
 import Link from "next/link";
 import { useMemo, useEffect } from "react";
 import { trackViewContent } from "@/utils/facebookPixel";
+import { trackPageView, trackFunnelStep } from "@/utils/analytics";
+import { useScrollTracking } from "@/hooks/useScrollTracking";
+import { usePageTimeTracking } from "@/hooks/usePageTimeTracking";
 import SpinWheelPopup from "@/components/SpinWheelPopup";
 
 // Monthly promotions for 2026
@@ -96,8 +99,16 @@ const monthlyPromotions = [
 export default function Home() {
   // Track page view with ViewContent event
   useEffect(() => {
-    trackViewContent('BiteBook Homepage');
+    trackViewContent('BiteBook Homepage', 29.99);
+    trackPageView('Homepage', 'main', 29.99);
+    trackFunnelStep('homepage_view', 1, 'subscription');
   }, []);
+
+  // Track scroll depth
+  useScrollTracking();
+
+  // Track time on page
+  usePageTimeTracking('Homepage');
 
   // Calculate carousel events dynamically based on current date
   // Shows: previous 2 months, current month, next 6 months (total 9 events)

@@ -8,6 +8,9 @@ import SpinWheel from '@/components/SpinWheel';
 import { restaurants, Restaurant } from '@/data/restaurants';
 import emailjs from '@emailjs/browser';
 import { trackLead } from '@/utils/facebookPixel';
+import { trackPageView, trackFunnelStep, trackFormStart, trackFormSubmit } from '@/utils/analytics';
+import { useScrollTracking } from '@/hooks/useScrollTracking';
+import { usePageTimeTracking } from '@/hooks/usePageTimeTracking';
 import { generateCouponCode } from '@/utils/couponCode';
 import Image from 'next/image';
 
@@ -24,6 +27,18 @@ export default function NewHavenFreeCoupon() {
   const [error, setError] = useState('');
   const [hasSpun, setHasSpun] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState(20 * 60); // 20 minutes in seconds
+
+  // Track page view and funnel step
+  useEffect(() => {
+    trackPageView('Spin Wheel - Free Coupon', 'lead_magnet', 0);
+    trackFunnelStep('spin_wheel_view', 2, 'lead_generation');
+  }, []);
+
+  // Track scroll depth
+  useScrollTracking();
+
+  // Track time on page
+  usePageTimeTracking('Spin Wheel - Free Coupon');
 
   // Initialize EmailJS
   useEffect(() => {
@@ -82,6 +97,9 @@ export default function NewHavenFreeCoupon() {
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+
+    // Track form submission attempt
+    trackFormSubmit('spin_wheel', 'spin_wheel_page', false);
 
     // Validate email format
     if (!email || !email.includes('@')) {
@@ -213,6 +231,12 @@ export default function NewHavenFreeCoupon() {
 
       // Track lead with Meta Pixel
       trackLead(0, email.trim(), cleanPhone);
+      
+      // Track form submission success
+      trackFormSubmit('spin_wheel', 'spin_wheel_page', true);
+      
+      // Track funnel step
+      trackFunnelStep('lead_captured', 3, 'lead_generation');
 
       // Show success popup immediately after winner display
       // Spin completes at 4 seconds, winner shows for 2 seconds (total 6 seconds), then popup appears
@@ -380,7 +404,11 @@ export default function NewHavenFreeCoupon() {
             <h2 className="text-3xl font-bold text-gray-900 mb-6 text-center">
               Enter Your Info to Spin!
             </h2>
-            <form onSubmit={handleFormSubmit} className="space-y-4">
+            <form 
+              onSubmit={handleFormSubmit} 
+              className="space-y-4"
+              onFocus={() => trackFormStart('spin_wheel', 'spin_wheel_page')}
+            >
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Email Address *

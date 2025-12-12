@@ -7,6 +7,9 @@ import emailjs from '@emailjs/browser';
 import { useSearchParams } from 'next/navigation';
 import { trackPurchase, trackInitiateCheckout } from '@/utils/facebookPixel';
 import { trackCartAbandonment, clearCartAbandonment } from '@/utils/cartAbandonment';
+import { trackPurchaseGA4, trackFunnelStep, trackFormStart, trackFormSubmit } from '@/utils/analytics';
+import { useScrollTracking } from '@/hooks/useScrollTracking';
+import { usePageTimeTracking } from '@/hooks/usePageTimeTracking';
 import SquarePaymentForm from '@/components/SquarePaymentForm';
 
 function CheckoutContent() {
@@ -25,6 +28,15 @@ function CheckoutContent() {
   });
   const searchParams = useSearchParams();
 
+  // Track scroll and time on checkout page
+  useScrollTracking();
+  usePageTimeTracking('Checkout');
+
+  // Track funnel step
+  useEffect(() => {
+    trackFunnelStep('checkout_view', 3, 'subscription');
+  }, []);
+
   // Check for coupon code from URL
   useEffect(() => {
     // Subscription is always enabled, no need to check subscription parameter
@@ -35,6 +47,7 @@ function CheckoutContent() {
     }
     // Track page view for checkout
     trackInitiateCheckout(29.99);
+    trackFunnelStep('checkout_initiated', 2, 'subscription');
   }, [searchParams]);
   
   const couponBookDetails = {
@@ -187,8 +200,23 @@ function CheckoutContent() {
         'qq3QK0zGBYaHNI2DW'
       );
 
-      // Track purchase event with email for advanced matching
+      // Track purchase event with email for advanced matching (Meta Pixel)
       trackPurchase(currentPrice, 'USD', formData.email);
+      
+      // Track purchase with GA4 (enhanced e-commerce)
+      const transactionId = paymentResult.paymentId || idempotencyKey;
+      trackPurchaseGA4(transactionId, currentPrice, 'USD', [{
+        item_id: 'bitebook_subscription',
+        item_name: 'BiteBook Monthly Subscription',
+        price: currentPrice,
+        quantity: 1,
+      }]);
+      
+      // Track funnel completion
+      trackFunnelStep('purchase_complete', 4, 'subscription');
+      
+      // Track form submission success
+      trackFormSubmit('checkout', 'checkout_page', true);
       
       // Clear cart abandonment data on successful purchase
       clearCartAbandonment();
@@ -450,7 +478,11 @@ function CheckoutContent() {
                 Complete Your Subscription
               </h2>
 
-              <form onSubmit={(e) => e.preventDefault()} className="space-y-6">
+              <form 
+                onSubmit={(e) => e.preventDefault()} 
+                className="space-y-6"
+                onFocus={() => trackFormStart('checkout', 'checkout_page')}
+              >
                 {/* Customer Information */}
                 <div>
                   <h3 className="text-lg font-semibold text-gray-900 mb-4">

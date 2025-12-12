@@ -5,12 +5,23 @@ import Script from 'next/script';
 import { useEffect } from 'react';
 import TrackingButton from '@/components/TrackingButton';
 import { trackViewContent } from '@/utils/facebookPixel';
+import { trackPageView, trackFunnelStep } from '@/utils/analytics';
+import { useScrollTracking } from '@/hooks/useScrollTracking';
+import { usePageTimeTracking } from '@/hooks/usePageTimeTracking';
 
 export default function LandingBiteBook() {
   // Track page view with ViewContent event
   useEffect(() => {
-    trackViewContent('BiteBook Landing Page - New Haven');
+    trackViewContent('BiteBook Landing Page - New Haven', 29.99);
+    trackPageView('Landing Page - New Haven', 'landing', 29.99);
+    trackFunnelStep('landing_view', 1, 'subscription');
   }, []);
+
+  // Track scroll depth
+  useScrollTracking();
+
+  // Track time on page
+  usePageTimeTracking('Landing Page - New Haven');
   return (
     <div className="min-h-screen bg-white text-slate-900">
       {/* Social Media Preview Meta Tags */}
