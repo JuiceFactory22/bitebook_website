@@ -132,6 +132,9 @@ export default function NewHavenFreeCoupon() {
       return;
     }
 
+    // Track form start
+    trackFormStart('spin_wheel', 'spin_wheel_page');
+    
     // Show wheel
     setShowForm(false);
     setShowWheel(true);
