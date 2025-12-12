@@ -530,7 +530,7 @@ export default function Home() {
       
       {/* Spin Wheel Popup */}
       <SpinWheelPopup 
-        delay={5} // Show after 5 seconds
+        delay={30} // Show after 30 seconds
         showOncePerSession={true} // Only show once per browser session
         showOncePerVisitor={false} // Set to true if you want it to show only once ever per visitor
       />
