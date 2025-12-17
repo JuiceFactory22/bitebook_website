@@ -9,7 +9,6 @@ import { trackViewContent } from "@/utils/facebookPixel";
 import { trackPageView, trackFunnelStep } from "@/utils/analytics";
 import { useScrollTracking } from "@/hooks/useScrollTracking";
 import { usePageTimeTracking } from "@/hooks/usePageTimeTracking";
-import SpinWheelPopup from "@/components/SpinWheelPopup";
 
 // Monthly promotions for 2026
 const monthlyPromotions = [
@@ -510,13 +509,6 @@ export default function Home() {
           </div>
         </div>
       </footer>
-      
-      {/* Spin Wheel Popup */}
-      <SpinWheelPopup 
-        delay={30} // Show after 30 seconds
-        showOncePerSession={true} // Only show once per browser session
-        showOncePerVisitor={false} // Set to true if you want it to show only once ever per visitor
-      />
     </div>
   );
 }
