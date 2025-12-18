@@ -64,8 +64,9 @@ function doGet(e) {
       const restaurantName = row[0]; // Column A
       const promotion = row[1];      // Column B
       
-      // Skip empty rows
-      if (restaurantName && promotion) {
+      // Skip empty rows and restaurants with blank promotions
+      // Only include restaurants that have both a name and a non-empty promotion
+      if (restaurantName && promotion && String(promotion).trim().length > 0) {
         // Convert line breaks in cell to \n for JSON
         const promotionText = String(promotion).replace(/\r\n/g, '\n').replace(/\r/g, '\n');
         promotions[String(restaurantName).trim()] = promotionText.trim();

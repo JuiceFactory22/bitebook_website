@@ -1,3 +1,5 @@
+import { Restaurant } from './restaurants';
+
 /**
  * Restaurant-specific promotions for spin wheel
  * 
@@ -120,5 +122,26 @@ export function getRestaurantPromotionSync(restaurantName: string): string {
   // Use cached promotions if available, otherwise use fallback
   const promotions = cachedPromotions || restaurantPromotions;
   return promotions[restaurantName] || '6 FREE WINGS\nwith the purchase of an additional item';
+}
+
+/**
+ * Get list of restaurants that have promotions available
+ * Filters out restaurants with blank/empty promotions
+ * @param allRestaurants - Array of all restaurants
+ * @returns Array of restaurants that have promotions
+ */
+export async function getAvailableRestaurants(allRestaurants: Restaurant[]): Promise<Restaurant[]> {
+  // Fetch promotions from Google Sheets first
+  const apiPromotions = await fetchPromotionsFromAPI();
+  
+  // Use API promotions if available, otherwise use fallback
+  const promotions = apiPromotions || restaurantPromotions;
+  
+  // Filter restaurants to only include those with promotions
+  return allRestaurants.filter(restaurant => {
+    const promotion = promotions[restaurant.name];
+    // Only include if promotion exists and is not empty/whitespace
+    return promotion && promotion.trim().length > 0;
+  });
 }
 

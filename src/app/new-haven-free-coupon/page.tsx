@@ -6,7 +6,7 @@ import Script from 'next/script';
 import { CheckCircle, X, Gift } from 'lucide-react';
 import SpinWheel from '@/components/SpinWheel';
 import { restaurants, Restaurant } from '@/data/restaurants';
-import { getRestaurantPromotion } from '@/data/restaurantPromotions';
+import { getRestaurantPromotion, getAvailableRestaurants } from '@/data/restaurantPromotions';
 import emailjs from '@emailjs/browser';
 import { trackLead } from '@/utils/facebookPixel';
 import { trackPageView, trackFunnelStep, trackFormStart, trackFormSubmit } from '@/utils/analytics';
@@ -28,6 +28,7 @@ export default function NewHavenFreeCoupon() {
   const [error, setError] = useState('');
   const [hasSpun, setHasSpun] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState(20 * 60); // 20 minutes in seconds
+  const [availableRestaurants, setAvailableRestaurants] = useState<Restaurant[]>(restaurants);
 
   // Track page view and funnel step
   useEffect(() => {
@@ -40,6 +41,15 @@ export default function NewHavenFreeCoupon() {
 
   // Track time on page
   usePageTimeTracking('Spin Wheel - Free Coupon');
+
+  // Load available restaurants (only those with promotions)
+  useEffect(() => {
+    const loadAvailableRestaurants = async () => {
+      const available = await getAvailableRestaurants(restaurants);
+      setAvailableRestaurants(available);
+    };
+    loadAvailableRestaurants();
+  }, []);
 
   // Initialize EmailJS
   useEffect(() => {
@@ -385,7 +395,7 @@ export default function NewHavenFreeCoupon() {
             Our Participating Restaurants
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
-            {restaurants.map((restaurant, index) => (
+            {availableRestaurants.map((restaurant, index) => (
               <div
                 key={index}
                 className="bg-white rounded-lg p-3 shadow-lg flex flex-col items-center justify-center min-h-[100px]"
@@ -468,7 +478,7 @@ export default function NewHavenFreeCoupon() {
               Ready to Spin?
             </h2>
             <SpinWheel
-              restaurants={restaurants}
+              restaurants={availableRestaurants}
               onSpinComplete={handleSpinComplete}
               isSpinning={isSpinning}
               onSpinStart={handleSpinStart}
