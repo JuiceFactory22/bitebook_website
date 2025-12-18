@@ -122,7 +122,7 @@ export async function POST(request: NextRequest) {
         }
         
         .offer {
-            font-size: 64px;
+            font-size: 45px;
             font-weight: 900;
             color: #ff6b35;
             margin: 30px 0;
@@ -130,7 +130,7 @@ export async function POST(request: NextRequest) {
         }
         
         .offer-small {
-            font-size: 32px;
+            font-size: 22px;
             color: #666;
             margin-top: 10px;
         }
