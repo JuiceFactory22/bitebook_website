@@ -16,7 +16,8 @@ export async function POST(request: NextRequest) {
       code = 'BITEBOOKWINGS',
       email = '',
       phone = '',
-      month = 'January 2026'
+      month = 'January 2026',
+      promotion = '6 FREE WINGS\nwith the purchase of an additional item' // Restaurant-specific promotion
     } = body;
 
     // Format phone number for display
@@ -29,6 +30,17 @@ export async function POST(request: NextRequest) {
         formattedPhone = phone;
       }
     }
+
+    // Format promotion text for display (split by newlines)
+    const promotionLines = promotion.split('\n');
+    const promotionHtml = promotionLines.map((line: string, index: number) => {
+      if (index === 0) {
+        return `<div>${line}</div>`;
+      } else {
+        const style = index === 1 ? ' style="margin-top: 10px;"' : '';
+        return `<div class="offer-small"${style}>${line}</div>`;
+      }
+    }).join('');
 
     // Generate HTML coupon
     const html = `<!DOCTYPE html>
@@ -265,9 +277,7 @@ export async function POST(request: NextRequest) {
             <div class="restaurant-name">${restaurant.toUpperCase()}</div>
             
             <div class="offer">
-                6 FREE WINGS
-                <div class="offer-small">at participating location</div>
-                <div class="offer-small" style="margin-top: 10px; font-weight: 600; color: #ff6b35;">with the purchase of an additional item</div>
+                ${promotionHtml}
             </div>
             
             <div class="coupon-code-box">
@@ -292,7 +302,7 @@ export async function POST(request: NextRequest) {
             <h3>Terms & Conditions</h3>
             <ul>
                 <li>One coupon per customer. Cannot be combined with other offers.</li>
-                <li>Valid for 6 free wings (dine-in only - not valid for takeout).</li>
+                <li>Valid for the specific promotion listed above (dine-in only - not valid for takeout).</li>
                 <li>Valid only at the participating restaurant listed above.</li>
                 <li>Coupon must be presented at time of purchase.</li>
                 <li>Valid for the month of ${month} only.</li>

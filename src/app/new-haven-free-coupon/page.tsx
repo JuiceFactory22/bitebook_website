@@ -6,6 +6,7 @@ import Script from 'next/script';
 import { CheckCircle, X, Gift } from 'lucide-react';
 import SpinWheel from '@/components/SpinWheel';
 import { restaurants, Restaurant } from '@/data/restaurants';
+import { getRestaurantPromotion } from '@/data/restaurantPromotions';
 import emailjs from '@emailjs/browser';
 import { trackLead } from '@/utils/facebookPixel';
 import { trackPageView, trackFunnelStep, trackFormStart, trackFormSubmit } from '@/utils/analytics';
@@ -165,6 +166,9 @@ export default function NewHavenFreeCoupon() {
     // Generate unique coupon code
     const couponCode = generateCouponCode();
     
+    // Get restaurant-specific promotion (async - fetches from Google Sheets if configured)
+    const promotion = await getRestaurantPromotion(restaurant.name);
+    
     // Send email via EmailJS
     setIsSubmitting(true);
     try {
@@ -182,6 +186,7 @@ export default function NewHavenFreeCoupon() {
             email: email.trim(),
             phone: cleanPhone,
             month: 'January 2026',
+            promotion: promotion, // Include restaurant-specific promotion
           }),
         });
         
