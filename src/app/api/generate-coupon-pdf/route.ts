@@ -31,6 +31,10 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    // Debug: Log the promotion received
+    console.log('Coupon generation - Restaurant:', restaurant);
+    console.log('Coupon generation - Promotion received:', promotion);
+    
     // Format promotion text for display (split by newlines)
     const promotionLines = promotion.split('\n');
     const promotionHtml = promotionLines.map((line: string, index: number) => {

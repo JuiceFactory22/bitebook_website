@@ -179,6 +179,10 @@ export default function NewHavenFreeCoupon() {
     // Get restaurant-specific promotion (async - fetches from Google Sheets if configured)
     const promotion = await getRestaurantPromotion(restaurant.name);
     
+    // Debug: Log the promotion being used
+    console.log('Restaurant:', restaurant.name);
+    console.log('Promotion being used:', promotion);
+    
     // Send email via EmailJS
     setIsSubmitting(true);
     try {

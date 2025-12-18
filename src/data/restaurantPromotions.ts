@@ -70,10 +70,12 @@ const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 async function fetchPromotionsFromAPI(): Promise<Record<string, string> | null> {
   // Use cache if still valid
   if (cachedPromotions && Date.now() - cacheTimestamp < CACHE_DURATION) {
+    console.log('Using cached promotions');
     return cachedPromotions;
   }
 
   try {
+    console.log('Fetching fresh promotions from API...');
     const response = await fetch('/api/fetch-restaurant-promotions', {
       cache: 'no-store', // Always fetch fresh from API
     });
@@ -84,13 +86,17 @@ async function fetchPromotionsFromAPI(): Promise<Record<string, string> | null> 
     }
 
     const data = await response.json();
+    console.log('Promotions API response:', data);
     
     if (data.success && data.promotions && Object.keys(data.promotions).length > 0) {
       cachedPromotions = data.promotions;
       cacheTimestamp = Date.now();
+      const count = cachedPromotions ? Object.keys(cachedPromotions).length : 0;
+      console.log('Promotions cached, count:', count);
       return cachedPromotions;
     }
     
+    console.warn('No promotions in API response, using fallback');
     return null;
   } catch (error) {
     console.warn('Error fetching promotions from API, using fallback:', error);
@@ -109,9 +115,14 @@ export async function getRestaurantPromotion(restaurantName: string): Promise<st
   const apiPromotions = await fetchPromotionsFromAPI();
   
   // Use API promotions if available, otherwise use fallback
-  const promotions = apiPromotions || restaurantPromotions;
+  const promotions: Record<string, string> = apiPromotions || restaurantPromotions;
   
-  return promotions[restaurantName] || '6 FREE WINGS\nwith the purchase of an additional item';
+  const promotion = promotions[restaurantName] || '6 FREE WINGS\nwith the purchase of an additional item';
+  
+  console.log(`Getting promotion for "${restaurantName}":`, promotion);
+  console.log('Available restaurant keys:', Object.keys(promotions));
+  
+  return promotion;
 }
 
 /**
