@@ -23,7 +23,7 @@ export const restaurants: Restaurant[] = [
   { name: 'The Castle Black Rock', image: '/images/Logos/New Haven/The-Castle-Black-Rock-Logo.jpeg' },
   { name: "Archie Moore's NH", image: '/images/Logos/New Haven/archie-moores.jpeg' },
   { name: "Capotorto's Apizza Center", image: '/images/Logos/New Haven/capotortos logo.jpeg' },
-  { name: 'Gaetano's Tavern on Main', image: '/images/Logos/New Haven/gaetanos tavern logo.jpeg' },
+  { name: "Gaetano's Tavern on Main", image: '/images/Logos/New Haven/gaetanos tavern logo.jpeg' },
   { name: "J Roo's", image: '/images/Logos/New Haven/jroos.jpeg' },
   { name: "Jordan's Hot Dog's & Mac", image: '/images/Logos/New Haven/jordans hot dogs logo.jpeg' },
   { name: 'Blue Orchid Pan Asian Cuisine', image: '/images/Logos/New Haven/blue-orchid-logo.jpeg' },
