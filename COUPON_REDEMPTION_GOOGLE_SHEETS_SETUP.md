@@ -18,8 +18,10 @@ When someone scans a QR code on a coupon:
    - **B1**: `Redemption ID`
    - **C1**: `Restaurant Name`
    - **D1**: `Coupon Code`
-   - **E1**: `Status`
-   - **F1**: `First Redeemed At`
+   - **E1**: `Customer Name`
+   - **F1**: `Customer Email`
+   - **G1**: `Status`
+   - **H1**: `First Redeemed At`
 
 ## Step 2: Create Google Apps Script
 
@@ -30,17 +32,28 @@ When someone scans a QR code on a coupon:
 ```javascript
 /* BiteBook Coupon Redemption Tracker
  * Tracks coupon redemptions and prevents duplicate redemptions
+ * Columns: A=Timestamp, B=Redemption ID, C=Restaurant Name, D=Coupon Code, E=Customer Name, F=Customer Email, G=Status, H=First Redeemed At
  */
 function doPost(e) {
   try {
     const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-    const data = JSON.parse(e.postData.contents);
+    const data = JSON.parse(e.postData && e.postData.contents ? e.postData.contents : '{}');
     
-    const redemptionId = data.redemptionId;
+    const redemptionId = data.redemptionId || '';
     const restaurantName = data.restaurantName || '';
     const couponCode = data.couponCode || '';
-    const timestamp = new Date().**
- toISOString();
+    const customerName = data.customerName || '';
+    const customerEmail = data.customerEmail || '';
+    const timestamp = new Date().toISOString();
+    
+    if (!redemptionId) {
+      return ContentService.createTextOutput(
+        JSON.stringify({
+          success: false,
+          error: 'Missing redemptionId'
+        })
+      ).setMimeType(ContentService.MimeType.JSON);
+    }
     
     // Check if this redemption ID already exists
     const dataRange = sheet.getDataRange();
@@ -65,8 +78,10 @@ function doPost(e) {
         redemptionId,       // Column B: Redemption ID
         restaurantName,     // Column C: Restaurant Name
         couponCode,         // Column D: Coupon Code
-        'Redeemed',         // Column E: Status
-        timestamp           // Column F: First Redeemed At
+        customerName,       // Column E: Customer Name
+        customerEmail,      // Column F: Customer Email
+        'Redeemed',         // Column G: Status
+        timestamp           // Column H: First Redeemed At
       ]);
     }
     
@@ -187,14 +202,26 @@ You also need to set your site URL for QR codes:
 
 ## How It Works
 
-1. **QR Code Generation**: Each coupon gets a unique QR code with a redemption ID
+1. **QR Code Generation**: Each coupon gets a unique QR code with a redemption ID, customer name, and email embedded in the URL
 2. **First Scan**: 
-   - QR code links to `/redeem?id=REDEMPTION_ID`
+   - QR code links to `/redeem?id=REDEMPTION_ID&restaurant=NAME&customer=NAME&email=EMAIL`
    - API checks Google Sheets
-   - If not found, records redemption and returns green success
+   - If not found, records redemption (including customer name and email) and returns green success
 3. **Subsequent Scans**:
    - API finds existing redemption in sheet
    - Returns red "Already Redeemed" response
+
+## What Gets Tracked
+
+Each redemption records:
+- **Timestamp**: When the coupon was scanned
+- **Redemption ID**: Unique identifier for this specific coupon
+- **Restaurant Name**: Which restaurant's coupon was redeemed
+- **Coupon Code**: The coupon code (e.g., BB-NWC-A3F9-240115)
+- **Customer Name**: Name of the customer who purchased the coupon book
+- **Customer Email**: Email of the customer who purchased the coupon book
+- **Status**: "Redeemed"
+- **First Redeemed At**: When it was first redeemed (same as timestamp for first redemption)
 
 ## Testing
 

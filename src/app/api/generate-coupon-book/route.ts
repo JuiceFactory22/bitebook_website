@@ -80,10 +80,12 @@ export async function POST(request: NextRequest) {
         siteUrl = vercelUrl ? `https://${vercelUrl}` : 'https://getbitebook.com';
       }
       
-      // Include restaurant name in URL for better tracking
+      // Include restaurant name, customer name, and email in URL for tracking
       const restaurantNameEncoded = encodeURIComponent(restaurant.name);
+      const customerNameEncoded = encodeURIComponent(customerName || '');
+      const customerEmailEncoded = encodeURIComponent(customerEmail || '');
       const qrCodeDataUrl = await QRCode.toDataURL(
-        `${siteUrl}/redeem?id=${redemptionId}&restaurant=${restaurantNameEncoded}`,
+        `${siteUrl}/redeem?id=${redemptionId}&restaurant=${restaurantNameEncoded}&customer=${customerNameEncoded}&email=${customerEmailEncoded}`,
         {
           width: 200,
           margin: 2,

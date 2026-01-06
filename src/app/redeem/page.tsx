@@ -8,6 +8,8 @@ function RedeemContent() {
   const searchParams = useSearchParams();
   const redemptionId = searchParams.get('id');
   const restaurantNameParam = searchParams.get('restaurant');
+  const customerNameParam = searchParams.get('customer');
+  const customerEmailParam = searchParams.get('email');
   const [status, setStatus] = useState<'loading' | 'redeemed' | 'already_redeemed' | 'error'>('loading');
   const [message, setMessage] = useState('');
   const [restaurantName, setRestaurantName] = useState(restaurantNameParam || '');
@@ -45,7 +47,9 @@ function RedeemContent() {
           body: JSON.stringify({
             redemptionId,
             restaurantName: restaurantName || 'Participating Restaurant',
-            couponCode: couponCode || redemptionId
+            couponCode: couponCode || redemptionId,
+            customerName: customerNameParam || '',
+            customerEmail: customerEmailParam || ''
           }),
         });
 

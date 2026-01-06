@@ -17,7 +17,9 @@ export async function POST(request: NextRequest) {
     const {
       redemptionId,
       restaurantName,
-      couponCode
+      couponCode,
+      customerName = '',
+      customerEmail = ''
     } = body;
 
     if (!redemptionId || !restaurantName || !couponCode) {
@@ -54,6 +56,8 @@ export async function POST(request: NextRequest) {
           redemptionId,
           restaurantName,
           couponCode,
+          customerName,
+          customerEmail,
           timestamp: new Date().toISOString(),
           action: 'redeem' // Tell the script to check and record redemption
         }),
