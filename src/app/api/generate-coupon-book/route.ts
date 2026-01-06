@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { restaurants } from '@/data/restaurants';
+import QRCode from 'qrcode';
+import { generateUniqueCouponCode, generateRedemptionId } from '@/utils/couponRedemption';
 
 /**
  * API Route to generate a complete coupon book PDF
@@ -63,8 +65,43 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Generate HTML for the coupon book
-    const html = generateCouponBookHTML(availableRestaurants, month, customerName, customerEmail);
+  // Generate unique codes and QR codes for each restaurant
+  const restaurantsWithCodes = await Promise.all(
+    availableRestaurants.map(async (restaurant) => {
+      const couponCode = generateUniqueCouponCode(restaurant.name);
+      const redemptionId = generateRedemptionId(restaurant.name, couponCode);
+      
+      // Generate QR code as data URL
+      // QR code links to redemption page with redemption ID and restaurant name
+      const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || process.env.VERCEL_URL 
+        ? `https://${process.env.VERCEL_URL}` 
+        : 'https://getbitebook.com';
+      
+      // Include restaurant name in URL for better tracking
+      const restaurantNameEncoded = encodeURIComponent(restaurant.name);
+      const qrCodeDataUrl = await QRCode.toDataURL(
+        `${siteUrl}/redeem?id=${redemptionId}&restaurant=${restaurantNameEncoded}`,
+        {
+          width: 200,
+          margin: 2,
+          color: {
+            dark: '#000000',
+            light: '#FFFFFF'
+          }
+        }
+      );
+      
+      return {
+        ...restaurant,
+        couponCode,
+        redemptionId,
+        qrCodeDataUrl
+      };
+    })
+  );
+
+  // Generate HTML for the coupon book
+  const html = generateCouponBookHTML(restaurantsWithCodes, month, customerName, customerEmail);
 
     // Convert HTML to PDF using the same service as individual coupons
     try {
@@ -111,7 +148,7 @@ export async function POST(request: NextRequest) {
             success: true,
             pdfBase64: pdfBase64,
             format: 'pdf',
-            count: availableRestaurants.length,
+            count: restaurantsWithCodes.length,
             html: html, // Include HTML for preview
           });
         }
@@ -128,7 +165,7 @@ export async function POST(request: NextRequest) {
       success: true,
       pdfBase64: base64,
       format: 'html',
-      count: availableRestaurants.length,
+      count: restaurantsWithCodes.length,
       html: html,
     });
   } catch (error: any) {
@@ -144,7 +181,7 @@ export async function POST(request: NextRequest) {
  * Generate HTML for the complete coupon book
  */
 function generateCouponBookHTML(
-  restaurants: Array<{ name: string; image: string; promotion: string }>,
+  restaurants: Array<{ name: string; image: string; promotion: string; couponCode: string; redemptionId: string; qrCodeDataUrl: string }>,
   month: string,
   customerName: string,
   customerEmail: string
@@ -161,69 +198,77 @@ function generateCouponBookHTML(
     }).join('');
 
     return `
-      <div style="page-break-after: always; padding: 20px;">
-        <div style="background: #ff0000; color: white; padding: 15px; text-align: center; font-weight: bold; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">
+      <div style="page-break-after: always; page-break-inside: avoid; height: 100vh; display: flex; flex-direction: column; padding: 0; margin: 0;">
+        <div style="background: #ff0000; color: white; padding: 12px; text-align: center; font-weight: bold; font-size: 12px; text-transform: uppercase; letter-spacing: 1px;">
           IT IS ILLEGAL TO COPY OR DUPLICATE THIS COUPON
         </div>
         
-        <div style="background: linear-gradient(135deg, #ff6b35 0%, #e55a2b 100%); color: white; padding: 40px; text-align: center; position: relative; border-radius: 20px 20px 0 0;">
-          <h1 style="font-size: 48px; font-weight: 900; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0,0,0,0.2);">🍗 BiteBook</h1>
-          <div style="font-size: 24px; font-weight: 600; opacity: 0.95;">COUPON BOOK</div>
+        <div style="background: linear-gradient(135deg, #ff6b35 0%, #e55a2b 100%); color: white; padding: 30px; text-align: center; flex-shrink: 0;">
+          <h1 style="font-size: 36px; font-weight: 900; margin-bottom: 8px; text-shadow: 2px 2px 4px rgba(0,0,0,0.2);">🍗 BiteBook</h1>
+          <div style="font-size: 18px; font-weight: 600; opacity: 0.95;">COUPON BOOK</div>
         </div>
         
-        <div style="padding: 60px 40px; text-align: center; background: white; border: 2px solid #ff6b35;">
-          <div style="font-size: 36px; font-weight: bold; color: #ff6b35; margin-bottom: 30px; text-transform: uppercase; letter-spacing: 2px;">
-            ${restaurant.name.toUpperCase()}
-          </div>
-          
-          <div style="margin: 30px 0;">
-            ${promotionHtml}
-          </div>
-          
-          <div style="background: linear-gradient(135deg, #ff6b35 0%, #e55a2b 100%); color: white; padding: 30px; border-radius: 15px; margin: 40px 0; box-shadow: 0 5px 15px rgba(255, 107, 53, 0.3);">
-            <div style="font-size: 18px; font-weight: 600; margin-bottom: 10px; opacity: 0.9;">COUPON CODE</div>
-            <div style="font-size: 48px; font-weight: 900; letter-spacing: 8px; font-family: 'Courier New', monospace; text-shadow: 2px 2px 4px rgba(0,0,0,0.2);">
-              BITEBOOK${month.replace(/\s/g, '').substring(0, 6).toUpperCase()}
+        <div style="flex: 1; padding: 30px 40px; text-align: center; background: white; border-left: 2px solid #ff6b35; border-right: 2px solid #ff6b35; display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <div style="font-size: 28px; font-weight: bold; color: #ff6b35; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px;">
+              ${restaurant.name.toUpperCase()}
+            </div>
+            
+            <div style="margin: 20px 0;">
+              ${promotionHtml}
+            </div>
+            
+            <div style="background: linear-gradient(135deg, #ff6b35 0%, #e55a2b 100%); color: white; padding: 20px; border-radius: 15px; margin: 25px 0; box-shadow: 0 5px 15px rgba(255, 107, 53, 0.3);">
+              <div style="font-size: 14px; font-weight: 600; margin-bottom: 8px; opacity: 0.9;">COUPON CODE</div>
+              <div style="font-size: 32px; font-weight: 900; letter-spacing: 4px; font-family: 'Courier New', monospace; text-shadow: 2px 2px 4px rgba(0,0,0,0.2);">
+                ${restaurant.couponCode}
+              </div>
+            </div>
+            
+            <!-- QR Code -->
+            <div style="margin: 20px 0;">
+              <img src="${restaurant.qrCodeDataUrl}" alt="QR Code" style="width: 150px; height: 150px; margin: 0 auto; display: block; border: 3px solid #ff6b35; border-radius: 8px; padding: 5px; background: white;" />
+              <p style="font-size: 12px; color: #666; margin-top: 8px;">Scan to redeem</p>
+            </div>
+            
+            <div style="text-align: center; margin-top: 15px; color: #333; font-size: 16px; font-weight: 600;">
+              Valid: ${month}
             </div>
           </div>
           
-          <div style="text-align: center; margin-top: 20px; color: #333; font-size: 18px; font-weight: 600;">
-            Valid: ${month}
+          <div style="background: #f9f9f9; padding: 20px; border-top: 3px dashed #ff6b35; margin-top: 20px; flex-shrink: 0;">
+            <h3 style="color: #333; font-size: 16px; margin-bottom: 10px; text-align: center;">Terms & Conditions</h3>
+            <ul style="list-style: none; text-align: left; max-width: 600px; margin: 0 auto; padding: 0; font-size: 11px;">
+              <li style="padding: 4px 0; color: #666; line-height: 1.4;">
+                <span style="color: #ff6b35; font-weight: bold; margin-right: 8px;">✓</span>
+                One coupon per customer. Cannot be combined with other offers.
+              </li>
+              <li style="padding: 4px 0; color: #666; line-height: 1.4;">
+                <span style="color: #ff6b35; font-weight: bold; margin-right: 8px;">✓</span>
+                Valid for the specific promotion listed above (dine-in only - not valid for takeout unless specified).
+              </li>
+              <li style="padding: 4px 0; color: #666; line-height: 1.4;">
+                <span style="color: #ff6b35; font-weight: bold; margin-right: 8px;">✓</span>
+                Valid only at the participating restaurant listed above.
+              </li>
+              <li style="padding: 4px 0; color: #666; line-height: 1.4;">
+                <span style="color: #ff6b35; font-weight: bold; margin-right: 8px;">✓</span>
+                Coupon must be presented at time of purchase.
+              </li>
+              <li style="padding: 4px 0; color: #666; line-height: 1.4;">
+                <span style="color: #ff6b35; font-weight: bold; margin-right: 8px;">✓</span>
+                Valid for the month of ${month} only.
+              </li>
+              <li style="padding: 4px 0; color: #666; line-height: 1.4;">
+                <span style="color: #ff6b35; font-weight: bold; margin-right: 8px;">✓</span>
+                Not valid on holidays or special event days.
+              </li>
+              <li style="padding: 4px 0; color: #666; line-height: 1.4;">
+                <span style="color: #ff6b35; font-weight: bold; margin-right: 8px;">✓</span>
+                No cash value. Cannot be exchanged or refunded.
+              </li>
+            </ul>
           </div>
-        </div>
-        
-        <div style="background: #f9f9f9; padding: 30px; border-top: 3px dashed #ff6b35; margin-top: 0;">
-          <h3 style="color: #333; font-size: 20px; margin-bottom: 15px; text-align: center;">Terms & Conditions</h3>
-          <ul style="list-style: none; text-align: left; max-width: 600px; margin: 0 auto; padding: 0;">
-            <li style="padding: 8px 0; color: #666; font-size: 14px; line-height: 1.6;">
-              <span style="color: #ff6b35; font-weight: bold; margin-right: 10px;">✓</span>
-              One coupon per customer. Cannot be combined with other offers.
-            </li>
-            <li style="padding: 8px 0; color: #666; font-size: 14px; line-height: 1.6;">
-              <span style="color: #ff6b35; font-weight: bold; margin-right: 10px;">✓</span>
-              Valid for the specific promotion listed above (dine-in only - not valid for takeout unless specified).
-            </li>
-            <li style="padding: 8px 0; color: #666; font-size: 14px; line-height: 1.6;">
-              <span style="color: #ff6b35; font-weight: bold; margin-right: 10px;">✓</span>
-              Valid only at the participating restaurant listed above.
-            </li>
-            <li style="padding: 8px 0; color: #666; font-size: 14px; line-height: 1.6;">
-              <span style="color: #ff6b35; font-weight: bold; margin-right: 10px;">✓</span>
-              Coupon must be presented at time of purchase.
-            </li>
-            <li style="padding: 8px 0; color: #666; font-size: 14px; line-height: 1.6;">
-              <span style="color: #ff6b35; font-weight: bold; margin-right: 10px;">✓</span>
-              Valid for the month of ${month} only.
-            </li>
-            <li style="padding: 8px 0; color: #666; font-size: 14px; line-height: 1.6;">
-              <span style="color: #ff6b35; font-weight: bold; margin-right: 10px;">✓</span>
-              Not valid on holidays or special event days.
-            </li>
-            <li style="padding: 8px 0; color: #666; font-size: 14px; line-height: 1.6;">
-              <span style="color: #ff6b35; font-weight: bold; margin-right: 10px;">✓</span>
-              No cash value. Cannot be exchanged or refunded.
-            </li>
-          </ul>
         </div>
       </div>
     `;
