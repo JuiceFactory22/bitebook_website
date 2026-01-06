@@ -28,8 +28,7 @@ When someone scans a QR code on a coupon:
 3. Copy and paste this code:
 
 ```javascript
-/**
- * BiteBook Coupon Redemption Tracker
+/* BiteBook Coupon Redemption Tracker
  * Tracks coupon redemptions and prevents duplicate redemptions
  */
 function doPost(e) {
@@ -40,7 +39,8 @@ function doPost(e) {
     const redemptionId = data.redemptionId;
     const restaurantName = data.restaurantName || '';
     const couponCode = data.couponCode || '';
-    const timestamp = new Date().toISOString();
+    const timestamp = new Date().**
+ toISOString();
     
     // Check if this redemption ID already exists
     const dataRange = sheet.getDataRange();

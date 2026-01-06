@@ -1,10 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { Suspense, useState, useEffect } from 'react';
 import { CheckCircle, XCircle, Loader2 } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
 
-export default function RedeemPage() {
+function RedeemContent() {
   const searchParams = useSearchParams();
   const redemptionId = searchParams.get('id');
   const restaurantNameParam = searchParams.get('restaurant');
@@ -135,6 +135,23 @@ export default function RedeemPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function RedeemPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 text-center">
+            <Loader2 className="w-16 h-16 text-[#ff6b35] mx-auto mb-4 animate-spin" />
+            <h1 className="text-2xl font-bold text-gray-900 mb-2">Loading...</h1>
+          </div>
+        </div>
+      }
+    >
+      <RedeemContent />
+    </Suspense>
   );
 }
 
