@@ -73,9 +73,12 @@ export async function POST(request: NextRequest) {
       
       // Generate QR code as data URL
       // QR code links to redemption page with redemption ID and restaurant name
-      const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || process.env.VERCEL_URL 
-        ? `https://${process.env.VERCEL_URL}` 
-        : 'https://getbitebook.com';
+      // Prefer explicit public site URL; fall back to Vercel deployment URL; finally default domain
+      let siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || '').trim();
+      if (!siteUrl) {
+        const vercelUrl = (process.env.VERCEL_URL || '').trim();
+        siteUrl = vercelUrl ? `https://${vercelUrl}` : 'https://getbitebook.com';
+      }
       
       // Include restaurant name in URL for better tracking
       const restaurantNameEncoded = encodeURIComponent(restaurant.name);
