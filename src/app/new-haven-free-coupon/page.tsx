@@ -539,7 +539,7 @@ export default function NewHavenFreeCoupon() {
                 Get the Full BiteBook with coupons from over 25 restaurants for just <span className="text-3xl">$15</span>
               </p>
               <p className="text-lg text-gray-700 mb-2 line-through">
-                Regular Price: $29.99
+                Regular Price: $14.99
               </p>
               <p className="text-2xl font-bold text-[#ff6b35] mb-6">
                 Your Price: $15 (50% OFF!)

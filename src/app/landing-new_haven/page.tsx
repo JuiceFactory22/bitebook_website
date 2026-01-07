@@ -12,8 +12,8 @@ import { usePageTimeTracking } from '@/hooks/usePageTimeTracking';
 export default function LandingBiteBook() {
   // Track page view with ViewContent event
   useEffect(() => {
-    trackViewContent('BiteBook Landing Page - New Haven', 29.99);
-    trackPageView('Landing Page - New Haven', 'landing', 29.99);
+    trackViewContent('BiteBook Landing Page - New Haven', 14.99);
+    trackPageView('Landing Page - New Haven', 'landing', 14.99);
     trackFunnelStep('landing_view', 1, 'subscription');
   }, []);
 
@@ -30,16 +30,16 @@ export default function LandingBiteBook() {
         strategy="beforeInteractive"
         dangerouslySetInnerHTML={{
           __html: `
-            document.title = 'Wings Month - BiteBook | Get $300+ in Local Restaurant Deals for $29.99';
+            document.title = 'Wings Month - BiteBook | Get $300+ in Local Restaurant Deals for $14.99';
             const metaDescription = document.querySelector('meta[name="description"]') || document.createElement('meta');
             metaDescription.name = 'description';
-            metaDescription.content = 'Love wings for less! Unlock unbeatable Wing Month deals at local favorites. Get $300+ in savings for just $29.99. Digital, mobile-friendly, instant access.';
+            metaDescription.content = 'Love wings for less! Unlock unbeatable Wing Month deals at local favorites. Get $300+ in savings for just $14.99. Digital, mobile-friendly, instant access.';
             if (!document.querySelector('meta[name="description"]')) document.head.appendChild(metaDescription);
             
             // Open Graph tags
             const ogTags = [
-              { property: 'og:title', content: 'Wings Month - BiteBook | Get $300+ in Local Restaurant Deals for $29.99' },
-              { property: 'og:description', content: 'Love wings for less! Unlock unbeatable Wing Month deals at local favorites. Get $300+ in savings for just $29.99.' },
+              { property: 'og:title', content: 'Wings Month - BiteBook | Get $300+ in Local Restaurant Deals for $14.99' },
+              { property: 'og:description', content: 'Love wings for less! Unlock unbeatable Wing Month deals at local favorites. Get $300+ in savings for just $14.99.' },
               { property: 'og:image', content: 'https://getbitebook.com/images/bitebook-logo.png' },
               { property: 'og:url', content: 'https://getbitebook.com/landing-new_haven' },
               { property: 'og:type', content: 'website' },
@@ -48,8 +48,8 @@ export default function LandingBiteBook() {
             // Twitter Card tags
             const twitterTags = [
               { name: 'twitter:card', content: 'summary_large_image' },
-              { name: 'twitter:title', content: 'Wings Month - BiteBook | Get $300+ in Local Restaurant Deals for $29.99' },
-              { name: 'twitter:description', content: 'Love wings for less! Unlock unbeatable Wing Month deals at local favorites. Get $300+ in savings for just $29.99.' },
+              { name: 'twitter:title', content: 'Wings Month - BiteBook | Get $300+ in Local Restaurant Deals for $14.99' },
+              { name: 'twitter:description', content: 'Love wings for less! Unlock unbeatable Wing Month deals at local favorites. Get $300+ in savings for just $14.99.' },
               { name: 'twitter:image', content: 'https://getbitebook.com/images/bitebook-logo.png' },
             ];
             
@@ -98,7 +98,7 @@ export default function LandingBiteBook() {
           <Link href="/" className="font-bold text-xl text-slate-900">BiteBook</Link>
           <TrackingButton
             href="/checkout"
-            value={29.99}
+            value={14.99}
             className="hidden md:inline-flex items-center justify-center rounded-xl px-4 py-2 font-semibold bg-yellow-400 hover:bg-yellow-300 text-slate-900 shadow"
           >
             Get Yours Now
@@ -114,12 +114,12 @@ export default function LandingBiteBook() {
               Love <span className="text-orange-600">Wings</span> for Less
             </h1>
             <p className="mt-4 text-lg text-slate-700">
-              Unlock unbeatable Wing Month deals at local favorites — all in one simple digital BiteBook for just <span className="font-semibold">$29.99</span>.
+              Unlock unbeatable Wing Month deals at local favorites — all in one simple digital BiteBook for just <span className="font-semibold">$14.99</span>.
             </p>
             <div className="mt-6 flex gap-3">
               <TrackingButton
                 href="/checkout"
-                value={29.99}
+                value={14.99}
                 className="inline-flex items-center justify-center rounded-xl px-5 py-3 font-semibold bg-yellow-400 hover:bg-yellow-300 text-slate-900 shadow"
               >
                 Get Yours Now
@@ -250,7 +250,7 @@ export default function LandingBiteBook() {
               "Over $300 in local restaurant value",
               "Exclusive Wings Month offers",
               "Mobile-friendly redemption",
-              "One low price: $29.99",
+              "One low price: $14.99",
             ].map((item) => (
               <div key={item} className="rounded-2xl bg-blue-50 p-5 border border-blue-100">
                 <p className="font-semibold text-slate-800">{item}</p>
@@ -310,14 +310,14 @@ export default function LandingBiteBook() {
             <div className="flex gap-3">
               <TrackingButton
                 href="/checkout"
-                value={29.99}
+                value={14.99}
                 className="inline-flex items-center justify-center rounded-xl px-6 py-3 font-semibold bg-yellow-400 hover:bg-yellow-300 text-slate-900 shadow"
               >
-                Get Your BiteBook — $29.99
+                Get Your BiteBook — $14.99
               </TrackingButton>
               <TrackingButton
                 href="/checkout"
-                value={29.99}
+                value={14.99}
                 className="hidden md:inline-flex items-center justify-center rounded-xl px-6 py-3 font-semibold bg-blue-600 hover:bg-blue-500 text-white shadow"
               >
                 Join Wings Month

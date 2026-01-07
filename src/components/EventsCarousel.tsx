@@ -298,7 +298,7 @@ export default function EventsCarousel({ pastEvents, upcomingEvents, currentMont
                     }
                   }}
                 >
-                  {isSoldOut ? 'Sold Out' : 'Buy Now - $29.99'}
+                  {isSoldOut ? 'Sold Out' : 'Buy Now - $14.99'}
                 </button>
               </div>
             );

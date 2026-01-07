@@ -16,7 +16,7 @@ export default function TrackingButton({
   href, 
   className, 
   children, 
-  value = 29.99,
+  value = 14.99,
   buttonName,
   location 
 }: TrackingButtonProps) {

@@ -16,7 +16,7 @@ const poppins = Poppins({
 
 export const metadata: Metadata = {
   title: "BiteBook - Local Restaurant Coupon Books | New Haven Area",
-  description: "Discover amazing deals at local restaurants with BiteBook coupon books. $29.99 for over $300 in savings at 30+ local restaurants. Limited monthly themes - Wings, Tacos, Pizza, Burgers & more.",
+  description: "Discover amazing deals at local restaurants with BiteBook coupon books. $14.99 for over $300 in savings at 30+ local restaurants. Limited monthly themes - Wings, Tacos, Pizza, Burgers & more.",
   keywords: "restaurant coupons, New Haven restaurants, local dining deals, food coupons, restaurant discounts, New Haven area dining, coupon books",
   authors: [{ name: "BiteBook" }],
   creator: "BiteBook",
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     locale: 'en_US',
     url: 'https://getbitebook.com',
     title: 'BiteBook - Local Restaurant Coupon Books | New Haven Area',
-    description: 'Discover amazing deals at local restaurants with BiteBook coupon books. $29.99 for over $300 in savings at 30+ local restaurants. Limited monthly themes featuring wings, tacos, pizza, burgers and more.',
+    description: 'Discover amazing deals at local restaurants with BiteBook coupon books. $14.99 for over $300 in savings at 30+ local restaurants. Limited monthly themes featuring wings, tacos, pizza, burgers and more.',
     siteName: 'BiteBook',
     images: [
       {
@@ -55,7 +55,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'BiteBook - Local Restaurant Coupon Books | New Haven Area',
-    description: 'Discover amazing deals at local restaurants with BiteBook coupon books. $29.99 for over $300 in savings at 30+ local restaurants. Limited monthly themes featuring wings, tacos, pizza, burgers and more.',
+    description: 'Discover amazing deals at local restaurants with BiteBook coupon books. $14.99 for over $300 in savings at 30+ local restaurants. Limited monthly themes featuring wings, tacos, pizza, burgers and more.',
     images: ['/images/bitebook-logo.png'],
   },
 };
@@ -120,7 +120,7 @@ export default function RootLayout({
               },
               "offers": {
                 "@type": "Offer",
-                "price": "29.99",
+                "price": "14.99",
                 "priceCurrency": "USD",
                 "description": "Monthly restaurant coupon book with over $300 in savings"
               }

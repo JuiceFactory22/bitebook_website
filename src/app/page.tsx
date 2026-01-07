@@ -97,8 +97,8 @@ const monthlyPromotions = [
 export default function Home() {
   // Track page view with ViewContent event
   useEffect(() => {
-    trackViewContent('BiteBook Homepage', 29.99);
-    trackPageView('Homepage', 'main', 29.99);
+    trackViewContent('BiteBook Homepage', 14.99);
+    trackPageView('Homepage', 'main', 14.99);
     trackFunnelStep('homepage_view', 1, 'subscription');
   }, []);
 
@@ -198,7 +198,7 @@ export default function Home() {
     {
       icon: <Star className="w-8 h-8" />,
       title: "Over $300 Value",
-      description: "Get more than $300 in savings for just $29.99 - that's 90% off!"
+      description: "Get more than $300 in savings for just $14.99 - that's 90% off!"
     },
     {
       icon: <Clock className="w-8 h-8" />,
@@ -241,7 +241,7 @@ export default function Home() {
                   href="/checkout"
                   className="inline-block bg-[#ff6b35] text-white px-6 py-2 rounded-full text-sm font-medium btn-hover"
                 >
-                  Buy Now - $29.99
+                  Buy Now - $14.99
                 </a>
               </div>
             </div>
@@ -261,16 +261,16 @@ export default function Home() {
             Deals
           </h1>
           <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto opacity-90">
-            Get over $300 in savings at 30+ local restaurants for just $29.99. 
+            Get over $300 in savings at 30+ local restaurants for just $14.99. 
             Limited monthly themes - books sell out fast!
           </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
                       <TrackingButton 
                         href="/checkout"
-                        value={29.99}
+                        value={14.99}
                         className="inline-block bg-white text-[#ff6b35] px-8 py-4 rounded-full text-lg font-semibold btn-hover shadow-lg"
                       >
-                        Buy Your Coupon Book - $29.99
+                        Buy Your Coupon Book - $14.99
                       </TrackingButton>
             <a 
               href="/partner"
@@ -343,7 +343,7 @@ export default function Home() {
               href="/checkout"
               className="inline-block bg-[#ff6b35] hover:bg-[#e55a2b] text-white px-8 py-3 rounded-full font-semibold btn-hover shadow-lg transition-all duration-300"
             >
-              Secure Your Book Now - $29.99
+              Secure Your Book Now - $14.99
             </a>
           </div>
         </div>
@@ -373,7 +373,7 @@ export default function Home() {
                   Subscribe and Save
                 </TrackingButton>
               <p className="text-sm text-gray-500 mt-3">
-                Cancel anytime • No commitment • 50% off first month, then $29.99/month
+                Cancel anytime • No commitment • 50% off first month, then $14.99/month
               </p>
             </div>
           </div>
@@ -451,7 +451,7 @@ export default function Home() {
               href="/checkout"
               className="inline-block bg-white text-[#ff6b35] px-8 py-4 rounded-full text-lg font-semibold btn-hover shadow-lg"
             >
-              Buy Now - $29.99
+              Buy Now - $14.99
             </a>
             <div className="text-sm opacity-75">
               ✓ Instant access ✓ 30-day validity ✓ Limited quantity
