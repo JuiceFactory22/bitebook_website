@@ -1,250 +1,89 @@
 'use client';
 
-import { Clock, MapPin, Star, Utensils } from "lucide-react";
-import EventsCarousel from "@/components/EventsCarousel";
-import TrackingButton from "@/components/TrackingButton";
-import RestaurantLogosCarousel from "@/components/RestaurantLogosCarousel";
-import { useMemo, useEffect } from "react";
-import { trackViewContent } from "@/utils/facebookPixel";
-import { trackPageView, trackFunnelStep } from "@/utils/analytics";
-import { useScrollTracking } from "@/hooks/useScrollTracking";
-import { usePageTimeTracking } from "@/hooks/usePageTimeTracking";
-
-// Monthly promotions for 2026
-const monthlyPromotions = [
-    {
-      month: "January 2026",
-      theme: "Wings Month",
-      tagline: "Kick Off the Year with Heat.",
-      description: "Perfect for bars, breweries, and sports grills. Tie into football playoffs or Super Bowl promos.",
-      color: "from-red-500 to-orange-600",
-      icon: "🍗"
-    },
-    {
-      month: "February 2026", 
-      theme: "Taco Month",
-      tagline: "Love at First Bite.",
-      description: "Works with Valentine's tie-ins — 'Taco 'bout love.' Feature street tacos, taquerias, and Mexican cantinas.",
-      color: "from-orange-400 to-red-500",
-      icon: "🌮"
-    },
-    {
-      month: "March 2026",
-      theme: "Pizza Month", 
-      tagline: "In Crust We Trust.",
-      description: "Celebrate National Pizza Day (Mar 9). Include local pizzerias, breweries, and family spots.",
-      color: "from-red-400 to-pink-500",
-      icon: "🍕"
-    },
-    {
-      month: "April 2026",
-      theme: "Breakfast Sandwich Month",
-      tagline: "Rise & Bite.",
-      description: "Partner with coffee shops and cafés. Feature breakfast burritos, croissant sandwiches, and biscuit specials.",
-      color: "from-yellow-400 to-orange-500",
-      icon: "🥪"
-    },
-    {
-      month: "May 2026",
-      theme: "Burger Month",
-      tagline: "Build the Perfect Bite.",
-      description: "National Burger Month — ideal time for contests or polls ('Best Burger in Town').",
-      color: "from-amber-600 to-red-600",
-      icon: "🍔"
-    },
-    {
-      month: "June 2026",
-      theme: "BBQ Month",
-      tagline: "Smokin' Deals All Month Long.",
-      description: "Kick off summer with ribs, brisket, pulled pork, and grilled chicken. Feature BBQ joints and food trucks.",
-      color: "from-orange-600 to-red-700",
-      icon: "🔥"
-    },
-    {
-      month: "July 2026",
-      theme: "Fried Chicken Month",
-      tagline: "Crispy. Juicy. Legendary.",
-      description: "Peak picnic season — highlight fried chicken sandwiches, tenders, and Korean fried chicken spots.",
-      color: "from-yellow-500 to-orange-600",
-      icon: "🍗"
-    },
-    {
-      month: "August 2026",
-      theme: "Ice Cream & Dessert Month",
-      tagline: "Sweet Summer Bites.",
-      description: "Pair ice cream shops, donut cafés, bakeries, and dessert trucks. Great for families and social media engagement.",
-      color: "from-pink-300 to-purple-400",
-      icon: "🍦"
-    },
-    {
-      month: "November 2025",
-      theme: "Nacho Month",
-      tagline: "Stacked. Loaded. Melted.",
-      description: "Great for casual dining and sports bars. Include creative twists: BBQ nachos, breakfast nachos, etc.",
-      color: "from-yellow-500 to-orange-600",
-      icon: "🧀"
-    },
-    {
-      month: "December 2025",
-      theme: "Burger Month (Round 2)",
-      tagline: "Holiday Edition — The Gift of the Grill.",
-      description: "Cozy comfort food for winter. Repeat top performers or feature new premium burger collabs.",
-      color: "from-amber-600 to-red-600",
-      icon: "🍔"
-    }
-  ];
+import { useEffect, useState } from 'react';
+import { 
+  Utensils, 
+  Star, 
+  Clock, 
+  MapPin, 
+  Check, 
+  ChevronRight,
+  Sparkles,
+  Wallet,
+  Gift,
+  Users,
+  ArrowRight,
+  BadgeCheck,
+  Zap,
+  Shield,
+  RefreshCw,
+  BookOpen,
+  TrendingUp
+} from 'lucide-react';
+import TrackingButton from '@/components/TrackingButton';
+import RestaurantLogosCarousel from '@/components/RestaurantLogosCarousel';
+import { trackViewContent } from '@/utils/facebookPixel';
+import { trackPageView, trackFunnelStep } from '@/utils/analytics';
+import { useScrollTracking } from '@/hooks/useScrollTracking';
+import { usePageTimeTracking } from '@/hooks/usePageTimeTracking';
+import { locations, getDefaultPricing } from '@/data/locations';
+import { restaurants } from '@/data/restaurants';
 
 export default function Home() {
-  // Track page view with ViewContent event
+  const [isVisible, setIsVisible] = useState(false);
+  const [currentFoodIndex, setCurrentFoodIndex] = useState(0);
+  
+  const foodTypes = ['Cuisine', 'Burger', 'Wing', 'Taco', 'Pizza', 'BBQ', 'Noodle', 'Sandwich'];
+  const pricing = getDefaultPricing();
+  const activeLocations = locations.filter(l => l.status === 'active');
+  const comingSoonLocations = locations.filter(l => l.status === 'coming-soon' || l.status === 'waitlist');
+
   useEffect(() => {
-    trackViewContent('BiteBook Homepage', 14.99);
-    trackPageView('Homepage', 'main', 14.99);
+    trackViewContent('BiteBook Homepage', pricing.introPrice);
+    trackPageView('Homepage', 'main', pricing.introPrice);
     trackFunnelStep('homepage_view', 1, 'subscription');
-  }, []);
+    setIsVisible(true);
+  }, [pricing.introPrice]);
 
-  // Track scroll depth
+  // Rotate through food types every second
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentFoodIndex((prevIndex) => (prevIndex + 1) % foodTypes.length);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [foodTypes.length]);
+
   useScrollTracking();
-
-  // Track time on page
   usePageTimeTracking('Homepage');
 
-  // Calculate carousel events dynamically based on current date
-  // Shows: previous 2 months, current month, next 6 months (total 9 events)
-  // Handles combination of 2025 (Sept-Dec) and 2026 (Jan-Aug) events
-  const carouselEvents = useMemo(() => {
-    const now = new Date();
-    const currentYear = now.getFullYear();
-    const currentMonth = now.getMonth(); // 0-11 (0 = January)
-    
-    const monthNames = [
-      'January', 'February', 'March', 'April', 'May', 'June',
-      'July', 'August', 'September', 'October', 'November', 'December'
-    ];
-    
-    // Helper function to find event by month name and year
-    const findEvent = (monthIndex: number, targetYear: number) => {
-      const monthName = monthNames[monthIndex];
-      const searchString = `${monthName} ${targetYear}`;
-      
-      // First try exact match
-      let event = monthlyPromotions.find(e => e.month === searchString);
-      
-      // If not found and it's Sept-Dec, try 2025
-      if (!event && monthIndex >= 8) {
-        event = monthlyPromotions.find(e => e.month === `${monthName} 2025`);
-      }
-      
-      // If not found and it's Jan-Aug, try 2026
-      if (!event && monthIndex < 8) {
-        event = monthlyPromotions.find(e => e.month === `${monthName} 2026`);
-      }
-      
-      return event || null;
-    };
-    
-    // Calculate which months to show: previous 2, current, next 6
-    const events = [];
-    for (let i = -2; i <= 6; i++) {
-      const targetMonthIndex = currentMonth + i;
-      let targetYear = currentYear;
-      let adjustedMonthIndex = targetMonthIndex;
-      
-      // Handle year wrapping
-      if (adjustedMonthIndex < 0) {
-        adjustedMonthIndex = adjustedMonthIndex + 12;
-        targetYear = targetYear - 1;
-      } else if (adjustedMonthIndex >= 12) {
-        adjustedMonthIndex = adjustedMonthIndex - 12;
-        targetYear = targetYear + 1;
-      }
-      
-      // Determine which year to use for this month
-      // Sept-Dec should use 2025, Jan-Aug should use 2026
-      let searchYear = targetYear;
-      if (adjustedMonthIndex >= 8) {
-        // September-December: prefer 2025
-        searchYear = 2025;
-      } else {
-        // January-August: prefer 2026
-        searchYear = 2026;
-      }
-      
-      const event = findEvent(adjustedMonthIndex, searchYear);
-      if (event) {
-        events.push(event);
-      }
-    }
-    
-    // Separate into past (first 2), current (1), and upcoming (next 6)
-    const pastEvents = events.slice(0, 2);
-    const currentEvent = events.slice(2, 3);
-    const upcomingEvents = events.slice(3, 9);
-    
-    return {
-      pastEvents,
-      currentEvent,
-      upcomingEvents,
-      allCarouselEvents: events,
-      currentMonthIndex: currentMonth
-    };
-  }, []);
-
-  const features = [
-    {
-      icon: <Utensils className="w-8 h-8" />,
-      title: "30+ Local Restaurants",
-      description: "Access deals from your area's best local restaurants and hidden gems"
-    },
-    {
-      icon: <Star className="w-8 h-8" />,
-      title: "Over $300 Value",
-      description: "Get more than $300 in savings for just $14.99 - that's 90% off!"
-    },
-    {
-      icon: <Clock className="w-8 h-8" />,
-      title: "30-Day Validity",
-      description: "All coupons are valid for 30 days from the month of purchase"
-    },
-    {
-      icon: <MapPin className="w-8 h-8" />,
-      title: "Local Coverage",
-      description: "Conveniently located restaurants throughout your area"
-    }
-  ];
-
-
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
       {/* Navigation */}
-      <nav className="bg-white shadow-sm border-b border-gray-100 sticky top-0 z-50">
+      <nav className="bg-white/80 backdrop-blur-md shadow-sm border-b border-gray-100 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <h1 className="text-2xl font-display font-bold text-gray-900">
-                  <span className="text-[#ff6b35]">Bite</span>Book
-                </h1>
-              </div>
+              <h1 className="text-2xl font-display font-bold text-gray-900">
+                <span className="text-[#ff6b35]">Bite</span>Book
+              </h1>
             </div>
             <div className="hidden md:block">
               <div className="ml-10 flex items-baseline space-x-4">
-                <a href="#promotions" className="text-gray-700 hover:text-[#ff6b35] px-3 py-2 rounded-md text-sm font-medium transition-colors">
-                  Monthly Promotions
+                <a href="#how-it-works" className="text-gray-700 hover:text-[#ff6b35] px-3 py-2 rounded-md text-sm font-medium transition-colors">
+                  How It Works
+                </a>
+                <a href="#locations" className="text-gray-700 hover:text-[#ff6b35] px-3 py-2 rounded-md text-sm font-medium transition-colors">
+                  Select Location
                 </a>
                 <a href="/partner" className="text-gray-700 hover:text-[#ff6b35] px-3 py-2 rounded-md text-sm font-medium transition-colors">
                   Partner Restaurants
                 </a>
-                <a href="/locations/new-haven" className="text-gray-700 hover:text-[#ff6b35] px-3 py-2 rounded-md text-sm font-medium transition-colors">
-                  New Haven
-                </a>
-                <a href="#how-it-works" className="text-gray-700 hover:text-[#ff6b35] px-3 py-2 rounded-md text-sm font-medium transition-colors">
-                  How It Works
-          </a>
-          <a
-                  href="/checkout"
+                <a
+                  href="/locations"
                   className="inline-block bg-[#ff6b35] text-white px-6 py-2 rounded-full text-sm font-medium btn-hover"
                 >
-                  Buy Now - $14.99
+                  Find Your BiteBook
                 </a>
               </div>
             </div>
@@ -253,262 +92,492 @@ export default function Home() {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-[#ff6b35] via-[#e55a2b] to-[#d44a1f] text-white py-20">
-        <div className="absolute inset-0 bg-black opacity-10"></div>
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-5xl md:text-7xl font-display font-bold mb-6 leading-tight">
-            Discover Amazing
-            <br />
-            <span className="text-yellow-300">Local Restaurant</span>
-            <br />
-            Deals
-          </h1>
-          <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto opacity-90">
-            Get over $300 in savings at 30+ local restaurants for just $14.99. 
-            Limited monthly themes - books sell out fast!
-          </p>
-                <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
-                      <TrackingButton 
-                        href="/checkout"
-                        value={14.99}
-                        className="inline-block bg-white text-[#ff6b35] px-8 py-4 rounded-full text-lg font-semibold btn-hover shadow-lg"
-                      >
-                        Buy Your Coupon Book - $14.99
-                      </TrackingButton>
-            <a 
-              href="/partner"
-              className="inline-block border-2 border-white text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-white hover:text-[#ff6b35] transition-all"
-            >
-              Partner With Us
-            </a>
-          </div>
-          {/* Events Timeline */}
-          <EventsCarousel 
-            pastEvents={carouselEvents.pastEvents}
-            upcomingEvents={[...carouselEvents.currentEvent, ...carouselEvents.upcomingEvents]}
-            currentMonth={carouselEvents.currentMonthIndex}
-          />
+      <section className="relative overflow-hidden pt-12 pb-20 lg:pt-20 lg:pb-32">
+        {/* Background decoration */}
+        <div className="absolute inset-0 -z-10">
+          <div className="absolute top-20 left-10 w-72 h-72 bg-orange-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse" />
+          <div className="absolute top-40 right-10 w-72 h-72 bg-amber-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse delay-1000" />
+          <div className="absolute bottom-20 left-1/2 w-72 h-72 bg-rose-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse delay-500" />
         </div>
-      </section>
 
-      {/* How It Works Copy */}
-      <section id="how-it-works" className="py-20 bg-white">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-10">
-            <p className="text-sm uppercase tracking-[0.3em] text-gray-400 mb-3">The BiteBook Way</p>
-            <h2 className="text-4xl font-display font-bold text-gray-900">
-              How does it work? <span className="text-[#ff6b35]">Well I'm glad you asked.</span>
-            </h2>
-          </div>
-          <div className="space-y-6 text-lg leading-relaxed text-gray-700 max-w-3xl mx-auto">
-            <p>Here at BiteBook we don't believe you have to sacrifice quality for price.</p>
-            <p>Each month we put together a coupon book featuring around 30 local restaurants. We focus only on the best (most delicious) types of food. Wings, tacos, pizza, burgers, BBQ, fried chicken, etc.</p>
-            <p>We petitioned those food pyramid guys to recreate it based on our suggestions - but we haven't heard back yet...</p>
-            <p>So each monthly coupon book is centered around a theme and features 30 local restaurants.</p>
-            <p>January is Wing Month.</p>
-            <p>Each restaurant includes a coupon of their choosing, like a free half or full order of chicken wings. Most coupons are between $10 and $20 in value and are valid for the entire month.</p>
-            <p>And the entire book costs $30 (or $19.99 if you subscribe).</p>
-            <p>Quick math shakes out to - if you eat food then it's a pretty good deal.</p>
-            <p>Oh, and all the participating restaurants are centered around the New Haven area, so you won't have to go far to enjoy these deals.</p>
-            <p>We have some outstanding places who are participating and our team is constantly reaching out to find the absolute best places in the area.</p>
-            <p>Every month we are working to bring you the VERY BEST in New Haven for less.</p>
-            <p>We hope you check out the book and consider subscribing.</p>
-          </div>
-        </div>
-      </section>
-
-      {/* Participating Restaurants */}
-      <section className="bg-white py-12 md:py-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-display font-bold text-gray-900 mb-4">
-              Participating Restaurants
-            </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Here is a list of some of the restaurants featured in next month's book
-            </p>
-          </div>
-          <RestaurantLogosCarousel />
-        </div>
-        
-        {/* Limited Time Offer CTA */}
-        <div className="text-center mt-12">
-          <div className="bg-yellow-100 border border-yellow-300 rounded-lg p-6 max-w-2xl mx-auto">
-            <div className="flex items-center justify-center mb-3">
-              <Clock className="w-6 h-6 text-yellow-600 mr-2" />
-              <span className="font-semibold text-yellow-800">Limited Time Offer</span>
-            </div>
-            <p className="text-yellow-700 mb-6">
-              Coupon books sell out fast! Each month we print a limited number to ensure 
-              our restaurant partners get maximum value from their participation.
-            </p>
-            <a 
-              href="/checkout"
-              className="inline-block bg-[#ff6b35] hover:bg-[#e55a2b] text-white px-8 py-3 rounded-full font-semibold btn-hover shadow-lg transition-all duration-300"
-            >
-              Secure Your Book Now - $14.99
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* Monthly Promotions */}
-      <section id="promotions" className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-display font-bold text-gray-900 mb-4">
-              Our 2026 Events Schedule
-            </h2>
-            <h3 className="text-2xl font-display font-semibold text-gray-700 mb-4">
-              Monthly Promotions
-            </h3>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
-              Each month features a different food theme with exclusive deals from local restaurants
+          <div className="text-center max-w-4xl mx-auto">
+            {/* Badge */}
+            <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 mb-8 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+              <Sparkles className="w-4 h-4 text-amber-500" />
+              <span className="text-sm font-medium text-amber-700">Save at Local Restaurants Every Month</span>
+            </div>
+
+            {/* Main headline */}
+            <h1 className={`text-4xl sm:text-5xl lg:text-6xl font-display font-bold text-gray-900 leading-tight mb-6 transition-all duration-700 delay-100 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+              What is <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#ff6b35] to-amber-500">BiteBook</span>?
+            </h1>
+
+            {/* Subheadline */}
+            <p className={`text-xl sm:text-2xl text-gray-600 mb-8 max-w-3xl mx-auto transition-all duration-700 delay-200 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+              A digital coupon book that gives you <strong className="text-gray-900">hundreds in savings</strong> at <strong className="text-gray-900">dozens of local restaurants</strong> every month. Wings, pizza, burgers, tacos — all in one place.
             </p>
-            
-            {/* Subscribe & Save Button */}
-            <div className="text-center mb-12">
-                <TrackingButton 
-                  href="/checkout?coupon=BITEBOOKNH50"
-                  value={14.99}
-                  className="inline-block bg-[#ff6b35] hover:bg-[#e55a2b] text-white px-8 py-4 rounded-full text-lg font-semibold btn-hover shadow-lg transition-all duration-300"
-                >
-                  Subscribe and Save
-                </TrackingButton>
-              <p className="text-sm text-gray-500 mt-3">
-                Cancel anytime • No commitment • 50% off first month, then $14.99/month
+
+            {/* Animated food types */}
+            <div className={`mb-8 transition-all duration-700 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+              <p className="text-lg text-gray-500">
+                Discounts and free food at dozens of local restaurants.
+              </p>
+              <p className="text-lg text-gray-500">
+                Refreshed every single month. All in one digital book.
               </p>
             </div>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {monthlyPromotions.map((promo, index) => (
-              <div key={index} className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
-                <div className={`h-24 bg-gradient-to-r ${promo.color} flex items-center justify-center`}>
-                  <span className="text-4xl">{promo.icon}</span>
-                </div>
-                <div className="p-4">
-                  <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">
-                    {promo.month}
-                  </div>
-                  <h3 className="text-lg font-display font-bold text-gray-900 mb-2">
-                    {promo.theme}
-                  </h3>
-                  <p className="text-sm font-medium text-[#ff6b35] mb-2 italic">
-                    "{promo.tagline}"
-                  </p>
-                  <p className="text-gray-600 text-xs leading-relaxed">
-                    {promo.description}
-                  </p>
-                </div>
+
+            {/* Primary CTA */}
+            <div className={`flex flex-col sm:flex-row items-center justify-center gap-4 mb-10 transition-all duration-700 delay-400 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+              <TrackingButton
+                href="/locations"
+                eventName="hero_find_location_click"
+                eventCategory="conversion"
+                value={pricing.introPrice}
+                className="w-full sm:w-auto bg-gradient-to-r from-[#ff6b35] to-orange-500 text-white px-8 py-4 rounded-full text-lg font-bold btn-hover shadow-lg shadow-orange-500/25 flex items-center justify-center gap-2"
+              >
+                Find Your Local BiteBook
+                <MapPin className="w-5 h-5" />
+              </TrackingButton>
+            </div>
+
+            {/* Trust indicators */}
+            <div className={`flex flex-wrap justify-center gap-6 text-sm text-gray-600 transition-all duration-700 delay-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+              <div className="flex items-center gap-2">
+                <BadgeCheck className="w-4 h-4 text-emerald-600" />
+                <span>Risk-free: Start for ${pricing.introPrice}</span>
               </div>
-            ))}
+              <div className="flex items-center gap-2">
+                <BadgeCheck className="w-4 h-4 text-emerald-600" />
+                <span>Cancel anytime</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <BadgeCheck className="w-4 h-4 text-emerald-600" />
+                <span>Instant digital access</span>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Features */}
+      {/* What is BiteBook - Simple Explanation */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-display font-bold text-gray-900 mb-4">
-              Why Choose BiteBook?
+            <h2 className="text-3xl sm:text-4xl font-display font-bold text-gray-900 mb-4">
+              Think of BiteBook as Your Restaurant Savings App
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              We connect food lovers with amazing local restaurants while providing incredible value
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Like Groupon, but better — because you get a new book of deals every single month
             </p>
           </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {features.map((feature, index) => (
-              <div key={index} className="text-center group">
-                <div className="bg-[#ff6b35] bg-opacity-10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-opacity-20 transition-all">
-                  <div className="text-[#ff6b35]">
-                    {feature.icon}
-                  </div>
-                </div>
-                <h3 className="text-xl font-display font-semibold text-gray-900 mb-3">
-                  {feature.title}
-                </h3>
-                <p className="text-gray-600">
-                  {feature.description}
-                </p>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="text-center">
+              <div className="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                <BookOpen className="w-8 h-8 text-blue-600" />
               </div>
-            ))}
+              <h3 className="text-xl font-bold text-gray-900 mb-3">One Digital Book</h3>
+              <p className="text-gray-600">
+                Get all your restaurant coupons in one place. Access them on your phone anytime, anywhere. No paper to carry around.
+              </p>
+            </div>
+            <div className="text-center">
+              <div className="w-16 h-16 bg-[#ff6b35]/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                <RefreshCw className="w-8 h-8 text-[#ff6b35]" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">Fresh Deals Monthly</h3>
+              <p className="text-gray-600">
+                New coupons every single month. Different restaurants, different deals. Never run out of places to try.
+              </p>
+            </div>
+            <div className="text-center">
+              <div className="w-16 h-16 bg-emerald-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                <TrendingUp className="w-8 h-8 text-emerald-600" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">Save Big Every Time</h3>
+              <p className="text-gray-600">
+                Each book has ${pricing.totalValue}+ worth of savings. Use one coupon and you've already paid for the month.
+              </p>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-[#ff6b35] to-[#e55a2b] text-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-4xl font-display font-bold mb-6">
-            Ready to Start Saving?
-          </h2>
-          <p className="text-xl mb-8 opacity-90">
-            Join thousands of satisfied customers who have saved hundreds of dollars 
-            while discovering amazing local restaurants.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <a 
-              href="/checkout"
-              className="inline-block bg-white text-[#ff6b35] px-8 py-4 rounded-full text-lg font-semibold btn-hover shadow-lg"
-            >
-              Buy Now - $14.99
-            </a>
-            <div className="text-sm opacity-75">
-              ✓ Instant access ✓ 30-day validity ✓ Limited quantity
+      {/* Benefits Section - Why BiteBook? */}
+      <section className="py-20 bg-gradient-to-b from-slate-50 to-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl sm:text-4xl font-display font-bold text-gray-900 mb-4">
+              Why Choose BiteBook?
+            </h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Simple benefits that add up to real savings
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* Benefit 1: Risk-Free */}
+            <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 hover:shadow-lg transition-shadow">
+              <div className="w-14 h-14 bg-emerald-100 rounded-2xl flex items-center justify-center mb-6">
+                <Shield className="w-7 h-7 text-emerald-600" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">
+                Risk-Free to Try
+              </h3>
+              <p className="text-gray-600 mb-4">
+                Your first month is just <strong>${pricing.introPrice}</strong> — less than most appetizers. Try it once, and if it's not for you, cancel anytime. No questions asked.
+              </p>
+              <div className="flex items-center gap-2 text-emerald-600 font-medium text-sm">
+                <Check className="w-4 h-4" />
+                Cancel anytime, no fees
+              </div>
+            </div>
+
+            {/* Benefit 2: Value */}
+            <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 hover:shadow-lg transition-shadow">
+              <div className="w-14 h-14 bg-[#ff6b35]/10 rounded-2xl flex items-center justify-center mb-6">
+                <Gift className="w-7 h-7 text-[#ff6b35]" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">
+                Massive Value
+              </h3>
+              <p className="text-gray-600 mb-4">
+                Each book has <strong>${pricing.totalValue}+ in savings</strong> from {pricing.restaurantCount}+ local restaurants. Use one coupon and you're already ahead.
+              </p>
+              <div className="flex items-center gap-2 text-[#ff6b35] font-medium text-sm">
+                <Check className="w-4 h-4" />
+                Pays for itself instantly
+              </div>
+            </div>
+
+            {/* Benefit 3: Variety */}
+            <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 hover:shadow-lg transition-shadow">
+              <div className="w-14 h-14 bg-blue-100 rounded-2xl flex items-center justify-center mb-6">
+                <Zap className="w-7 h-7 text-blue-600" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">
+                All Cuisines, Every Month
+              </h3>
+              <p className="text-gray-600 mb-4">
+                No more single-theme months. Get wings, pizza, tacos, burgers, Asian, BBQ, and desserts — all in one book, every month.
+              </p>
+              <div className="flex items-center gap-2 text-blue-600 font-medium text-sm">
+                <Check className="w-4 h-4" />
+                Variety every month
+              </div>
+            </div>
+
+            {/* Benefit 4: Local */}
+            <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 hover:shadow-lg transition-shadow">
+              <div className="w-14 h-14 bg-purple-100 rounded-2xl flex items-center justify-center mb-6">
+                <MapPin className="w-7 h-7 text-purple-600" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">
+                Support Local
+              </h3>
+              <p className="text-gray-600 mb-4">
+                Every restaurant is locally owned and operated. Support your community while saving money on great food.
+              </p>
+              <div className="flex items-center gap-2 text-purple-600 font-medium text-sm">
+                <Check className="w-4 h-4" />
+                Community-focused
+              </div>
+            </div>
+
+            {/* Benefit 5: Convenient */}
+            <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 hover:shadow-lg transition-shadow">
+              <div className="w-14 h-14 bg-amber-100 rounded-2xl flex items-center justify-center mb-6">
+                <Clock className="w-7 h-7 text-amber-600" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">
+                Digital & Convenient
+              </h3>
+              <p className="text-gray-600 mb-4">
+                All coupons are digital. No paper to carry. Show your phone at the restaurant. Simple and easy.
+              </p>
+              <div className="flex items-center gap-2 text-amber-600 font-medium text-sm">
+                <Check className="w-4 h-4" />
+                Access on your phone
+              </div>
+            </div>
+
+            {/* Benefit 6: Restaurant Partners */}
+            <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 hover:shadow-lg transition-shadow">
+              <div className="w-14 h-14 bg-rose-100 rounded-2xl flex items-center justify-center mb-6">
+                <Users className="w-7 h-7 text-rose-600" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">
+                Trusted Restaurants
+              </h3>
+              <p className="text-gray-600 mb-4">
+                Work with dozens of local favorites. From neighborhood gems to popular spots, all verified and trusted.
+              </p>
+              <div className="flex items-center gap-2 text-rose-600 font-medium text-sm">
+                <Check className="w-4 h-4" />
+                Verified partners
+              </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Restaurant Showcase */}
+      <section className="py-20 bg-white border-y border-gray-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 border border-blue-100 mb-6">
+              <Users className="w-4 h-4 text-blue-600" />
+              <span className="text-sm font-medium text-blue-700">Trusted by Local Favorites</span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl font-display font-bold text-gray-900 mb-4">
+              {restaurants.length}+ Restaurant Partners
+            </h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              From neighborhood gems to local favorites — these restaurants trust BiteBook to bring them hungry customers.
+            </p>
+          </div>
+
+          <RestaurantLogosCarousel />
+        </div>
+      </section>
+
+      {/* How It Works - Updated */}
+      <section id="how-it-works" className="py-20 bg-slate-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl sm:text-4xl font-display font-bold text-gray-900 mb-4">
+              How BiteBook Works
+            </h2>
+            <p className="text-lg text-gray-600">
+              Get started in 3 simple steps
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+            <div className="text-center">
+              <div className="w-16 h-16 bg-[#ff6b35] rounded-2xl flex items-center justify-center mx-auto mb-6 text-white text-2xl font-bold">
+                1
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">Find Your Location</h3>
+              <p className="text-gray-600 mb-4">
+                Select your city to see available deals in your area. We're expanding to new cities all the time.
+              </p>
+              <a href="/locations" className="inline-flex items-center gap-2 text-[#ff6b35] font-medium text-sm hover:gap-3 transition-all">
+                Browse Locations
+                <ArrowRight className="w-4 h-4" />
+              </a>
+            </div>
+            <div className="text-center">
+              <div className="w-16 h-16 bg-[#ff6b35] rounded-2xl flex items-center justify-center mx-auto mb-6 text-white text-2xl font-bold">
+                2
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">Subscribe</h3>
+              <p className="text-gray-600 mb-4">
+                Start for <strong>${pricing.introPrice}</strong> your first month. Get instant access to your digital coupon book. Cancel anytime.
+              </p>
+              <div className="flex items-center justify-center gap-2 text-emerald-600 font-medium text-sm">
+                <BadgeCheck className="w-4 h-4" />
+                Risk-free trial
+              </div>
+            </div>
+            <div className="text-center">
+              <div className="w-16 h-16 bg-[#ff6b35] rounded-2xl flex items-center justify-center mx-auto mb-6 text-white text-2xl font-bold">
+                3
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">Save & Enjoy</h3>
+              <p className="text-gray-600 mb-4">
+                Browse your coupons, pick a restaurant, show your phone at checkout. Save money, enjoy great food, repeat all month long.
+              </p>
+              <div className="flex items-center justify-center gap-2 text-blue-600 font-medium text-sm">
+                <RefreshCw className="w-4 h-4" />
+                New deals monthly
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Locations Section */}
+      <section id="locations" className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl sm:text-4xl font-display font-bold text-gray-900 mb-4">
+              Find BiteBook in Your City
+            </h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              We're bringing restaurant savings to cities across the country
+            </p>
+          </div>
+
+          {/* Active Locations */}
+          {activeLocations.length > 0 && (
+            <div className="mb-12">
+              <h3 className="text-xl font-bold text-gray-900 mb-6">Available Now</h3>
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {activeLocations.map((location) => (
+                  <a
+                    key={location.id}
+                    href={`/locations/${location.id}`}
+                    className="group bg-white rounded-2xl border-2 border-gray-100 p-6 hover:shadow-xl hover:border-[#ff6b35]/20 transition-all duration-300"
+                  >
+                    <div className="flex items-start justify-between mb-4">
+                      <div className="w-12 h-12 bg-[#ff6b35]/10 rounded-xl flex items-center justify-center">
+                        <MapPin className="w-6 h-6 text-[#ff6b35]" />
+                      </div>
+                      {location.featured && (
+                        <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-100 text-emerald-700">
+                          Active
+                        </span>
+                      )}
+                    </div>
+                    
+                    <h4 className="text-xl font-bold text-gray-900 mb-1 group-hover:text-[#ff6b35] transition-colors">
+                      {location.city}, {location.state}
+                    </h4>
+                    <p className="text-gray-500 text-sm mb-4">{location.region}</p>
+                    
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-gray-600">
+                        <strong className="text-gray-900">{location.restaurantCount}+</strong> restaurants
+                      </span>
+                      <span className="flex items-center gap-1 text-[#ff6b35] font-medium text-sm group-hover:gap-2 transition-all">
+                        View deals
+                        <ArrowRight className="w-4 h-4" />
+                      </span>
+                    </div>
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Coming Soon Locations */}
+          {comingSoonLocations.length > 0 && (
+            <div>
+              <h3 className="text-xl font-bold text-gray-900 mb-6">Coming Soon</h3>
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {comingSoonLocations.map((location) => (
+                  <div
+                    key={location.id}
+                    className="bg-white/50 rounded-2xl border border-gray-200 border-dashed p-6"
+                  >
+                    <div className="flex items-start justify-between mb-4">
+                      <div className="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center">
+                        <MapPin className="w-6 h-6 text-gray-400" />
+                      </div>
+                      <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-700">
+                        {location.status === 'waitlist' ? 'Join Waitlist' : 'Coming Soon'}
+                      </span>
+                    </div>
+                    
+                    <h4 className="text-xl font-bold text-gray-600 mb-1">
+                      {location.city}, {location.state}
+                    </h4>
+                    <p className="text-gray-400 text-sm mb-4">{location.region}</p>
+                    
+                    {location.status === 'waitlist' && (
+                      <button className="w-full py-2 px-4 rounded-lg border border-gray-200 text-gray-600 text-sm font-medium hover:bg-gray-50 transition-colors">
+                        Notify Me
+                      </button>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* No locations message */}
+          {activeLocations.length === 0 && comingSoonLocations.length === 0 && (
+            <div className="text-center py-12">
+              <p className="text-gray-600 mb-4">More locations coming soon!</p>
+              <a 
+                href="mailto:hello@getbitebook.com?subject=Bring BiteBook to my city"
+                className="inline-flex items-center gap-2 text-[#ff6b35] font-medium hover:gap-3 transition-all"
+              >
+                Request Your City
+                <ArrowRight className="w-4 h-4" />
+              </a>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Social Proof Stats */}
+      <section className="py-16 bg-slate-900 text-white">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16">
+            <div className="text-center">
+              <p className="text-4xl font-bold">{restaurants.length}+</p>
+              <p className="text-slate-400 text-sm">Restaurant Partners</p>
+            </div>
+            <div className="h-12 w-px bg-slate-700 hidden md:block" />
+            <div className="text-center">
+              <p className="text-4xl font-bold">${pricing.totalValue}+</p>
+              <p className="text-slate-400 text-sm">Monthly Savings Value</p>
+            </div>
+            <div className="h-12 w-px bg-slate-700 hidden md:block" />
+            <div className="text-center">
+              <p className="text-4xl font-bold">30</p>
+              <p className="text-slate-400 text-sm">Day Validity</p>
+            </div>
+            <div className="h-12 w-px bg-slate-700 hidden md:block" />
+            <div className="text-center">
+              <p className="text-4xl font-bold text-[#ff6b35]">${pricing.introPrice}</p>
+              <p className="text-slate-400 text-sm">First Month</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Final CTA */}
+      <section className="py-20 bg-gradient-to-br from-[#ff6b35] to-orange-600">
+        <div className="max-w-4xl mx-auto px-4 text-center">
+          <h2 className="text-3xl sm:text-4xl font-display font-bold text-white mb-6">
+            Ready to Start Saving?
+          </h2>
+          <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
+            Join thousands of people saving money at their favorite local restaurants. Risk-free trial for just ${pricing.introPrice}.
+          </p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <TrackingButton
+              href="/locations"
+              eventName="footer_cta_click"
+              eventCategory="conversion"
+              value={pricing.introPrice}
+              className="w-full sm:w-auto bg-white text-[#ff6b35] px-8 py-4 rounded-full text-lg font-bold hover:bg-gray-50 transition-colors shadow-lg flex items-center justify-center gap-2"
+            >
+              Find Your Local BiteBook
+              <ChevronRight className="w-5 h-5" />
+            </TrackingButton>
+          </div>
+          <p className="text-white/70 text-sm mt-6">
+            Start for ${pricing.introPrice} • Then ${pricing.regularPrice}/month • Cancel anytime
+          </p>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12">
+      <footer className="bg-slate-900 text-white py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-6">
             <div>
-              <h3 className="text-2xl font-display font-bold mb-4">
+              <h2 className="text-2xl font-display font-bold">
                 <span className="text-[#ff6b35]">Bite</span>Book
-              </h3>
-              <p className="text-gray-400 text-sm">
-                Connecting food lovers with amazing local restaurants through incredible coupon deals.
-              </p>
+              </h2>
+              <p className="text-slate-400 text-sm mt-1">Local deals, everywhere</p>
             </div>
-            
-            <div>
-              <h4 className="font-semibold mb-4">Quick Links</h4>
-              <ul className="space-y-2 text-sm text-gray-400">
-                <li><a href="#promotions" className="hover:text-white transition-colors">Monthly Promotions</a></li>
-                <li><a href="#how-it-works" className="hover:text-white transition-colors">How It Works</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Contact Us</a></li>
-              </ul>
-            </div>
-            
-            <div>
-              <h4 className="font-semibold mb-4">For Restaurants</h4>
-              <ul className="space-y-2 text-sm text-gray-400">
-                <li><a href="#" className="hover:text-white transition-colors">Partner With Us</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Restaurant Benefits</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Application Process</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Support</a></li>
-              </ul>
-            </div>
-            
-            <div>
-              <h4 className="font-semibold mb-4">Contact</h4>
-              <div className="text-sm text-gray-400 space-y-2">
-                <div>
-                  <a href="mailto:info@getbitebook.com" className="hover:text-white transition-colors">
-                    info@getbitebook.com
-                  </a>
-                </div>
-              </div>
+            <div className="flex items-center gap-6 text-sm text-slate-400">
+              <a href="/partner" className="hover:text-white transition-colors">Partner With Us</a>
+              <a href="#how-it-works" className="hover:text-white transition-colors">How It Works</a>
+              <a href="/locations" className="hover:text-white transition-colors">Locations</a>
+              <a href="#" className="hover:text-white transition-colors">Terms</a>
+              <a href="#" className="hover:text-white transition-colors">Privacy</a>
             </div>
           </div>
-          
-          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-400">
-            <p>&copy; 2024 BiteBook. All rights reserved. | Terms of Service | Privacy Policy</p>
+          <div className="border-t border-slate-800 mt-8 pt-8 text-center text-slate-500 text-sm">
+            © {new Date().getFullYear()} BiteBook. All rights reserved.
           </div>
         </div>
       </footer>
