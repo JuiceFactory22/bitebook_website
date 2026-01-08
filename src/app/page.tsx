@@ -234,6 +234,9 @@ export default function Home() {
                 <a href="/partner" className="text-gray-700 hover:text-[#ff6b35] px-3 py-2 rounded-md text-sm font-medium transition-colors">
                   Partner Restaurants
                 </a>
+                <a href="/locations/new-haven" className="text-gray-700 hover:text-[#ff6b35] px-3 py-2 rounded-md text-sm font-medium transition-colors">
+                  New Haven
+                </a>
                 <a href="#how-it-works" className="text-gray-700 hover:text-[#ff6b35] px-3 py-2 rounded-md text-sm font-medium transition-colors">
                   How It Works
           </a>

@@ -52,10 +52,11 @@ function CheckoutContent() {
   
   const couponBookDetails = {
     price: 14.99,
-    subscriptionPrice: 14.99, // Standard subscription price
-    originalValue: 300,
-    savings: 285.01,
-    subscriptionSavings: 285.01, // $300 - $14.99
+    introPrice: 4.99, // First month intro price
+    subscriptionPrice: 14.99, // Standard subscription price (month 2+)
+    originalValue: 400,
+    savings: 395.01, // $400 - $4.99 for first month
+    subscriptionSavings: 385.01, // $400 - $14.99
     restaurants: 30,
     validity: 30
   };
@@ -69,8 +70,9 @@ function CheckoutContent() {
   };
 
   // Calculate base price before discounts
+  // For subscriptions, first month is intro price, then regular price
   const getBasePrice = () => {
-    if (isSubscription) return couponBookDetails.subscriptionPrice;
+    if (isSubscription) return couponBookDetails.introPrice; // First month intro price
     return couponBookDetails.price;
   };
 
@@ -368,8 +370,8 @@ function CheckoutContent() {
                       </>
                     ) : (
                       <>
-                        <div className="font-semibold mb-1">First Month: ${getCurrentPrice().toFixed(2)}</div>
-                        <div className="text-blue-700">Then: ${getCurrentPrice().toFixed(2)}/month (billed monthly)</div>
+                        <div className="font-semibold mb-1">First Month: $4.99 <span className="text-green-600">(Intro Price)</span></div>
+                        <div className="text-blue-700">Then: $14.99/month (billed monthly)</div>
                       </>
                     )}
                   </div>
@@ -381,7 +383,7 @@ function CheckoutContent() {
               {/* Coupon Code Section */}
               <div className="mb-6">
                 <h4 className="font-semibold text-gray-900 mb-3">Have a Coupon Code?</h4>
-                <p className="text-xs text-gray-500 mb-2">Coupon codes apply to your first month only. After that, you'll be billed at the standard $14.99/month rate.</p>
+                <p className="text-xs text-gray-500 mb-2">Coupon codes apply to your first month only. After that, you&apos;ll be billed at the standard $14.99/month rate.</p>
                 {!appliedCoupon ? (
                   <div className="flex gap-2">
                     <input
@@ -560,7 +562,7 @@ function CheckoutContent() {
                         )}
                         {!appliedCoupon && (
                           <div className="text-xs opacity-90 mt-1">
-                            Then ${getCurrentPrice().toFixed(2)}/month
+                            Then $14.99/month
                           </div>
                         )}
                       </div>
