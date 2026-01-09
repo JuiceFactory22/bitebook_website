@@ -332,7 +332,7 @@ export default function Home() {
               <span className="text-sm font-medium text-blue-700">Trusted by Local Favorites</span>
             </div>
             <h2 className="text-3xl sm:text-4xl font-display font-bold text-gray-900 mb-4">
-              {restaurants.length}+ Restaurant Partners
+              Some of the Participating Restaurants
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               From neighborhood gems to local favorites — these restaurants trust BiteBook to bring them hungry customers.

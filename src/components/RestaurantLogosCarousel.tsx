@@ -1,9 +1,37 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Utensils } from 'lucide-react';
 import Image from 'next/image';
 import { restaurants } from '@/data/restaurants';
+
+// Component for restaurant logo with fallback
+function RestaurantLogoItem({ restaurant }: { restaurant: { name: string; image: string } }) {
+  const [imageError, setImageError] = useState(false);
+
+  if (imageError || !restaurant.image) {
+    return (
+      <div className="flex flex-col items-center justify-center w-full h-full">
+        <Utensils className="w-8 h-8 text-gray-300 mb-2" />
+        <p className="text-xs text-gray-400 text-center px-2 line-clamp-2">
+          {restaurant.name}
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <Image
+      src={restaurant.image}
+      alt={restaurant.name}
+      width={180}
+      height={100}
+      className="object-contain max-h-24 w-auto"
+      unoptimized
+      onError={() => setImageError(true)}
+    />
+  );
+}
 
 export default function RestaurantLogosCarousel() {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -137,14 +165,7 @@ export default function RestaurantLogosCarousel() {
               key={index}
               className="flex-shrink-0 w-48 h-32 bg-white rounded-lg shadow-md p-4 flex items-center justify-center snap-start"
             >
-              <Image
-                src={restaurant.image}
-                alt={restaurant.name}
-                width={180}
-                height={100}
-                className="object-contain max-h-24 w-auto"
-                unoptimized
-              />
+              <RestaurantLogoItem restaurant={restaurant} />
             </div>
           ))}
         </div>
