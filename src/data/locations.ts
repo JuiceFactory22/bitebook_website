@@ -25,8 +25,8 @@ export const locations: Location[] = [
     status: 'active',
     featured: true,
     pricing: {
-      introPrice: 4.99,
-      regularPrice: 14.99,
+      introPrice: 0.99,
+      regularPrice: 9.99,
       totalValue: 400,
     },
   },
@@ -73,8 +73,8 @@ export function getActiveLocations(): Location[] {
 // Helper function to get default pricing
 export function getDefaultPricing() {
   return {
-    introPrice: 4.99,
-    regularPrice: 14.99,
+    introPrice: 0.99,
+    regularPrice: 9.99,
     totalValue: 400,
   };
 }

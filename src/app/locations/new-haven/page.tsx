@@ -37,8 +37,8 @@ const foodCategories = [
 
 // Pricing tiers
 const pricing = {
-  introPrice: 4.99,
-  regularPrice: 14.99,
+  introPrice: 0.99,
+  regularPrice: 9.99,
   totalValue: 400,
   restaurantCount: 30,
 };
@@ -116,7 +116,7 @@ export default function NewHavenPage() {
                 value={pricing.introPrice}
                 className="bg-[#ff6b35] text-white px-5 py-2 rounded-full text-sm font-semibold btn-hover flex items-center gap-2"
               >
-                Start for ${pricing.introPrice}
+                Start for 99¢
                 <ArrowRight className="w-4 h-4" />
               </TrackingButton>
             </div>
@@ -170,7 +170,7 @@ export default function NewHavenPage() {
               <div className="flex items-center gap-3 bg-white rounded-2xl shadow-lg border border-gray-100 px-6 py-4">
                 <div className="text-left">
                   <p className="text-xs text-gray-500 uppercase tracking-wide">First Month</p>
-                  <p className="text-3xl font-bold text-[#ff6b35]">${pricing.introPrice}</p>
+                  <p className="text-3xl font-bold text-[#ff6b35]">99¢</p>
                 </div>
                 <div className="h-12 w-px bg-gray-200" />
                 <div className="text-left">
@@ -193,7 +193,7 @@ export default function NewHavenPage() {
                 value={pricing.introPrice}
                 className="w-full sm:w-auto bg-gradient-to-r from-[#ff6b35] to-orange-500 text-white px-8 py-4 rounded-full text-lg font-bold btn-hover shadow-lg shadow-orange-500/25 flex items-center justify-center gap-2"
               >
-                Start Saving for ${pricing.introPrice}
+                Start Saving for 99¢
                 <ChevronRight className="w-5 h-5" />
               </TrackingButton>
               <a 
@@ -244,10 +244,10 @@ export default function NewHavenPage() {
                 <Wallet className="w-7 h-7 text-emerald-600" />
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-3">
-                ${pricing.introPrice} First Month
+                99¢ First Month
               </h3>
               <p className="text-gray-600 mb-4">
-                Try BiteBook risk-free. Your first month costs less than a coffee. Use just one coupon and you're already ahead.
+                Try BiteBook risk-free. Your first month is just 99 cents. Use just one coupon and you're already ahead.
               </p>
               <div className="flex items-center gap-2 text-emerald-600 font-medium text-sm">
                 <Check className="w-4 h-4" />
@@ -298,7 +298,7 @@ export default function NewHavenPage() {
             </div>
             <div className="grid sm:grid-cols-3 gap-8 text-center">
               <div>
-                <p className="text-4xl font-bold text-[#ff6b35] mb-2">${pricing.introPrice}</p>
+                <p className="text-4xl font-bold text-[#ff6b35] mb-2">99¢</p>
                 <p className="text-slate-300">Your first month</p>
               </div>
               <div>
@@ -380,7 +380,7 @@ export default function NewHavenPage() {
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-3">Subscribe</h3>
               <p className="text-gray-600">
-                Sign up for ${pricing.introPrice} your first month. Get instant access to your digital coupon book.
+                Sign up for 99¢ your first month. Get instant access to your digital coupon book.
               </p>
             </div>
             <div className="text-center">
@@ -425,7 +425,7 @@ export default function NewHavenPage() {
             </div>
             <div className="h-12 w-px bg-gray-200 hidden md:block" />
             <div className="text-center">
-              <p className="text-4xl font-bold text-[#ff6b35]">${pricing.introPrice}</p>
+              <p className="text-4xl font-bold text-[#ff6b35]">99¢</p>
               <p className="text-gray-500 text-sm">First Month</p>
             </div>
           </div>
@@ -439,7 +439,7 @@ export default function NewHavenPage() {
             Ready to Start Saving?
           </h2>
           <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
-            Join BiteBook today. Your first month is just ${pricing.introPrice} — less than a single appetizer at most restaurants.
+            Join BiteBook today. Your first month is just 99¢ — then ${pricing.regularPrice}/month. Cancel anytime.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <TrackingButton
@@ -449,7 +449,7 @@ export default function NewHavenPage() {
               value={pricing.introPrice}
               className="w-full sm:w-auto bg-white text-[#ff6b35] px-8 py-4 rounded-full text-lg font-bold hover:bg-gray-50 transition-colors shadow-lg flex items-center justify-center gap-2"
             >
-              Get Started — ${pricing.introPrice}
+              Get Started — 99¢
               <ChevronRight className="w-5 h-5" />
             </TrackingButton>
           </div>

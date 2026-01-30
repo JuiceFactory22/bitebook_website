@@ -46,17 +46,17 @@ function CheckoutContent() {
       setAppliedCoupon(urlCoupon.toUpperCase());
     }
     // Track page view for checkout
-    trackInitiateCheckout(14.99);
+    trackInitiateCheckout(9.99);
     trackFunnelStep('checkout_initiated', 2, 'subscription');
   }, [searchParams]);
   
   const couponBookDetails = {
-    price: 14.99,
-    introPrice: 4.99, // First month intro price
-    subscriptionPrice: 14.99, // Standard subscription price (month 2+)
+    price: 9.99,
+    introPrice: 0.99, // First month intro price
+    subscriptionPrice: 9.99, // Standard subscription price (month 2+)
     originalValue: 400,
-    savings: 395.01, // $400 - $4.99 for first month
-    subscriptionSavings: 385.01, // $400 - $14.99
+    savings: 399.01, // $400 - $0.99 for first month
+    subscriptionSavings: 390.01, // $400 - $9.99
     restaurants: 30,
     validity: 30
   };
@@ -366,12 +366,12 @@ function CheckoutContent() {
                     {appliedCoupon ? (
                       <>
                         <div className="font-semibold mb-1">First Month: ${getCurrentPrice().toFixed(2)} <span className="text-green-600">(Discount Applied)</span></div>
-                        <div className="text-blue-700">Then: $14.99/month (standard price, billed monthly)</div>
+                        <div className="text-blue-700">Then: $9.99/month (standard price, billed monthly)</div>
                       </>
                     ) : (
                       <>
-                        <div className="font-semibold mb-1">First Month: $4.99 <span className="text-green-600">(Intro Price)</span></div>
-                        <div className="text-blue-700">Then: $14.99/month (billed monthly)</div>
+                        <div className="font-semibold mb-1">First Month: 99¢ <span className="text-green-600">(Intro Price)</span></div>
+                        <div className="text-blue-700">Then: $9.99/month (billed monthly). Cancel anytime.</div>
                       </>
                     )}
                   </div>
@@ -383,7 +383,7 @@ function CheckoutContent() {
               {/* Coupon Code Section */}
               <div className="mb-6">
                 <h4 className="font-semibold text-gray-900 mb-3">Have a Coupon Code?</h4>
-                <p className="text-xs text-gray-500 mb-2">Coupon codes apply to your first month only. After that, you&apos;ll be billed at the standard $14.99/month rate.</p>
+                <p className="text-xs text-gray-500 mb-2">Coupon codes apply to your first month only. After that, you&apos;ll be billed at the standard $9.99/month rate. Cancel anytime.</p>
                 {!appliedCoupon ? (
                   <div className="flex gap-2">
                     <input
@@ -415,7 +415,7 @@ function CheckoutContent() {
                         <span className="text-green-800 font-semibold">
                           Coupon Applied: {appliedCoupon}
                         </span>
-                        <div className="text-xs text-green-600 mt-1">First month only - then $14.99/month</div>
+                        <div className="text-xs text-green-600 mt-1">First month only - then $9.99/month</div>
                       </div>
                     </div>
                     <button
@@ -557,12 +557,12 @@ function CheckoutContent() {
                         </div>
                         {appliedCoupon && (
                           <div className="text-xs opacity-90 mt-2 pt-2 border-t border-white/20">
-                            Then $14.99/month
+                            Then $9.99/month
                           </div>
                         )}
                         {!appliedCoupon && (
                           <div className="text-xs opacity-90 mt-1">
-                            Then $14.99/month
+                            Then $9.99/month
                           </div>
                         )}
                       </div>
@@ -590,7 +590,7 @@ function CheckoutContent() {
                     </li>
                     <li className="flex items-start">
                       <span className="mr-2">•</span>
-                      <span>Starting month 2, you'll be charged <strong>$14.99/month</strong> at the standard subscription rate</span>
+                      <span>Starting month 2, you'll be charged <strong>$9.99/month</strong> at the standard subscription rate. Cancel anytime.</span>
                     </li>
                     <li className="flex items-start">
                       <span className="mr-2">•</span>
