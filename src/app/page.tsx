@@ -440,7 +440,11 @@ export default function Home() {
                     
                     <div className="flex items-center justify-between">
                       <span className="text-sm text-gray-600">
-                        <strong className="text-gray-900">{location.restaurantCount}+</strong> restaurants
+                        {location.restaurantCount > 0 ? (
+                          <><strong className="text-gray-900">{location.restaurantCount}+</strong> restaurants</>
+                        ) : (
+                          <>Deals at <strong className="text-gray-900">dozens of local spots</strong></>
+                        )}
                       </span>
                       <span className="flex items-center gap-1 text-[#ff6b35] font-medium text-sm group-hover:gap-2 transition-all">
                         View deals

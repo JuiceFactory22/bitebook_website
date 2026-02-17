@@ -1,41 +1,8 @@
 'use client';
 
-import { useEffect } from 'react';
 import { MapPin, ArrowRight, Sparkles } from 'lucide-react';
 import Link from 'next/link';
-
-// Available locations - add new cities here as you expand
-const locations = [
-  {
-    id: 'new-haven',
-    city: 'New Haven',
-    state: 'CT',
-    region: 'Connecticut',
-    restaurantCount: 27,
-    status: 'active', // 'active' | 'coming-soon' | 'waitlist'
-    featured: true,
-    image: '/images/locations/new-haven.jpg', // Optional hero image
-  },
-  // Future locations - uncomment as you launch
-  // {
-  //   id: 'hartford',
-  //   city: 'Hartford',
-  //   state: 'CT',
-  //   region: 'Connecticut',
-  //   restaurantCount: 0,
-  //   status: 'coming-soon',
-  //   featured: false,
-  // },
-  // {
-  //   id: 'boston',
-  //   city: 'Boston',
-  //   state: 'MA',
-  //   region: 'Massachusetts',
-  //   restaurantCount: 0,
-  //   status: 'waitlist',
-  //   featured: false,
-  // },
-];
+import { locations } from '@/data/locations';
 
 export default function LocationsPage() {
   const activeLocations = locations.filter(l => l.status === 'active');
@@ -108,7 +75,11 @@ export default function LocationsPage() {
                 
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-600">
-                    <strong className="text-gray-900">{location.restaurantCount}+</strong> restaurants
+                    {location.restaurantCount > 0 ? (
+                      <><strong className="text-gray-900">{location.restaurantCount}+</strong> restaurants</>
+                    ) : (
+                      <>Deals at <strong className="text-gray-900">dozens of local spots</strong></>
+                    )}
                   </span>
                   <span className="flex items-center gap-1 text-[#ff6b35] font-medium text-sm group-hover:gap-2 transition-all">
                     View deals

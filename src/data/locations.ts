@@ -30,6 +30,34 @@ export const locations: Location[] = [
       totalValue: 400,
     },
   },
+  {
+    id: 'brooklyn',
+    city: 'Brooklyn',
+    state: 'NY',
+    region: 'New York',
+    restaurantCount: 0,
+    status: 'active',
+    featured: true,
+    pricing: {
+      introPrice: 0.99,
+      regularPrice: 9.99,
+      totalValue: 400,
+    },
+  },
+  {
+    id: 'boston',
+    city: 'Boston',
+    state: 'MA',
+    region: 'Massachusetts',
+    restaurantCount: 0,
+    status: 'active',
+    featured: true,
+    pricing: {
+      introPrice: 0.99,
+      regularPrice: 9.99,
+      totalValue: 400,
+    },
+  },
   // Add new locations here as you expand
   // {
   //   id: 'hartford',
